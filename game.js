@@ -132,6 +132,7 @@ function doClick() {
         console.log("clicked = " + clicked);
         return;
     }
+    
     clicked = true;
     console.log("clicked = " + clicked);
     console.log("clicked at " + mouse.x + " , " + mouse.y);
