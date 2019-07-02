@@ -27,6 +27,7 @@ var buildingHandler = new BuildingHandler();
 var tempBuild;
 var screenManager;
 
+
 var rp;
 var clicked = false;
 var scrolling = false;
@@ -132,7 +133,7 @@ function doClick() {
         console.log("clicked = " + clicked);
         return;
     }
-    
+
     clicked = true;
     console.log("clicked = " + clicked);
     console.log("clicked at " + mouse.x + " , " + mouse.y);
