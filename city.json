@@ -20,10 +20,22 @@
     ],
     "troops": [
         {"type": 0, "level": 1, "name": "Infantry", "quantity": 100},
-        {"type": 0, "level": 1, "name": "Archers", "quantity": 100},
-        {"type": 0, "level": 1, "name": "Cavalry", "quantity": 75},
-        {"type": 0, "level": 1, "name": "Siege", "quantity": 75},
-        {"type": 1, "level": 1, "name": "Boats", "quantity": 5}
+        {"type": 1, "level": 1, "name": "Archer", "quantity": 100},
+        {"type": 2, "level": 1, "name": "Cavalry", "quantity": 75},
+        {"type": 3, "level": 1, "name": "Siege", "quantity": 75},
+        {"type": 4, "level": 1, "name": "Settler", "quantity": 1},
+        {"type": 5, "level": 1, "name": "Boat", "quantity": 5}
+    ],
+    "items": [
+        {"type": 0, "name": "Gold", "quantity": 1000},
+        {"type": 1, "name": "Gem", "quantity": 50},
+        {"type": 2, "level": 0, "group": "resources",  "name": "rssbox", "quantity": 5, "contents": [{"food": 1000}]},
+        {"type": 30, "level": 0, "group": "chest",  "name": "SummerChest", "quantity": 100, "contents": [{"type" : 2, "level": 0, "quantity": 5}]}
+    ],
+    "speeds": [
+        {"type": 0, "name": "1 hour Construction", "minutes": 60, "use": "building"},
+        {"type": 1, "name": "30 minute", "minutes": 30, "use": "all"},
+        {"type": 2, "name": "1 hour research", "minutes": 60, "use": "research"}
     ]
 }
 

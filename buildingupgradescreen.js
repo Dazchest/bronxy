@@ -163,6 +163,8 @@ class BuildingUpgradeScreen extends ScreenView {
             this.displayUpgradeRequirements();
             this.drawButtons();
             this.checkButtons();
+            Resource.drawAll();
+
         }
     }
 

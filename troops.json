@@ -1,0 +1,30 @@
+[
+    {
+        "type": 0,
+        "name": "Infantry",
+        "building": 6,     
+        "levels" : [
+        {   "level": 1,
+            "name": "Warriors",
+            "requirements": {   "resources" : {"food": 10, "wood": 0, "stone": 0, "iron": 0},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 10,
+            "attack": 10,
+            "defence": 12,
+            "health": 8,
+            "speed": 5
+        }
+        ]
+    },
+
+
+    {"type": 1, "level": 1, "name": "Archer", "quantity": 100},
+    {"type": 2, "level": 1, "name": "Cavalry", "quantity": 75},
+    {"type": 3, "level": 1, "name": "Siege", "quantity": 75},
+    {"type": 4, "level": 1, "name": "Settler", "quantity": 1},
+    {"type": 5, "level": 1, "name": "Boat", "quantity": 5}
+
+
+]

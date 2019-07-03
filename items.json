@@ -1,0 +1,40 @@
+[
+    {   "id": 0,
+        "type": 2,
+        "group": "resources",
+        "name": "rssbox",
+        "levels" : [
+        {   "level": 0,
+            "name": "1k Food",
+            "contents": [{"food": 1000}]
+        }
+        ]
+    },
+
+    {   "id": 1,
+        "type": 30,
+        "group": "chest",
+        "name": "SummerChest",
+        "levels" : [
+        {   "level": 0,
+            "name": "Medium Summer Chest",
+            "contents": [{"type" : 2, "level": 0, "quantity": 5}]
+        }
+        ]
+    },
+
+    {   "id": 2,
+        "type": 40,
+        "group": "speedup",
+        "name": "speed",
+        "speedType": "construction",
+        "levels" : [
+        {   "level": 0,
+            "name": "1 Hour Construction Speed",
+            "contents": [{"minutes": 60}]
+        }
+        ]
+    }
+
+]
+

@@ -3,7 +3,7 @@ class BuildingHandler {
     constructor() {
         this.newBuildingCoords = {};
         this.highlightGrid = false;
-        this.slots = 2;
+        this.slots = 4;
         this.usedSlots = 0;
         this.queueAmount = 3;
         this.queue = [];

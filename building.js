@@ -7,7 +7,7 @@ class Building {
             name = Object.keys(data)[x];
             this[name] = data[name];
         }
-
+        this.upgrading = false;
         this.amount = 0;
         this.collectable = false;
         this.collactableTime = 10;  // can collect rss after # seconds
@@ -74,8 +74,12 @@ class Building {
         ctx.font = "15px Georgia";
         ctx.fillText("level: " + this.level, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + 40);
         ctx.font = "15px Georgia";
-        ctx.fillText("a: " + this.amount, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + 60);
-
+        if(this.upgrading) {
+            let timeLeft = Math.ceil(this.endTime - Date.now()/1000);
+            ctx.fillText("time: " + timeLeft, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + 60);
+        } else if(this.pph) {
+            ctx.fillText("rss: " + this.amount, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + 60);
+        }
         //this.checkButtons();
         this.drawButtons();
     }
@@ -157,6 +161,11 @@ class Building {
 
     click() {
         console.log("clicked = " + this.name);
+        if(this.upgrading) {
+            console.log("building upgrading");
+            clicked = false;
+            return;         // dont do anything if the building is upgrading
+        }
         if(this.timeElapsed > this.collactableTime) {
             this.collectProduction();
             clicked = false;    
@@ -170,6 +179,9 @@ class Building {
     }
 
     upgradeScreen(self) {
+        if(self.upgrading) { // if already upgrading, then dont alow to upgrade again
+            return;
+        }
         console.log("upgrade screen please!!!");
         buildingUpgradeScreen = new BuildingUpgradeScreen(self);
         screenManager.screen = buildingUpgradeScreen;

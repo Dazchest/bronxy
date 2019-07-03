@@ -26,6 +26,9 @@ var tick = Date.now();
 var buildingHandler = new BuildingHandler();
 var tempBuild;
 var screenManager;
+var items;
+var itemList = [];
+var itemManager = new ItemManager();
 
 
 var rp;
@@ -80,14 +83,22 @@ function init() {
             console.log(buildings);
         })
 
+    let jsonfile5 = "items.json";
+    let promise5 = fetch(jsonfile5)
+        .then(parseJsonData)
+        .then(function(mj) {
+            items = mj;
+            console.log(items);
+        })
+        .catch(gotErr);
+
+
     let jsonfile = "city.json";
     let promise = fetch(jsonfile)
         .then(parseJsonData)
         .then(initBuildingData)
         .catch(gotErr);
-    console.log(promise);
-    console.log("-------");
-    
+   
     function parseJsonData(response) {
         console.log("responded");
         return response.json();
@@ -101,6 +112,7 @@ function init() {
         buildingData = cityData.buildings;
         resourceData = cityData.resources;
         troopsData = cityData.troops;
+        let itemData = cityData.items;
         console.log(resourceData);
 
         cities.push(new City(cityData.citydata));
@@ -108,6 +120,11 @@ function init() {
         for(var x=0; x<buildingData.length; x++) {
             buildingList.push(new Building(buildingData[x]));
         }
+
+        for(var x=0; x<itemData.length; x++) {
+            itemList.push(new Item(itemData[x]));
+        }
+
         troops = new Troops(troopsData);
         //for(var x=0; x<resourceData.length; x++) {
             //store the Resource class in individual objects within resources
