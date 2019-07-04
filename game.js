@@ -20,6 +20,7 @@ var buildingInfoScreen = {"active": false};
 var buildingDetailsScreen = {"active": false};
 var buildingUpgradeScreen = {"active": false};
 var itemScreen = {"active": false};
+var researchScreen = {"active": false};
 
 var cityScreen;
 var city = {"name": "city", "active": true};

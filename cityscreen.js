@@ -10,6 +10,7 @@ class CityScreen extends ScreenView {
 
         console.log("this is CityScreen constructor");
         this.buttons.push(new Button({"active": true, "x": 500, "y": 100, "w": 80, "h": 30, "text": "Items", "screen": this, "action":  this.itemScreen}));
+        this.buttons.push(new Button({"active": true, "x": 500, "y": 140, "w": 80, "h": 30, "text": "Research", "screen": this, "action":  this.researchScreen}));
         return;
         let b = {}; // new Button();
         b.x = 50;
@@ -61,6 +62,13 @@ class CityScreen extends ScreenView {
         console.log("going to item screen");
         itemScreen = new ItemScreen();
         screenManager.screen = itemScreen;
+
+    }
+
+    researchScreen() {
+        console.log("going to Research screen");
+        researchScreen = new ResearchScreen();
+        screenManager.screen = researchScreen;
 
     }
 

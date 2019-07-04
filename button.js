@@ -21,7 +21,7 @@ class Button {
 
             ctx.fillStyle = '#000000';
             ctx.font = "20px Georgia";
-            ctx.fillText(this.text, this.x + 30, this.y + 20);
+            ctx.fillText(this.text, this.x + 5, this.y + 20);
         }
     }
 

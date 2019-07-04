@@ -1,0 +1,30 @@
+[
+    {   "id": 1,
+        "type": 1,
+        "tree": "City",
+        "group": "production",
+        "name": "Food Production",
+        "buffType": "percentage",
+        "levels" : [
+        {   "level": 0,
+            "name": "Food Production + 5%",
+            "buff": [{"food": 5}],
+            "baseResearchTime": 10,
+            "requirements": {   "resources": {"gold": 500},
+                                "buildings": [{"type": 0, "level": 2}]
+
+                            }
+        },
+        {   "level": 1,
+            "name": "Food Production + 10%",
+            "buff": [{"food": 10}],
+            "baseResearchTime": 20,
+            "requirements": {   "resources": {"gold": 1500},
+                                "buildings": [{"type": 0, "level": 3}]
+
+                            }
+        }
+        ]
+    }
+
+]
