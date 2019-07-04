@@ -9,6 +9,7 @@ class CityScreen extends ScreenView {
         this.name = "City";
 
         console.log("this is CityScreen constructor");
+        this.buttons.push(new Button({"active": true, "x": 500, "y": 100, "w": 80, "h": 30, "text": "Items", "screen": this, "action":  this.itemScreen}));
         return;
         let b = {}; // new Button();
         b.x = 50;
@@ -49,13 +50,18 @@ class CityScreen extends ScreenView {
             ctx.font = "20px Georgia";
             ctx.fillText(this.name, this.x, this.y + 20);
     
-            //this.displayUpgradeRequirements();
-            //this.drawButtons();
-           // this.checkButtons();
+            this.drawButtons();
+            this.checkButtons();
            buildingHandler.drawBuildings();
            Resource.drawAll();
            }
     }
 
+    itemScreen() {
+        console.log("going to item screen");
+        itemScreen = new ItemScreen();
+        screenManager.screen = itemScreen;
+
+    }
 
 }

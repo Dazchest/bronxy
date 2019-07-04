@@ -5,8 +5,45 @@
         "name": "rssbox",
         "levels" : [
         {   "level": 0,
-            "name": "1k Food",
-            "contents": [{"food": 1000}]
+            "name": "2k Food",
+            "contents": [{"food": 2000}]
+        },
+        {   "level": 1,
+            "name": "5k Food",
+            "contents": [{"food": 5000}]
+        }
+        ]
+    },
+    {   "id": 0,
+        "type": 3,
+        "group": "resources",
+        "name": "rssbox",
+        "levels" : [
+        {   "level": 0,
+            "name": "2k Wood",
+            "contents": [{"wood": 2000}]
+        }
+        ]
+    },
+    {   "id": 0,
+        "type": 4,
+        "group": "resources",
+        "name": "rssbox",
+        "levels" : [
+        {   "level": 0,
+            "name": "1k stone",
+            "contents": [{"stone": 1000}]
+        }
+        ]
+    },
+    {   "id": 0,
+        "type": 5,
+        "group": "resources",
+        "name": "rssbox",
+        "levels" : [
+        {   "level": 0,
+            "name": "1k iron",
+            "contents": [{"iron": 1000}]
         }
         ]
     },
@@ -18,7 +55,7 @@
         "levels" : [
         {   "level": 0,
             "name": "Medium Summer Chest",
-            "contents": [{"type" : 2, "level": 0, "quantity": 5}]
+            "contents": [{"type" : 2, "level": 0, "quantity": 5},{"type" : 3, "level": 0, "quantity": 2}]
         }
         ]
     },

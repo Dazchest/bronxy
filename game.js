@@ -15,9 +15,12 @@ var cities = [];
 var player;
 var resources = {};
 var troops = {};
+
 var buildingInfoScreen = {"active": false};
 var buildingDetailsScreen = {"active": false};
 var buildingUpgradeScreen = {"active": false};
+var itemScreen = {"active": false};
+
 var cityScreen;
 var city = {"name": "city", "active": true};
 var buildings;
@@ -173,7 +176,6 @@ function draw() {
     screenManager.screen.draw();
 
     buildingHandler.checkBuildingUpgrades();
-
     buildingHandler.update();
 
     clicked = false;

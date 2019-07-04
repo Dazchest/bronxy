@@ -41,6 +41,7 @@ class ScreenView {
         }
 
     drawButtons() {
+        //console.log(this.buttons.length);
         for(let x=0; x<this.buttons.length; x++) {
              this.buttons[x].draw();
          }
@@ -55,7 +56,7 @@ class ScreenView {
                         clicked = false;
                         console.log(b.text + " pressed");
                         let callback = b.action;
-                        callback(this);
+                        callback(this, b);
                     }
                 }
             }
