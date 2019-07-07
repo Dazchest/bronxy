@@ -53,9 +53,9 @@ class CityScreen extends ScreenView {
     
             this.drawButtons();
             this.checkButtons();
-           buildingHandler.drawBuildings();
-           Resource.drawAll();
-           }
+            buildingHandler.drawBuildings();
+            Resource.drawAll();
+            }
     }
 
     itemScreen() {

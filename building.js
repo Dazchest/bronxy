@@ -7,6 +7,9 @@ class Building {
             name = Object.keys(data)[x];
             this[name] = data[name];
         }
+        this.images = new Image();
+        let imageSrc = "images/" + this.type + ".png";
+        this.images.src = imageSrc
         this.upgrading = false;
         this.amount = 0;
         this.collectable = false;
@@ -68,19 +71,20 @@ class Building {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
 
+        ctx.drawImage(this.images, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
+
         ctx.fillStyle = '#000000';
         ctx.font = "20px Georgia";
-        ctx.fillText(this.name, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + 20);
+        ctx.fillText(this.name, this.gridPos.x * gridSize.x + camera.x - 10, this.gridPos.y * gridSize.y + camera.y + 0);
         ctx.font = "15px Georgia";
-        ctx.fillText("level: " + this.level, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + 40);
+        ctx.fillText("level: " + this.level, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + gridSize.y + 20);
         ctx.font = "15px Georgia";
         if(this.upgrading) {
             let timeLeft = Math.ceil(this.endTime - Date.now()/1000);
-            ctx.fillText("time: " + timeLeft, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + 60);
+            ctx.fillText("time: " + timeLeft, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + gridSize.y + 35);
         } else if(this.pph) {
-            ctx.fillText("rss: " + this.amount, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + 60);
+            ctx.fillText("rss: " + this.amount, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + gridSize.y + 35);
         }
-        //this.checkButtons();
         this.drawButtons();
     }
 

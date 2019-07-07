@@ -18,7 +18,7 @@ class City {
 }
 
 function scrollCity(e) {
-    mouseDownFired = true;
+    //mouseDownFired = true;
     if(cities[currentCity].active) {
         scrolling = true;
         if(camera.x + e.movementX >= 0) {

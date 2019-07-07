@@ -47,6 +47,7 @@ var clicked = false;
 var scrolling = false;
 var mouseDownFired = false;
 
+
 function init() {
     console.log("initialising game");
 
@@ -62,6 +63,7 @@ function init() {
         mouse.y = e.offsetY;
     });
 
+   // mouseDownFired = false;
     canvas.addEventListener('mousedown', function(e) {
         mouseDownFired = false;
         canvas.addEventListener('mousemove', scrollCity);
@@ -156,9 +158,10 @@ function init() {
             //     resources.food = resources.food.amount + Number(1000);
             // }
         //}
-
-
-        draw();
+        buildingHandler.loadImages();
+        setTimeout(draw, 1000);
+        //draw();
+        
     }
 }
 

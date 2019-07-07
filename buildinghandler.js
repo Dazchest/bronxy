@@ -163,4 +163,14 @@ class BuildingHandler {
         }
     }
 
+
+    loadImages() {
+        //return;
+        for(let x=0; x<buildingList.length; x++) {
+            buildingList[x].images = new Image();
+            let imageSrc = "images/" + x + ".png";
+            buildingList[x].images.src = imageSrc;
+        // townHallImage.onload = function() {
+        }
+    }
 }
