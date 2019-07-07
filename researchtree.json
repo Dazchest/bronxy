@@ -1,30 +1,155 @@
 [
+
     {   "id": 1,
         "type": 1,
         "tree": "City",
+        "position": 1,
+        "row": 1,
         "group": "production",
         "name": "Food Production",
         "buffType": "percentage",
+        "level": 0,
         "levels" : [
-        {   "level": 0,
-            "name": "Food Production + 5%",
-            "buff": [{"food": 5}],
-            "baseResearchTime": 10,
-            "requirements": {   "resources": {"gold": 500},
-                                "buildings": [{"type": 0, "level": 2}]
-
-                            }
-        },
         {   "level": 1,
+            "id": 1.1,
             "name": "Food Production + 10%",
             "buff": [{"food": 10}],
-            "baseResearchTime": 20,
-            "requirements": {   "resources": {"gold": 1500},
-                                "buildings": [{"type": 0, "level": 3}]
+            "baseResearchTime": 5,
+            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 500}],
+                                "buildings": [{"type": 0, "level": 1}]
+                            }
+        },
+        {   "level": 2,
+            "id": 1.1,
+            "name": "Food Production + 200%",
+            "buff": [{"food": 200}],
+            "baseResearchTime": 5,
+            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 500}],
+                                "research": [{"type": 1, "level": 1}],
+                                "buildings": [{"type": 0, "level": 1}]
+                            }
+        }
+        ]
+    },
 
+    {   "id": 2,
+        "type": 2,
+        "tree": "City",
+        "position": 1,
+        "row": 2,
+        "group": "production",
+        "name": "Wood Production",
+        "buffType": "percentage",
+        "levels" : [
+        {   "level": 1,
+            "id": 2.1,
+            "name": "Wood Production + 10%",
+            "buff": [{"wood": 15}],
+            "baseResearchTime": 10,
+            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 1000}],
+                                "research": [{"type": 1, "level": 1}],
+                                "buildings": [{"type": 0, "level": 1}]
+                            }
+        }
+        ]
+    },
+
+    {   "id": 3,
+        "type": 3,
+        "tree": "City",
+        "position": 3,
+        "row": 3,
+        "group": "construction",
+        "name": "Construction Speed",
+        "buffType": "percentage",
+        "levels" : [
+        {   "level": 1,
+            "id": 3.1,
+            "name": "Construction Speed + 10%",
+            "buff": [{"construction": 10}],
+            "baseResearchTime": 3,
+            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 1500}],
+                                "research": [{"type": 4, "level": 1}],
+                                "buildings": [{"type": 0, "level": 1}]
+                            }
+        },
+        {   "level": 2,
+            "id": 3.1,
+            "name": "Construction Speed + 200%",
+            "buff": [{"construction": 200}],
+            "baseResearchTime": 3,
+            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 3500}],
+                                "research": [{"type": 3, "level": 1}],
+                                "buildings": [{"type": 0, "level": 2}]
+                            }
+        }
+
+        ]
+    },
+
+    {   "id": 6,
+        "type": 6,
+        "tree": "City",
+        "position": 6,
+        "row": 6,
+        "group": "construction",
+        "name": "Construction Speed",
+        "buffType": "value",
+        "levels" : [
+        {   "level": 1,
+            "id": 3.1,
+            "name": "Construction Speed -30 seconds",
+            "buff": [{"construction": 30}],
+            "baseResearchTime": 3,
+            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 1500}],
+                                "research": [{"type": 3, "level": 1}],
+                                "buildings": [{"type": 0, "level": 1}]
+                            }
+        }
+        ]
+    },
+
+    {   "id": 2,
+        "type": 4,
+        "tree": "City",
+        "position": 1,
+        "row": 4,
+        "group": "production",
+        "name": "all Production",
+        "buffType": "percentage",
+        "levels" : [
+        {   "level": 1,
+            "id": 4.1,
+            "name": "All Production + 200%",
+            "buff": [{"food": 200}, {"wood": 200}],
+            "baseResearchTime": 10,
+            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 1000}],
+                                "research": [{"type": 1, "level": 1}],
+                                "buildings": [{"type": 0, "level": 1}]
+                            }
+        }
+        ]
+    },
+    
+    {   "id": 5,
+        "type": 5,
+        "tree": "City",
+        "position": 1,
+        "row": 5,
+        "group": "production",
+        "name": "Stone Production",
+        "buffType": "value",
+        "levels" : [
+        {   "level": 1,
+            "id": 2.1,
+            "name": "Stone Production + 1000",
+            "buff": [{"stone": 1000}],
+            "baseResearchTime": 10,
+            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 1000}]
                             }
         }
         ]
     }
+
 
 ]

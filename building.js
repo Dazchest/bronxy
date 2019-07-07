@@ -10,7 +10,7 @@ class Building {
         this.upgrading = false;
         this.amount = 0;
         this.collectable = false;
-        this.collactableTime = 10;  // can collect rss after # seconds
+        this.collactableTime = 3;  // can collect rss after # seconds
         this.buttons = [];
         this.buttons.push(new Button({"active": false, "offset" : {"x": 0, "y": -30}, "w": 100, "h": 30, "text": "Upgrade", "screen": this, "action": this.upgradeScreen}));
     }
@@ -90,9 +90,23 @@ class Building {
     upgrade() {
         this.upgrading = true;
 
+        // check for construction buffs
+        let pBuff = 0;  //percentage buff
+        let vBuff = 0;  //value buff
+        if(buffManager.construction) {
+            if(buffManager.construction.construction.percentage) {
+                pBuff = buffManager.construction.construction.percentage;
+            } 
+            if(buffManager.construction.construction.value) {
+                vBuff = buffManager.construction.construction.value;
+            }
+        }
+        //-------------------------------------------
+
         this.startTime = Date.now()/1000;   //convert to seconds
         let buildTime = buildings[this.type].levels[this.level].baseBuildTime;
-        this.buildTime = Math.ceil(buildTime / (1+(research.construction/100)));
+        this.buildTime = Math.ceil(buildTime / (1+(pBuff/100)));   //this need fixing
+        this.buildTime -= vBuff;
         this.endTime = this.startTime + this.buildTime;
         console.log(buildTime);
 
@@ -122,8 +136,21 @@ class Building {
 
     checkProduction() {
         if(this.pph){
+            // check for productioin buffs
             let p = this.production;
-            let pph = this.pph + (this.pph * (research.production[p]/100));
+            let pph = this.pph;
+            let buff = 0;
+            if(buffManager.production[p].percentage) {
+                buff = buffManager.production[p].percentage;
+                pph = pph + (this.pph * (buff/100));
+            } 
+            if(buffManager.production[p].value) {
+                buff = buffManager.production[p].value;
+                pph = pph + (buff);
+            }
+            this.totalpph = pph;
+            //-------------------------------------------
+
             this.timeElapsed = (Date.now() - this.collectionTime) / 1000;    // in seconds
             this.collectable = true;
             if(this.timeElapsed < this.collactableTime) {

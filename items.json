@@ -1,5 +1,17 @@
 [
     {   "id": 0,
+        "type": 0,
+        "group": "resources",
+        "name": "Gold",
+        "levels" : [
+        {   "level": 0,
+            "name": "gold",
+            "contents": [{"gold": 500}]
+        }
+        ]
+    },
+
+    {   "id": 0,
         "type": 2,
         "group": "resources",
         "name": "rssbox",
@@ -55,7 +67,7 @@
         "levels" : [
         {   "level": 0,
             "name": "Medium Summer Chest",
-            "contents": [{"type" : 2, "level": 0, "quantity": 5},{"type" : 3, "level": 0, "quantity": 2}]
+            "contents": [{"type" : 0, "level": 0, "quantity": 500}, {"type" : 2, "level": 0, "quantity": 5},{"type" : 3, "level": 0, "quantity": 2}]
         }
         ]
     },

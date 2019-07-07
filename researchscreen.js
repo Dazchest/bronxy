@@ -7,6 +7,7 @@ class ResearchScreen extends ScreenView {
         
         this.buttons = [];
         this.name = "Research";
+        this.currentTree = "City";
 
         console.log("this is CityScreen constructor");
         this.buttons.push(new Button({"active": true, "x": 400, "y": 300, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
@@ -33,15 +34,43 @@ class ResearchScreen extends ScreenView {
             ctx.font = "20px Georgia";
             ctx.fillText(this.name, this.x, this.y + 20);
     
-            this.displayReseach();
+            this.displayResearch();
             this.drawButtons();
             this.checkButtons();
-            Resource.drawAll();
+            Resource.drawAll(); // draw resources at the top of the screen
+            this.checkDisplayResearch();
+            this.checkResearchButtons();
 
         }
     }
 
-    displayReseach() {
+    displayResearch() {
+        for(let x=0; x<researchList.length; x++) {
+            researchList[x].draw();
+        }
+    }
+    checkDisplayResearch() {
+        for(let x=0; x<researchList.length; x++) {
+            researchList[x].displayResearch();
+        }
+    }
+
+    checkResearchButtons() {
+        for(let x=0; x<researchList.length; x++) {
+            if(researchManager.showingResearch == false) {  //not showing reseach, so can pick another
+                if(clicked) {   //mouse is clicked, check if it was on a research button
+                    let b = researchList[x].button;
+                    if(mouse.x > b.x && mouse.x < b.x + b.w && mouse.y > b.y && mouse.y < b.y + b.h) {
+                        if(b.action && b.active) {
+                            clicked = false;
+                            console.log(b.text + " pressed");
+                            let callback = b.action;
+                            callback(b.where, b);
+                        }
+                    }
+                }
+            }
+        }
     }
 
 

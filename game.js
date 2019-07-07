@@ -19,21 +19,28 @@ var troops = {};
 var buildingInfoScreen = {"active": false};
 var buildingDetailsScreen = {"active": false};
 var buildingUpgradeScreen = {"active": false};
-var itemScreen = {"active": false};
+
 var researchScreen = {"active": false};
+var researchTree;
+var researchList = [];
+var researchManager = new ResearchManager();
+
+var buffManager = new BuffManager();
 
 var cityScreen;
 var city = {"name": "city", "active": true};
 var buildings;
-var research = {"construction": 0, "production" : {"food":50, "wood": 20, "stone": 10, "iron": 5}};
 var tick = Date.now();
 var buildingHandler = new BuildingHandler();
 var tempBuild;
 var screenManager;
+
+var itemScreen = {"active": false};
 var items;
 var itemList = [];
 var itemManager = new ItemManager();
 
+var promises = [];
 
 var rp;
 var clicked = false;
@@ -68,12 +75,6 @@ function init() {
 
     canvas.addEventListener('click', doClick); 
 
-
-    // canvas.addEventListener('mousemove', function(e) {
-    //     console.log("over at " + mouse.x + " , " + mouse.y);
-    //     //Building.checkBuildingClick();
-    // }); 
-
     //initilaiase the player
     player = new Player;
     cityScreen = new CityScreen();
@@ -86,6 +87,7 @@ function init() {
             buildings = mj;
             console.log(buildings);
         })
+    promises.push(promise2);
 
     let jsonfile5 = "items.json";
     let promise5 = fetch(jsonfile5)
@@ -96,6 +98,15 @@ function init() {
         })
         .catch(gotErr);
 
+    jsonfile6 = "researchtree.json";
+    let promise6 = fetch(jsonfile6)
+        .then(parseJsonData)
+        .then(function(mj) {
+            researchTree = mj;
+            console.log(items);
+        })
+        .catch(gotErr);
+    
 
     let jsonfile = "city.json";
     let promise = fetch(jsonfile)
@@ -110,6 +121,7 @@ function init() {
     function gotErr(err) {
         console.log(err);
     }
+    //TODO: put all promises in an array, and then check them all before proceeding
     function initBuildingData(myJson) {
         console.log(myJson[currentCity].buildings);
         cityData = myJson[currentCity];
@@ -118,6 +130,9 @@ function init() {
         troopsData = cityData.troops;
         let itemData = cityData.items;
         console.log(resourceData);
+    
+        researchData = cityData.research;
+        researchManager.initResearch();
 
         cities.push(new City(cityData.citydata));
 
@@ -178,6 +193,9 @@ function draw() {
 
     buildingHandler.checkBuildingUpgrades();
     buildingHandler.update();
+
+    researchManager.checkResearchUpgrades();
+
 
     clicked = false;
     requestAnimationFrame(draw);    

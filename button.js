@@ -25,6 +25,28 @@ class Button {
         }
     }
 
+    /**
+     * CHECK AN INDIVIDUAL BUTTON
+     * 
+     * @param {object} button 
+     */
+    //TODO: maybe have it so accepts a button and this --- so.. (b = this)
+    check(b) {
+        if(clicked) {   //mouse is clicked, check if it was on a button
+            if(mouse.x > this.x && mouse.x < this.x + this.w && mouse.y > this.y && mouse.y < this.y + this.h) {
+                if(this.action && this.active) {
+                    clicked = false;
+                    console.log(this.text + " pressed");
+                    let callback = this.action;
+                    callback(this.where, this);
+                    return true
+                }
+            }
+        }
+        return false;
+    }
+
+
     show() {
         this.active = true;
     }
