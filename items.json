@@ -3,9 +3,10 @@
         "type": 0,
         "group": "resources",
         "name": "Gold",
+        "action": "none",
         "levels" : [
         {   "level": 0,
-            "name": "gold",
+            "name": "500 Gold",
             "contents": [{"gold": 500}]
         }
         ]

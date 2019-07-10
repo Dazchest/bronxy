@@ -24,12 +24,17 @@ class ItemManager {
                 }
                 console.log("adding a new item");   
                 let newItemData = {};
-                newItemData.type = items[x].type;
-                newItemData.group = items[x].group;
+                // newItemData.type = items[x].type;
+                // newItemData.group = items[x].group;
+                // newItemData.name = items[x].levels[itemData.level].name;
+                // newItemData.level = itemData.level;
+                // newItemData.quantity = itemData.quantity;
+                // newItemData.contents = items[x].levels[itemData.level].contents;
+                newItemData = items[x];
                 newItemData.name = items[x].levels[itemData.level].name;
+                newItemData.contents = items[x].levels[itemData.level].contents;
                 newItemData.level = itemData.level;
                 newItemData.quantity = itemData.quantity;
-                newItemData.contents = items[x].levels[itemData.level].contents;
                 itemList.push(new Item(newItemData));
 
                 let nb = new Button({"item": itemList.slice(-1)[0] , "active": true, "drawButton": false, "x": 50, "y": 200 + ((itemList.length-1) * 35), "w": 100, "h": 30, "text": "", "screen": this, "action":  itemScreen.showItem});

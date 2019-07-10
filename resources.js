@@ -12,7 +12,14 @@ class Resource {
     static drawAll() {
         for(let x=0; x<Object.keys(resources).length; x++) {
             t = Object.keys(resources)[x];
-            ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 10 + (x*120), 80);
+            if(t == "gold") {
+                ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 470, 30);
+            } else 
+            if(t == "gems") {
+                ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 470, 55);
+            } else {
+                ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 10 + (x*120), 80);
+            }
         }
     }
 

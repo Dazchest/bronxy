@@ -15,7 +15,7 @@
             "name": "Food Production + 10%",
             "buff": [{"food": 10}],
             "baseResearchTime": 5,
-            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 500}],
+            "requirements": {   "resources": [{"type": "gold", "name": "Gold", "quantity": 500}],
                                 "buildings": [{"type": 0, "level": 1}]
                             }
         },
@@ -24,7 +24,7 @@
             "name": "Food Production + 200%",
             "buff": [{"food": 200}],
             "baseResearchTime": 5,
-            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 500}],
+            "requirements": {   "resources": [{"type": "gold", "name": "gold", "quantity": 500}],
                                 "research": [{"type": 1, "level": 1}],
                                 "buildings": [{"type": 0, "level": 1}]
                             }
@@ -46,7 +46,7 @@
             "name": "Wood Production + 10%",
             "buff": [{"wood": 15}],
             "baseResearchTime": 10,
-            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 1000}],
+            "requirements": {   "resources": [{"type": "gold", "name": "gold", "quantity": 1000}],
                                 "research": [{"type": 1, "level": 1}],
                                 "buildings": [{"type": 0, "level": 1}]
                             }
@@ -68,7 +68,7 @@
             "name": "Construction Speed + 10%",
             "buff": [{"construction": 10}],
             "baseResearchTime": 3,
-            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 1500}],
+            "requirements": {   "resources": [{"type": "gold", "name": "gold", "quantity": 1500}],
                                 "research": [{"type": 4, "level": 1}],
                                 "buildings": [{"type": 0, "level": 1}]
                             }
@@ -78,7 +78,7 @@
             "name": "Construction Speed + 200%",
             "buff": [{"construction": 200}],
             "baseResearchTime": 3,
-            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 3500}],
+            "requirements": {   "resources": [{"type": "gold", "name": "gold", "quantity": 3500}],
                                 "research": [{"type": 3, "level": 1}],
                                 "buildings": [{"type": 0, "level": 2}]
                             }
@@ -101,7 +101,7 @@
             "name": "Construction Speed -30 seconds",
             "buff": [{"construction": 30}],
             "baseResearchTime": 3,
-            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 1500}],
+            "requirements": {   "resources": [{"type": "gold", "name": "gold", "quantity": 1500}],
                                 "research": [{"type": 3, "level": 1}],
                                 "buildings": [{"type": 0, "level": 1}]
                             }
@@ -123,7 +123,7 @@
             "name": "All Production + 200%",
             "buff": [{"food": 200}, {"wood": 200}],
             "baseResearchTime": 10,
-            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 1000}],
+            "requirements": {   "resources": [{"type": "gold", "name": "gold", "quantity": 1000}],
                                 "research": [{"type": 1, "level": 1}],
                                 "buildings": [{"type": 0, "level": 1}]
                             }
@@ -145,7 +145,7 @@
             "name": "Stone Production + 1000",
             "buff": [{"stone": 1000}],
             "baseResearchTime": 10,
-            "requirements": {   "items": [{"type": 0, "name": "gold", "quantity": 1000}]
+            "requirements": {   "resources": [{"type": "gold", "name": "gold", "quantity": 1000}]
                             }
         }
         ]

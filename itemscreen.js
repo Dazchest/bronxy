@@ -49,20 +49,17 @@ class ItemScreen extends ScreenView {
 
     displayItems() {
         for(let x=0; x<itemList.length; x++) {
-            itemList[x].draw(50, 200 + (x * 35));
-            // go through the buttons, and change x,y to match the item x,y
-                //console.log(this.buttons.length);
+          //  if(itemList[x].action != "none") {  // dont display thing like gold
+                itemList[x].draw(50, 200 + (x * 35));
+                // go through the buttons, and change x,y to match the item x,y
                 for(let y=0; y<this.buttons.length; y++) {
-                    //console.log(this.buttons.length);
                     if(this.buttons[y] == itemList[x].button) {
                         this.buttons[y].x = itemList[x].x;
                         this.buttons[y].y = itemList[x].y;
-                        //console.log("FOUND A MTACHING BUTTONOONONONONO " + this.buttons[y].y + " - " + itemList[x].y);
                     }
                 }
+          //  }
         }
-        //debugger;
-
     }
 
     showItem(self, itemButton) {

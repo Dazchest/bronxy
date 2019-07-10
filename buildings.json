@@ -163,20 +163,19 @@
     {   "type": 6,
         "name": "Barracks",
         "quantityAllowed" : 5,
-        "troppProduction": "infantry",
-        "outerButtons": {"":0},
+        "troopProduction": "infantry",
         "levels" : [
         {   "level": 1,
             "requirements":    {   "resources" : {"food": 40, "wood": 40, "stone": 40, "iron": 20},
-                                    "buildings" : [{"type": 0, "level": 1}, {"type": 1, "level": 1}, {"type": 2, "level": 1}, {"type": 3, "level": 1}]
+                                    "buildings" : [{"type": 0, "level": 1}, {"type": 1, "level": 1}]
                                 },
-            "baseBuildTime": 10
+            "baseBuildTime": 1
         },
         {   "level": 2,
             "requirements":    {   "resources" : {"food": 100, "wood": 1000, "stone": 500, "iron": 250},
                                     "buildings" : [{"type": 0, "level": 2}, {"type": 1, "level": 2}]
                                 },
-            "baseBuildTime": 20
+            "baseBuildTime": 5
         }
         ]
     },

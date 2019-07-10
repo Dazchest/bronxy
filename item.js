@@ -12,7 +12,7 @@ class Item {
 
 
     useItem(quantity, itemButton) {
-        console.log(itemButton);
+        console.log("using = " + itemButton.name);
         if(this.quantity > 0) {
             let group = this.group;
             this.quantity --;

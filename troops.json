@@ -5,8 +5,9 @@
         "building": 6,     
         "levels" : [
         {   "level": 1,
-            "name": "Warriors",
-            "requirements": {   "resources" : {"food": 10, "wood": 0, "stone": 0, "iron": 0},
+            "name": "Warrior",
+            "baseTrainTime": 2,
+            "requirements": {   "resources" : {"food": 10, "wood": 5, "stone": 4, "iron": 3},
                                 "buildings" : [{"type": 6, "level": 1}]
                             },
             "upkeep": 1,
@@ -15,6 +16,19 @@
             "defence": 12,
             "health": 8,
             "speed": 5
+        },
+        {   "level": 2,
+            "name": "Bronx Warrior",
+            "baseTrainTime": 20,
+            "requirements": {   "resources" : {"food": 50, "wood": 15, "stone": 10, "iron": 5},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 20,
+            "attack": 20,
+            "defence": 25,
+            "health": 20,
+            "speed": 10
         }
         ]
     },

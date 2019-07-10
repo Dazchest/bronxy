@@ -9,7 +9,7 @@ class ResearchScreen extends ScreenView {
         this.name = "Research";
         this.currentTree = "City";
 
-        console.log("this is CityScreen constructor");
+        console.log("this is Research Screen constructor");
         this.buttons.push(new Button({"active": true, "x": 400, "y": 300, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
         //this.buttons.push(new Button({"active": true, "x": 400, "y": 350, "w": 100, "h": 30, "text": "Details", "screen": this, "action":  this.detailsScreen}));
 

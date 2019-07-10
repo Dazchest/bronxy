@@ -9,10 +9,12 @@
         "active": true
     },
     "resources": {
-        "food" : { "pph" : 545, "amount" : 500, "text": "Food" },
-        "wood" : { "pph" : 545, "amount" : 500, "text": "Wood" },
-        "stone" : { "pph" : 545, "amount" : 500, "text": "Stone" },
-        "iron" : { "pph" : 545, "amount" : 500, "text": "Iron" }
+        "food" : { "pph" : 545, "amount" : 500, "text": "Food"},
+        "wood" : { "pph" : 545, "amount" : 500, "text": "Wood"},
+        "stone" : { "pph" : 545, "amount" : 500, "text": "Stone"},
+        "iron" : { "pph" : 545, "amount" : 500, "text": "Iron"},
+        "gold": { "pph" : 0, "amount" : 5000, "text": "Gold", "name": "Gold"},
+        "gems": { "pph" : 0, "amount" : 50, "text": "Gems"}
     },
     "buildings": [
         {"id": 1, "type": 0, "level": 1, "name": "Town Hall", "gridPos": {"x":4, "y":4}},
@@ -22,18 +24,17 @@
         {"id": 1, "type": 1, "level": 1, "name": "Food Production", "buff": [{"food": 10}]}
     ],
     "troops": [
-        {"type": 0, "level": 1, "name": "Infantry", "quantity": 100},
-        {"type": 1, "level": 1, "name": "Archer", "quantity": 100},
-        {"type": 2, "level": 1, "name": "Cavalry", "quantity": 75},
-        {"type": 3, "level": 1, "name": "Siege", "quantity": 75},
-        {"type": 4, "level": 1, "name": "Settler", "quantity": 1},
-        {"type": 5, "level": 1, "name": "Boat", "quantity": 5}
+        {"type": 0, "tiers": [{"type": 0, "level": 1, "name": "Infantry1", "quantity": 100}, {"type": 0, "level": 2, "name": "Infantry2", "quantity": 50}]},
+        {"type": 1, "tiers": [{"level": 1, "name": "Archer 1", "quantity": 100}, {"level": 2, "name": "Archers 2", "quantity": 20}]},
+        {"tiers": 2, "level": 1, "name": "Cavalry", "quantity": 75},
+        {"tiers": 3, "level": 1, "name": "Siege", "quantity": 75},
+        {"tiers": 4, "level": 1, "name": "Settler", "quantity": 1},
+        {"tiers": 5, "level": 1, "name": "Boat", "quantity": 5}
     ],
     "items": [
-        {"type": 0, "group": "resources", "level": 0, "name": "Gold", "quantity": 5000},
-        {"type": 1, "name": "Gem", "quantity": 50},
-        {"type": 2, "level": 0, "group": "resources",  "name": "2k food", "quantity": 5, "contents": [{"food": 2000}]},
-        {"type": 30, "level": 0, "group": "chest",  "name": "SummerChest", "quantity": 100, "contents": [{"type" : 0, "level": 0, "quantity": 500},{"type" : 2, "level": 0, "quantity": 5}, {"type" : 2, "level": 1, "quantity": 1},{"type" : 3, "level": 0, "quantity": 2}, {"type" : 4, "level": 0, "quantity": 1}, {"type" : 5, "level": 0, "quantity": 1}]}
+        {"type": 50, "level": 0, "group": "resources", "action": "use", "name": "5 Gems", "quantity": 5, "contents": [{"gems": 5}]},
+        {"type": 2, "level": 0, "group": "resources", "action": "use", "name": "2k food", "quantity": 5, "contents": [{"food": 2000}]},
+        {"type": 30, "level": 0, "group": "chest", "action": "open", "name": "SummerChest", "quantity": 100, "contents": [{"type" : 0, "level": 0, "quantity": 1},{"type" : 2, "level": 0, "quantity": 5}, {"type" : 2, "level": 1, "quantity": 1},{"type" : 3, "level": 0, "quantity": 2}, {"type" : 4, "level": 0, "quantity": 1}, {"type" : 5, "level": 0, "quantity": 1}]}
     ],
     "speeds": [
         {"type": 0, "name": "1 hour Construction", "minutes": 60, "use": "building"},

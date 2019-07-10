@@ -23,12 +23,13 @@ class BuildingUpgradeScreen extends ScreenView {
         b.type = "upgrade";
         b.text = "Upgrade";
         b.color = "#00ff00";
+        b.style = "rectangle";
         b.active = false;
         b.action = this.upgradeBuilding;
         let bb = new Button(b);
+        this.buttons.push(bb);
         this.buttons.push(new Button({"active": true, "x": 400, "y": 300, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
         //this.buttons.push(new Button({"active": true, "x": 400, "y": 350, "w": 100, "h": 30, "text": "Details", "screen": this, "action":  this.detailsScreen}));
-        this.buttons.push(bb);
         console.log(this);
         
         cities[currentCity].active = false;
@@ -159,6 +160,13 @@ class BuildingUpgradeScreen extends ScreenView {
             ctx.fillStyle = '#000000';
             ctx.font = "20px Georgia";
             ctx.fillText(this.name, this.x, this.y + 20);
+    
+            if(this.level == 0) {
+                buildingUpgradeScreen.buttons[0].text = "Build"
+            } else {
+                buildingUpgradeScreen.buttons[0].text = "Upgrade"
+    
+            }
     
             this.displayUpgradeRequirements();
             this.drawButtons();

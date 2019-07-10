@@ -63,7 +63,11 @@ class BuildingHandler {
         tempData.level = 0;
         tempData.newBuilding = true;
         tempData.gridPos = { "x": this.newBuildingCoords.x, "y": this.newBuildingCoords.y };
-        tempBuild = new Building(tempData);
+        if(tempData.type == 6) {
+            tempBuild = new Barracks(tempData);
+         } else {
+           tempBuild = new Building(tempData);
+        }
         buildingUpgradeScreen = new BuildingUpgradeScreen(tempBuild);
         screenManager.screen = buildingUpgradeScreen;
         this.buildingDiv.style.visibility = "hidden";

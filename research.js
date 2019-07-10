@@ -154,18 +154,34 @@ class Research {
             //------------------------------------
             // check items required
             //TODO: change to include more items
-            this.item = this.levels[this.level].requirements.items[0].type;
-            this.requiredQuantity = this.levels[this.level].requirements.items[0].quantity;
-            let gold = itemList[this.item].quantity;    // players gold quantity
+            // this.item = this.levels[this.level].requirements.items[0].type;
+            // this.requiredQuantity = this.levels[this.level].requirements.items[0].quantity;
+            // let gold = itemList[this.item].quantity;    // players gold quantity
+            
+            // fontC = '#ff00ff';
+            // if(gold < this.requiredQuantity) {
+            //     requirementMet = false;
+            //     fontC = '#ff0000';
+            // }
+            // let rl = {"text": itemList[0].name + " - " + this.requiredQuantity, "color": fontC};
+            // requiredList.push(rl);
+            //-----------------------------------------
+
+            //------------------------------------
+            // check GOLD required
+            //TODO: change to include more items
+            this.resource = this.levels[this.level].requirements.resources[0].type;
+            this.requiredQuantity = this.levels[this.level].requirements.resources[0].quantity;
+            let gold = resources[this.resource].quantity;    // players gold quantity
             
             fontC = '#ff00ff';
             if(gold < this.requiredQuantity) {
                 requirementMet = false;
                 fontC = '#ff0000';
             }
-            let rl = {"text": itemList[0].name + " - " + this.requiredQuantity, "color": fontC};
+            let rl = {"text": resources[this.resource].name + " - " + this.requiredQuantity, "color": fontC};
             requiredList.push(rl);
-    //-----------------------------------------
+            //-----------------------------------------
 
         } else {
             requirementMet = false;
@@ -202,7 +218,7 @@ class Research {
         researchManager.upgrading = true;
 
         self.startTime = Date.now()/1000;   //convert to seconds
-        //TODO: needs to use this/self, instead of the list...
+        
         let upgradeTime = self.levels[self.level].baseResearchTime;
         self.upgradeTime = upgradeTime;
         self.endTime = self.startTime + self.upgradeTime;
@@ -211,7 +227,7 @@ class Research {
         self.show = false;
 
         //let itemsUsed = self.levels[self.level+1].requirements.resources.gold;
-        itemList[0].quantity -= self.requiredQuantity;
+        resources.gold.amount -= self.requiredQuantity;
     }
 
     checkUpgrading() {

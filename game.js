@@ -8,14 +8,21 @@ var canvas, ctx;
 var mouse = {};
 var camera = {"x": 0, "y": 0};
 var gridSize = {"x":64, "y": 64};
-var buildingList = [];
 var currentCity = 0;
 var thisCity;
 var cities = [];
 var player;
 var resources = {};
-var troops = {};
 
+var troopTrainingScreen = {"active": false};
+var troops = {};
+var troopList = [];
+var troopManager = new TroopManager();
+
+var buildings;
+var buildingList = [];
+var buildingHandler = new BuildingHandler();
+var tempBuild;
 var buildingInfoScreen = {"active": false};
 var buildingDetailsScreen = {"active": false};
 var buildingUpgradeScreen = {"active": false};
@@ -29,10 +36,7 @@ var buffManager = new BuffManager();
 
 var cityScreen;
 var city = {"name": "city", "active": true};
-var buildings;
 var tick = Date.now();
-var buildingHandler = new BuildingHandler();
-var tempBuild;
 var screenManager;
 
 var itemScreen = {"active": false};
@@ -77,6 +81,8 @@ function init() {
 
     canvas.addEventListener('click', doClick); 
 
+    //window.addEventListener('keydown', getInput);
+
     //initilaiase the player
     player = new Player;
     cityScreen = new CityScreen();
@@ -100,7 +106,16 @@ function init() {
         })
         .catch(gotErr);
 
-    jsonfile6 = "researchtree.json";
+    let jsonfile9 = "troops.json";
+    let promise9 = fetch(jsonfile9)
+        .then(parseJsonData)
+        .then(function(mj) {
+            troops = mj;
+            console.log(troops);
+        })
+        .catch(gotErr);
+    
+        jsonfile6 = "researchtree.json";
     let promise6 = fetch(jsonfile6)
         .then(parseJsonData)
         .then(function(mj) {
@@ -129,7 +144,7 @@ function init() {
         cityData = myJson[currentCity];
         buildingData = cityData.buildings;
         resourceData = cityData.resources;
-        troopsData = cityData.troops;
+        troopData = cityData.troops;
         let itemData = cityData.items;
         console.log(resourceData);
     
@@ -146,13 +161,20 @@ function init() {
             itemList.push(new Item(itemData[x]));
         }
 
-        troops = new Troops(troopsData);
+        for(var x=0; x<troopData.length; x++) {
+            troopList.push(new Troop(troopData[x]));
+        }
+        //troops = new Troop(troopsData);
+
+
         //for(var x=0; x<resourceData.length; x++) {
             //store the Resource class in individual objects within resources
             resources.food = new Resource(resourceData.food);
             resources.wood = new Resource(resourceData.wood);
             resources.stone = new Resource(resourceData.stone);
             resources.iron = new Resource(resourceData.iron);
+            resources.gold = new Resource(resourceData.gold);
+            resources.gems = new Resource(resourceData.gems);
             console.log(resources.food.amount);
             // resources.food.add = function() {
             //     resources.food = resources.food.amount + Number(1000);
@@ -198,6 +220,9 @@ function draw() {
     buildingHandler.update();
 
     researchManager.checkResearchUpgrades();
+
+    troopManager.checkTroopTraining();
+
 
 
     clicked = false;

@@ -23,6 +23,8 @@ class ScreenView {
         this.active = true;
 
         this.buttons = [];
+        this.inputs = [];
+
         console.log("this is ScreenView constructor");
 
     }
@@ -37,6 +39,10 @@ class ScreenView {
         cities[currentCity].active = true;
         //screenManager.screen =    
         //cityScreen = new CityScreen();
+
+        for(let x=0; x<self.inputs.length; x++) {
+            document.getElementById('maindiv').removeChild(self.inputs[x]);
+        }
         screenManager = new ScreenManager(cityScreen);
         }
 

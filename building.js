@@ -42,16 +42,17 @@ class Building {
     }
 
     checkButtons() {
-        console.log("checking buttons???");
+        //console.log("checking buttons???");
         this.buttonClicked = false;
         var b;
         for(let x=0; x<this.buttons.length; x++) {
             if(clicked) {   //mouse is clicked, check if it was on a button
-                console.log("checking buttons???");
+                console.log(this.buttons.length);
                 b = this.buttons[x];
-                console.log("action = " + b.action);
-                console.log("active = " + b.active);
+                //console.log("action = " + b.action);
+                //console.log("active = " + b.active);
                 if(mouse.x > b.x && mouse.x < b.x + b.w && mouse.y > b.y && mouse.y < b.y + b.h) {
+                    console.log("presssssss " + x);
                     if(b.action && b.active) {
                         this.buttonClicked = b;
                     }
@@ -60,8 +61,8 @@ class Building {
         }
         if(this.buttonClicked) {
             clicked = false;
-            console.log(b.text + " pressed");
-            let callback = b.action;
+            console.log(this.buttonClicked.text + " pressed");
+            let callback = this.buttonClicked.action;
             callback(this);
         }
     }
@@ -170,12 +171,18 @@ class Building {
         }
         if(this.production == "rss"){   //its a warehouse
             this.timeElapsed = (Date.now() - this.collectionTime) / 1000;    // in seconds
+            this.collectable = true;
+            if(this.timeElapsed < this.collactableTime) {
+                this.collectable = false;
+                return;                 // can only collect after # seconds/minutes
+            } 
         }
     }
 
     collectProduction() {
         if(this.production == "rss") {  // collect all rss
             console.log("collecting from warehouse");
+            this.collectionTime = Date.now();
             for(let x=0; x<buildingList.length; x++) {
                 if(buildingList[x].pph) {
                     resources[buildingList[x].production].amount += buildingList[x].amount;
@@ -232,5 +239,83 @@ class Building {
 
 }
 
+
+class Barracks extends Building {
+
+    constructor(data) {
+        super(data);
+
+        this.troopType = 0;
+        this.troopName = "Infantry";
+        this.troops = troops[this.troopType];
+        this.barracksTroopList = troopList[this.troopType];
+
+        this.training = false;
+        this.trainingQueue = {};
+
+        this.buttons.push(new Button({"active": false, "offset" : {"x": 0, "y": 80}, "w": 100, "h": 30, "text": "Train", "screen": this, "action": this.trainTroopsScreen}));
+
+    }
+
+    trainTroopsScreen(self) {
+        if(self.upgrading) { // if upgrading, then dont alow to train troops
+            console.log("Upgrading... cant train");
+            return;
+        }
+        console.log("Troop Training screen please!!!");
+        console.log(self);
+        troopTrainingScreen = new TroopTrainingScreen(self);
+        screenManager.screen = troopTrainingScreen;
+    }
+
+    checkTraining() {
+        if(this.training) {
+            console.log("we are training in " + this.name);
+            if(this.trainingQueue.endTime <= Date.now()/1000) {
+                this.training = false;
+                console.log("training complete");
+                console.log(this.barracksTroopList);
+                console.log(this.trainingQueue.quantity);
+                troopList[0].tiers[this.trainingQueue.tier].quantity += this.trainingQueue.quantity;
+                setButtonState(this.trainingScreen.buttons, "train", true);
+
+                //troopList[0].tiers[this.trainingQueue.tier].quantity = 500;
+            }
+        }
+    }
+
+    train(tier, qty) {
+        if(this.training) {   // already trainging so return - double checking at this point
+            console.log('already training');
+            return;
+        }
+
+        tier -= 1;
+        this.training = true;
+        this.trainingQueue.quantity = Number(qty);
+        this.trainingQueue.tier = tier;
+
+        this.trainingQueue.startTime = Date.now()/1000;   //convert to seconds
+        let trainTime = qty * this.troops.levels[tier].baseTrainTime;
+        //this.trainTime = Math.ceil(trainTime / (1+(pBuff/100)));   //this need fixing
+        //this.trainTime -= vBuff;
+        this.trainingQueue.trainTime = trainTime;
+        this.trainingQueue.endTime = this.trainingQueue.startTime + this.trainingQueue.trainTime;
+        console.log("training time = " + this.trainingQueue.trainTime + " seconds");
+
+        // use the rss
+        resources.food.amount -= troops[this.troopType].levels[this.trainingQueue.tier].requirements.resources.food;
+        resources.wood.amount -= troops[this.troopType].levels[this.trainingQueue.tier].requirements.resources.wood;
+        resources.stone.amount -= troops[this.troopType].levels[this.trainingQueue.tier].requirements.resources.stone;
+        resources.iron.amount -= troops[this.troopType].levels[this.trainingQueue.tier].requirements.resources.iron;
+
+
+    }
+
+    displayTrainingTimer() {
+        popup(this.trainingQueue.endTime - Date.now()/1000, 180, 565);
+    }
+
+}
 
 

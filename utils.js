@@ -11,5 +11,19 @@ function setButtonActive(buttons, type) {
             buttons[x].active = true;
         }
     }
+}
+function setButtonState(buttons, name, state) {
+    if(Array.isArray(buttons)) {    // we have a list/array of buttons to check through
+        for(let x=0; x< buttons.length; x++) {
+            if(buttons[x].name == name) {
+                buttons[x].active = state;
+            }
+        }
+    } else {    // just 1 button to change
+        //buttons[typeCheck].active = state;
+    }
+}
 
+function getInput(e) {
+    console.log(e.keyCode);
 }
