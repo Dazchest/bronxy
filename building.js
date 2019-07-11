@@ -240,15 +240,14 @@ class Building {
 }
 
 
-class Barracks extends Building {
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------
+
+class troopTrainingBuilding extends Building {
 
     constructor(data) {
         super(data);
-
-        this.troopType = 0;
-        this.troopName = "Infantry";
-        this.troops = troops[this.troopType];
-        this.barracksTroopList = troopList[this.troopType];
 
         this.training = false;
         this.trainingQueue = {};
@@ -276,10 +275,31 @@ class Barracks extends Building {
                 console.log("training complete");
                 console.log(this.barracksTroopList);
                 console.log(this.trainingQueue.quantity);
-                troopList[0].tiers[this.trainingQueue.tier].quantity += this.trainingQueue.quantity;
-                setButtonState(this.trainingScreen.buttons, "train", true);
 
-                //troopList[0].tiers[this.trainingQueue.tier].quantity = 500;
+
+                // check if we have this troop type and tier already.. if true, just add quantity... if false, create new troop and push
+                if(troopList[this.troopType]) {
+                    if(troopList[this.troopType].levels[this.trainingQueue.tier]) {
+                        troopList[this.troopType].levels[this.trainingQueue.tier].quantity += this.trainingQueue.quantity;
+                        console.log(troopList[this.troopType].levels[this.trainingQueue.tier]);
+                        console.log("adding to existing troops");
+                    }
+                } else {
+                    console.log(this.troopType);
+                    let troopData = {};
+                    troopData.type = this.troopType;
+                    troopData.levels = [];
+                    let tierData = {};
+                    tierData.level = this.trainingQueue.tier + 1;
+                    tierData.quantity = this.trainingQueue.quantity;
+                    tierData.type = this.troopType;
+                    tierData.name = troops[this.troopType].levels[this.trainingQueue.tier].name;
+                    troopData.levels.push(tierData);
+                    troopList[this.troopType] = (new Troop(troopData));
+
+                    console.log("creating new troops")
+                }
+                setButtonState(this.trainingScreen.buttons, "train", true);
             }
         }
     }
@@ -304,16 +324,17 @@ class Barracks extends Building {
         console.log("training time = " + this.trainingQueue.trainTime + " seconds");
 
         // use the rss
-        resources.food.amount -= troops[this.troopType].levels[this.trainingQueue.tier].requirements.resources.food;
-        resources.wood.amount -= troops[this.troopType].levels[this.trainingQueue.tier].requirements.resources.wood;
-        resources.stone.amount -= troops[this.troopType].levels[this.trainingQueue.tier].requirements.resources.stone;
-        resources.iron.amount -= troops[this.troopType].levels[this.trainingQueue.tier].requirements.resources.iron;
+        let t = troops[this.troopType].levels[this.trainingQueue.tier];
+        resources.food.amount -= t.requirements.resources.food * qty;
+        resources.wood.amount -= t.requirements.resources.wood * qty;
+        resources.stone.amount -= t.requirements.resources.stone * qty;
+        resources.iron.amount -= t.requirements.resources.iron * qty;
 
 
     }
 
     displayTrainingTimer() {
-        popup(this.trainingQueue.endTime - Date.now()/1000, 180, 565);
+        //popup(this.trainingQueue.endTime - Date.now()/1000, 180, 565);
     }
 
 }

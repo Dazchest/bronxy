@@ -2,7 +2,6 @@ class Troop {
 
    // type = {inf (load=10), arch, cav, sieg, boar, farmer (load = 200), settler {needed to build another city}}
     level;
-    quantity;
     attack;
     defence;
     health

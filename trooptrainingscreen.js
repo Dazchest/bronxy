@@ -18,7 +18,13 @@ class TroopTrainingScreen extends ScreenView {
         this.troopType = troopBuilding.troopType
         this.troopName = troopBuilding.troopName
         this.troops = troopBuilding.troops;
-        this.tiers = troopList[this.troopType].tiers;
+        this.troopList = troopBuilding.troopList;
+        //this.tiers = this.troopList.tiers;
+        // if(this.troopList.length>0) {
+        // } else {
+        //     this.tiers = [];
+        // }
+        this.currentTier = 1;
 
         console.log("this is Troop Training constructor");
         console.log("troops that train here are - " + "type: " + this.troopType + " : " +  this.troopName);
@@ -36,8 +42,10 @@ class TroopTrainingScreen extends ScreenView {
         i.style.top =  (165 + camera.x) + 'px';
         i.style.width = '200px';
         i.type = 'number';  
+        i.min = 1;
         i.value = 1;
-        i.addEventListener('keydown', getInput);
+        //i.addEventListener('keydown', getInput);
+        //i.addEventListener('change', checkInput); 
 
         console.log(i);
         this.inputs.push(i);
@@ -71,6 +79,9 @@ class TroopTrainingScreen extends ScreenView {
             this.displayTroops(1);      //which tier to display
             this.drawButtons();
             this.checkButtons();
+            if(this.troopBuilding.training) {
+                this.displayTrainingTimer();
+            }
 
             Resource.drawAll(); // draw resources at the top of the screen
             //this.checkDisplayResearch();
@@ -84,31 +95,62 @@ class TroopTrainingScreen extends ScreenView {
         //TODO: this is just a quick show
         ctx.fillStyle = '#eeeeee';
         ctx.font = "20px Georgia";
-        ctx.fillText(this.tiers[tier].quantity + " " + this.troops.levels[tier].name, this.x + 100, this.y + 180);
-        //this.tiers[x].draw();
 
+        if(troopList[this.troopType]) {
+            if(troopList[this.troopType].levels[tier]) {
+                ctx.fillText(troopList[this.troopType].levels[tier].quantity + " " + this.troops.levels[tier].name, this.x + 100, this.y + 180);
+            }
+        } else {
+            ctx.fillText("0 " + this.troops.levels[tier].name, this.x + 100, this.y + 180);
+        }
+
+        // check requirements
+        this.requirementsMet = true;
         let r = this.troops.levels[tier].requirements;
-        ctx.fillText("Food: " + r.resources.food, this.x + 25, this.y + 240)
-        ctx.fillText("Wood: " + r.resources.wood, this.x + 125, this.y + 240)
-        ctx.fillText("Stone: " + r.resources.stone, this.x + 250, this.y + 240)
-        ctx.fillText("Iron: " + r.resources.iron, this.x + 375, this.y + 240)
 
         let quantityInput = document.getElementById('quantityInput').value;
-        ctx.fillText("Food: " + quantityInput * r.resources.food, this.x + 25, this.y + 300)
-        ctx.fillText("Wood: " + quantityInput * r.resources.wood, this.x + 125, this.y + 300)
-        ctx.fillText("Stone: " + quantityInput * r.resources.stone, this.x + 250, this.y + 300)
-        ctx.fillText("Iron: " + quantityInput * r.resources.iron, this.x + 375, this.y + 300)
+        ctx.fillStyle = '#ffffff';
 
+        let resCheck = ['food', 'wood', 'stone', 'iron'];
+        for(let x=0; x<resCheck.length; x++) {
+            ctx.fillStyle = '#ffffff';
+            if(resources[resCheck[x]].amount < quantityInput * r.resources[resCheck[x]]) {
+                ctx.fillStyle = '#ff0000';
+                this.requirementsMet = false;
+            }
+            ctx.fillText("hello", 150, 25);
+            ctx.fillText(resources[resCheck[x]].text + ": " + quantityInput * r.resources[resCheck[x]], this.x + 25 + (x * 95), this.y + 260)    
+        }
+
+        ctx.fillStyle = '#ffffff';
         ctx.fillText("Total Time: " + quantityInput * this.troops.levels[tier].baseTrainTime, this.x + 375, this.y + 380)
+
+        if(this.troopBuilding.training) {
+            this.requirementsMet = false;
+        }
+
+        if(this.requirementsMet == false) {
+            setButtonState(this.buttons, "train", false);
+        } else {
+            setButtonState(this.buttons, "train", true);
+        }
+
     }
 
     train(self) {
         console.log("lets train some troops");
         let quantityInput = document.getElementById('quantityInput').value;
+        if(quantityInput < 1) {
+            quantityInput = 1;
+            document.getElementById('quantityInput').value = 1;
+        }
         setButtonState(self.buttons, "train", false);
-        self.troopBuilding.train(1, quantityInput);
+        self.troopBuilding.train(self.currentTier, quantityInput);
     }
 
+    displayTrainingTimer() {
+        popup(this.trainingQueue.endTime - Date.now()/1000, 180, 565);
+    }
 
     // checkDisplayResearch() {
     //     for(let x=0; x<researchList.length; x++) {

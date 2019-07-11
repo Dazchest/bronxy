@@ -63,11 +63,37 @@ class BuildingHandler {
         tempData.level = 0;
         tempData.newBuilding = true;
         tempData.gridPos = { "x": this.newBuildingCoords.x, "y": this.newBuildingCoords.y };
-        if(tempData.type == 6) {
-            tempBuild = new Barracks(tempData);
-         } else {
-           tempBuild = new Building(tempData);
+
+        if(buildings[this.selectedBuilding].troopProduction) {
+            console.log("building a troop building");
+            tempData.troopType = buildings[this.selectedBuilding].troopType;
+            tempData.troopName = buildings[this.selectedBuilding].name;
+            tempData.troops = troops[tempData.troopType];
+            tempData.troopList = troopList[tempData.troopType];
+            tempBuild = new troopTrainingBuilding(tempData);
+        } else {
+            tempBuild = new Building(tempData);
         }
+        // switch (tempData.type) {
+        //     case 6:
+        //         tempData.troopType = 0;
+        //         tempData.troopName = "Infantry";
+        //         tempData.troops = troops[tempData.troopType];
+        //         tempData.troopList = troopList[tempData.troopType];
+        //         tempBuild = new troopTrainingBuilding(tempData);
+        //         break;
+        //     case 8:
+        //         tempData.troopType = 1;
+        //         tempData.troopName = "Archer";
+        //         tempData.troops = troops[tempData.troopType];
+        //         tempData.troopList = troopList[tempData.troopType];
+        //         tempBuild = new troopTrainingBuilding(tempData);
+        //         break;
+        //     default:
+        //         tempBuild = new Building(tempData);
+        //         break;
+        // }
+
         buildingUpgradeScreen = new BuildingUpgradeScreen(tempBuild);
         screenManager.screen = buildingUpgradeScreen;
         this.buildingDiv.style.visibility = "hidden";
@@ -131,6 +157,7 @@ class BuildingHandler {
         if(buildingHandler.currentBuilding) {
             buildingHandler.currentBuilding.showButtons();
             buildingHandler.currentBuilding.checkButtons();
+            document.getElementById('buildingDiv').style.visibility = 'hidden';
         }
         if(cities[currentCity].active == true && clicked) {
             buildingHandler.hideOuterButtons();

@@ -27,3 +27,9 @@ function setButtonState(buttons, name, state) {
 function getInput(e) {
     console.log(e.keyCode);
 }
+function checkInput() {
+    //console.log("key = " + e.keyCode);
+    if(document.getElementById('quantityInput').value < 0) {
+        document.getElementById('quantityInput').value = 1;
+    }
+}

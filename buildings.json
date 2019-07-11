@@ -162,8 +162,9 @@
 
     {   "type": 6,
         "name": "Barracks",
-        "quantityAllowed" : 5,
+        "quantityAllowed" : 1,
         "troopProduction": "infantry",
+        "troopType": 0,
         "levels" : [
         {   "level": 1,
             "requirements":    {   "resources" : {"food": 40, "wood": 40, "stone": 40, "iron": 20},
@@ -196,6 +197,111 @@
                                     "buildings" : [{"type": 0, "level": 2}, {"type": 1, "level": 2}]
                                 },
             "baseBuildTime": 20
+        }
+        ]
+    },
+
+    {   "type": 8,
+        "name": "Archery",
+        "quantityAllowed" : 1,
+        "troopProduction": "Archers",
+        "troopType": 1,
+        "levels" : [
+        {   "level": 1,
+            "requirements":    {   "resources" : {"food": 40, "wood": 40, "stone": 40, "iron": 20},
+                                    "buildings" : [{"type": 0, "level": 1}, {"type": 1, "level": 1}]
+                                },
+            "baseBuildTime": 1
+        },
+        {   "level": 2,
+            "requirements":    {   "resources" : {"food": 100, "wood": 1000, "stone": 500, "iron": 250},
+                                    "buildings" : [{"type": 0, "level": 2}, {"type": 1, "level": 2}]
+                                },
+            "baseBuildTime": 5
+        }
+        ]
+    },
+
+    {   "type": 9,
+        "name": "Stables",
+        "quantityAllowed" : 1,
+        "troopProduction": "Cavalry",
+        "troopType": 2,
+        "levels" : [
+        {   "level": 1,
+            "requirements":    {   "resources" : {"food": 40, "wood": 40, "stone": 40, "iron": 20},
+                                    "buildings" : [{"type": 0, "level": 1}, {"type": 1, "level": 1}]
+                                },
+            "baseBuildTime": 1
+        },
+        {   "level": 2,
+            "requirements":    {   "resources" : {"food": 100, "wood": 1000, "stone": 500, "iron": 250},
+                                    "buildings" : [{"type": 0, "level": 2}, {"type": 1, "level": 2}]
+                                },
+            "baseBuildTime": 5
+        }
+        ]
+    },
+
+    {   "type": 10,
+        "name": "Workshop",
+        "quantityAllowed" : 1,
+        "troopProduction": "Siege",
+        "troopType": 3,
+        "levels" : [
+        {   "level": 1,
+            "requirements":    {   "resources" : {"food": 40, "wood": 40, "stone": 40, "iron": 20},
+                                    "buildings" : [{"type": 0, "level": 1}, {"type": 1, "level": 1}]
+                                },
+            "baseBuildTime": 1
+        },
+        {   "level": 2,
+            "requirements":    {   "resources" : {"food": 100, "wood": 1000, "stone": 500, "iron": 250},
+                                    "buildings" : [{"type": 0, "level": 2}, {"type": 1, "level": 2}]
+                                },
+            "baseBuildTime": 5
+        }
+        ]
+    },
+
+    {   "type": 11,
+        "name": "Shipyard",
+        "quantityAllowed" : 1,
+        "troopProduction": "Boats",
+        "troopType": 4,
+        "levels" : [
+        {   "level": 1,
+            "requirements":    {   "resources" : {"food": 40, "wood": 40, "stone": 40, "iron": 20},
+                                    "buildings" : [{"type": 0, "level": 1}, {"type": 1, "level": 1}]
+                                },
+            "baseBuildTime": 1
+        },
+        {   "level": 2,
+            "requirements":    {   "resources" : {"food": 100, "wood": 1000, "stone": 500, "iron": 250},
+                                    "buildings" : [{"type": 0, "level": 2}, {"type": 1, "level": 2}]
+                                },
+            "baseBuildTime": 5
+        }
+        ]
+    },
+
+    {   "type": 12,
+        "name": "Hut",
+        "quantityAllowed" : 1,
+        "troopProduction": "Settlers",
+        "troopType": 5,
+        "levels" : [
+        {   "level": 1,
+            "requirements":    {   "resources" : {"food": 40, "wood": 40, "stone": 40, "iron": 20},
+                                    "buildings" : [{"type": 0, "level": 1}, {"type": 1, "level": 1}]
+                                },
+            "baseBuildTime": 1
+        },
+        {   "level": 2,
+            "requirements":    {   "resources" : {"food": 100, "wood": 1000, "stone": 500, "iron": 250},
+                                    "buildings" : [{"type": 0, "level": 2}, {"type": 1, "level": 2}]
+                                },
+            "baseBuildTime": 5
         }
         ]
     }

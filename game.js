@@ -141,11 +141,11 @@ function init() {
     //TODO: put all promises in an array, and then check them all before proceeding
     function initBuildingData(myJson) {
         console.log(myJson[currentCity].buildings);
-        cityData = myJson[currentCity];
-        buildingData = cityData.buildings;
-        resourceData = cityData.resources;
-        troopData = cityData.troops;
-        let itemData = cityData.items;
+        cityData = myJson[currentCity] || "";
+        buildingData = cityData.buildings || "";
+        resourceData = cityData.resources || "";
+        troopData = cityData.troops || "";
+        let itemData = cityData.items || "";
         console.log(resourceData);
     
         researchData = cityData.research;

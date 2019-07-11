@@ -1,0 +1,8 @@
+    "troops": [
+        {"type": 0, "tiers": [{"type": 0, "level": 1, "name": "Infantry1", "quantity": 100}, {"type": 0, "level": 2, "name": "Infantry2", "quantity": 50}]},
+        {"type": 1, "tiers": [{"level": 1, "name": "Archer 1", "quantity": 100}, {"level": 2, "name": "Archers 2", "quantity": 20}]},
+        {"tiers": 2, "level": 1, "name": "Cavalry", "quantity": 75},
+        {"tiers": 3, "level": 1, "name": "Siege", "quantity": 75},
+        {"tiers": 4, "level": 1, "name": "Settler", "quantity": 1},
+        {"tiers": 5, "level": 1, "name": "Boat", "quantity": 5}
+    ],

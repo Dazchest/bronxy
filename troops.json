@@ -6,8 +6,8 @@
         "levels" : [
         {   "level": 1,
             "name": "Warrior",
-            "baseTrainTime": 2,
-            "requirements": {   "resources" : {"food": 10, "wood": 5, "stone": 4, "iron": 3},
+            "baseTrainTime": 1,
+            "requirements": {   "resources" : {"food": 50, "wood": 25, "stone": 24, "iron": 23},
                                 "buildings" : [{"type": 6, "level": 1}]
                             },
             "upkeep": 1,
@@ -32,13 +32,174 @@
         }
         ]
     },
+    {
+        "type": 1,
+        "name": "Archer",
+        "building": 8,     
+        "levels" : [
+        {   "level": 1,
+            "name": "Twig Thrower",
+            "baseTrainTime": 1,
+            "requirements": {   "resources" : {"food": 50, "wood": 25, "stone": 24, "iron": 23},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 10,
+            "attack": 10,
+            "defence": 12,
+            "health": 8,
+            "speed": 5
+        },
+        {   "level": 2,
+            "name": "Stone Thrower",
+            "baseTrainTime": 20,
+            "requirements": {   "resources" : {"food": 50, "wood": 15, "stone": 10, "iron": 5},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 20,
+            "attack": 20,
+            "defence": 25,
+            "health": 20,
+            "speed": 10
+        }
+        ]
+    },
 
+    {
+        "type": 2,
+        "name": "Cavalry",
+        "building": 9,     
+        "levels" : [
+        {   "level": 1,
+            "name": "Unicorn Donkey",
+            "baseTrainTime": 1,
+            "requirements": {   "resources" : {"food": 50, "wood": 25, "stone": 24, "iron": 23},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 10,
+            "attack": 10,
+            "defence": 12,
+            "health": 8,
+            "speed": 5
+        },
+        {   "level": 2,
+            "name": "Unicorn",
+            "baseTrainTime": 20,
+            "requirements": {   "resources" : {"food": 50, "wood": 15, "stone": 10, "iron": 5},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 20,
+            "attack": 20,
+            "defence": 25,
+            "health": 20,
+            "speed": 10
+        }
+        ]
+    },
 
-    {"type": 1, "level": 1, "name": "Archer", "quantity": 100},
-    {"type": 2, "level": 1, "name": "Cavalry", "quantity": 75},
-    {"type": 3, "level": 1, "name": "Siege", "quantity": 75},
-    {"type": 4, "level": 1, "name": "Settler", "quantity": 1},
-    {"type": 5, "level": 1, "name": "Boat", "quantity": 5}
+    {
+        "type": 3,
+        "name": "Siege",
+        "building": 10,     
+        "levels" : [
+        {   "level": 1,
+            "name": "Twig Launcher",
+            "baseTrainTime": 1,
+            "requirements": {   "resources" : {"food": 50, "wood": 25, "stone": 24, "iron": 23},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 10,
+            "attack": 10,
+            "defence": 12,
+            "health": 8,
+            "speed": 5
+        },
+        {   "level": 2,
+            "name": "Stone Launcher",
+            "baseTrainTime": 20,
+            "requirements": {   "resources" : {"food": 50, "wood": 15, "stone": 10, "iron": 5},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 20,
+            "attack": 20,
+            "defence": 25,
+            "health": 20,
+            "speed": 10
+        }
+        ]
+    },
 
+    {
+        "type": 4,
+        "name": "Boat",
+        "building": 11,     
+        "levels" : [
+        {   "level": 1,
+            "name": "Trireme",
+            "baseTrainTime": 1,
+            "requirements": {   "resources" : {"food": 50, "wood": 25, "stone": 24, "iron": 23},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 10,
+            "attack": 10,
+            "defence": 12,
+            "health": 8,
+            "speed": 5
+        },
+        {   "level": 2,
+            "name": "Iron Clad",
+            "baseTrainTime": 20,
+            "requirements": {   "resources" : {"food": 50, "wood": 15, "stone": 10, "iron": 5},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 20,
+            "attack": 20,
+            "defence": 25,
+            "health": 20,
+            "speed": 10
+        }
+        ]
+    },
+    
+    {
+        "type": 5,
+        "name": "Settler",
+        "building": 12,     
+        "levels" : [
+        {   "level": 1,
+            "name": "Settler",
+            "baseTrainTime": 1,
+            "requirements": {   "resources" : {"food": 50, "wood": 25, "stone": 24, "iron": 23},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 10,
+            "attack": 10,
+            "defence": 12,
+            "health": 8,
+            "speed": 5
+        },
+        {   "level": 2,
+            "name": "Engineer",
+            "baseTrainTime": 20,
+            "requirements": {   "resources" : {"food": 50, "wood": 15, "stone": 10, "iron": 5},
+                                "buildings" : [{"type": 6, "level": 1}]
+                            },
+            "upkeep": 1,
+            "load": 20,
+            "attack": 20,
+            "defence": 25,
+            "health": 20,
+            "speed": 10
+        }
+        ]
+    }
 
 ]
