@@ -181,7 +181,7 @@ function init() {
             // }
         //}
         buildingHandler.loadImages();
-        setTimeout(draw, 1000);
+        setTimeout(draw, 2000);
         //draw();
         
     }
