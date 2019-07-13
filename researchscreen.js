@@ -39,6 +39,10 @@ class ResearchScreen extends ScreenView {
             this.checkButtons();
             Resource.drawAll(); // draw resources at the top of the screen
             this.checkDisplayResearch();
+
+            // for(let x=0; x<researchList.length; x++) {
+            //     researchList[x].checkResearchButtons();
+            // }
             this.checkResearchButtons();
 
         }
@@ -65,7 +69,7 @@ class ResearchScreen extends ScreenView {
                             clicked = false;
                             console.log(b.text + " pressed");
                             let callback = b.action;
-                            callback(b.where, b);
+                            callback(researchList[x], b);
                         }
                     }
                 }

@@ -37,12 +37,20 @@ class ItemManager {
                 newItemData.quantity = itemData.quantity;
                 itemList.push(new Item(newItemData));
 
-                let nb = new Button({"item": itemList.slice(-1)[0] , "active": true, "drawButton": false, "x": 50, "y": 200 + ((itemList.length-1) * 35), "w": 100, "h": 30, "text": "", "screen": this, "action":  itemScreen.showItem});
-                itemList.slice(-1)[0].button = nb
+                // let nb = new Button({"item": itemList.slice(-1)[0] , "active": true, "drawButton": false, "x": 50, "y": 200 + ((itemList.length-1) * 35), "w": 100, "h": 30, "text": "",  "action":  itemScreen.showItem});
+                // itemList.slice(-1)[0].button = nb
+
+                // if(screenManager.screen = itemScreen) { // add a new button for the new item
+                //     itemScreen.buttons.push(nb);
+                // }
+
+                let nb = new Button({"active": true, "drawButton": false, "x": 50, "y": 200 + ((itemList.length-1) * 35), "w": 100, "h": 30, "text": "",  "action":  itemScreen.showItem});
+                itemList.slice(-1)[0].button = nb;  // add button to last item added
 
                 if(screenManager.screen = itemScreen) { // add a new button for the new item
-                    itemScreen.buttons.push(nb);
+                    //itemScreen.buttons.push(nb);
                 }
+
             }
         }
         //{"type": 2, "level": 0, "group": "resources",  "name": "rssbox", "quantity": 5, "contents": [{"food": 1000}]},

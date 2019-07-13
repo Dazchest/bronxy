@@ -3,17 +3,21 @@ class Building {
 
     constructor(data) {
         console.log("this is building constructor");
-        for(let x=0; x<Object.keys(data).length; x++) {
-            name = Object.keys(data)[x];
-            this[name] = data[name];
-        }
-        this.images = new Image();
-        let imageSrc = "images/" + this.type + ".png";
-        this.images.src = imageSrc
         this.upgrading = false;
         this.amount = 0;
         this.collectable = false;
         this.collactableTime = 3;  // can collect rss after # seconds
+
+        for(let x=0; x<Object.keys(data).length; x++) {
+            name = Object.keys(data)[x];
+            this[name] = data[name];
+        }
+
+        //setup the more static objects
+        this.images = new Image();
+        let imageSrc = "images/" + this.type + ".png";
+        this.images.src = imageSrc
+
         this.buttons = [];
         this.buttons.push(new Button({"active": false, "offset" : {"x": 0, "y": -30}, "w": 100, "h": 30, "text": "Upgrade", "screen": this, "action": this.upgradeScreen}));
     }
@@ -72,8 +76,9 @@ class Building {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
 
-        ctx.drawImage(this.images, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
-
+        if(this.images.complete) {
+            ctx.drawImage(this.images, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
+        }
         ctx.fillStyle = '#000000';
         ctx.font = "20px Georgia";
         ctx.fillText(this.name, this.gridPos.x * gridSize.x + camera.x - 10, this.gridPos.y * gridSize.y + camera.y + 0);
@@ -249,8 +254,8 @@ class troopTrainingBuilding extends Building {
     constructor(data) {
         super(data);
 
-        this.training = false;
-        this.trainingQueue = {};
+        //this.training = false;
+        //this.trainingQueue = {};
 
         this.buttons.push(new Button({"active": false, "offset" : {"x": 0, "y": 80}, "w": 100, "h": 30, "text": "Train", "screen": this, "action": this.trainTroopsScreen}));
 
@@ -269,23 +274,23 @@ class troopTrainingBuilding extends Building {
 
     checkTraining() {
         if(this.training) {
-            console.log("we are training in " + this.name);
+            //console.log("we are training in " + this.name);
             if(this.trainingQueue.endTime <= Date.now()/1000) {
                 this.training = false;
                 console.log("training complete");
-                console.log(this.barracksTroopList);
-                console.log(this.trainingQueue.quantity);
+                //console.log(this.barracksTroopList);
+                //console.log(this.trainingQueue.quantity);
 
 
                 // check if we have this troop type and tier already.. if true, just add quantity... if false, create new troop and push
                 if(troopList[this.troopType]) {
                     if(troopList[this.troopType].levels[this.trainingQueue.tier]) {
                         troopList[this.troopType].levels[this.trainingQueue.tier].quantity += this.trainingQueue.quantity;
-                        console.log(troopList[this.troopType].levels[this.trainingQueue.tier]);
-                        console.log("adding to existing troops");
+                        //console.log(troopList[this.troopType].levels[this.trainingQueue.tier]);
+                        //console.log("adding to existing troops");
                     }
                 } else {
-                    console.log(this.troopType);
+                    //console.log(this.troopType);
                     let troopData = {};
                     troopData.type = this.troopType;
                     troopData.levels = [];
@@ -297,9 +302,11 @@ class troopTrainingBuilding extends Building {
                     troopData.levels.push(tierData);
                     troopList[this.troopType] = (new Troop(troopData));
 
-                    console.log("creating new troops")
+                    //console.log("creating new troops")
                 }
-                setButtonState(this.trainingScreen.buttons, "train", true);
+                if(this.trainingScreen) {
+                    setButtonState(this.trainingScreen.buttons, "train", true);
+                }
             }
         }
     }

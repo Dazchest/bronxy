@@ -7,6 +7,8 @@ class Resource {
             name = Object.keys(data)[x];
             this[name] = data[name];
         }
+
+        this.icon = new Image();
     }
 
     static drawAll() {
@@ -18,7 +20,10 @@ class Resource {
             if(t == "gems") {
                 ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 470, 55);
             } else {
-                ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 10 + (x*120), 80);
+                if(resources[t].icon.complete) {
+                ctx.drawImage(resources[t].icon, 10 + (x*80), 80-16, 32, 32);
+                }
+                ctx.fillText(resources[t].amount.toString(), 50 + (x*80), 80);
             }
         }
     }

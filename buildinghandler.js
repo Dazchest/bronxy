@@ -66,33 +66,17 @@ class BuildingHandler {
 
         if(buildings[this.selectedBuilding].troopProduction) {
             console.log("building a troop building");
+            tempData.troopProduction = buildings[this.selectedBuilding].troopProduction;
             tempData.troopType = buildings[this.selectedBuilding].troopType;
             tempData.troopName = buildings[this.selectedBuilding].name;
             tempData.troops = troops[tempData.troopType];
             tempData.troopList = troopList[tempData.troopType];
+            tempData.training = false;
+            tempData.trainingQueue = {};
             tempBuild = new troopTrainingBuilding(tempData);
         } else {
             tempBuild = new Building(tempData);
         }
-        // switch (tempData.type) {
-        //     case 6:
-        //         tempData.troopType = 0;
-        //         tempData.troopName = "Infantry";
-        //         tempData.troops = troops[tempData.troopType];
-        //         tempData.troopList = troopList[tempData.troopType];
-        //         tempBuild = new troopTrainingBuilding(tempData);
-        //         break;
-        //     case 8:
-        //         tempData.troopType = 1;
-        //         tempData.troopName = "Archer";
-        //         tempData.troops = troops[tempData.troopType];
-        //         tempData.troopList = troopList[tempData.troopType];
-        //         tempBuild = new troopTrainingBuilding(tempData);
-        //         break;
-        //     default:
-        //         tempBuild = new Building(tempData);
-        //         break;
-        // }
 
         buildingUpgradeScreen = new BuildingUpgradeScreen(tempBuild);
         screenManager.screen = buildingUpgradeScreen;

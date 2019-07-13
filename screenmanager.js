@@ -39,6 +39,10 @@ class ScreenView {
         cities[currentCity].active = true;
         //screenManager.screen =    
         //cityScreen = new CityScreen();
+        if(self.troopBuilding) {
+            console.log("exiting - from a troop building");
+            self.troopBuilding.trainingScreen = null;
+        }
 
         for(let x=0; x<self.inputs.length; x++) {
             document.getElementById('maindiv').removeChild(self.inputs[x]);

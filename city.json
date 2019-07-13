@@ -9,12 +9,12 @@
         "active": true
     },
     "resources": {
-        "food" : { "pph" : 545, "amount" : 500, "text": "Food"},
-        "wood" : { "pph" : 545, "amount" : 500, "text": "Wood"},
-        "stone" : { "pph" : 545, "amount" : 500, "text": "Stone"},
-        "iron" : { "pph" : 545, "amount" : 500, "text": "Iron"},
-        "gold": { "pph" : 0, "amount" : 5000, "text": "Gold", "name": "Gold"},
-        "gems": { "pph" : 0, "amount" : 50, "text": "Gems"}
+        "food" : { "pph" : 545, "amount" : 50000, "text": "Food"},
+        "wood" : { "pph" : 545, "amount" : 50000, "text": "Wood"},
+        "stone" : { "pph" : 545, "amount" : 50000, "text": "Stone"},
+        "iron" : { "pph" : 545, "amount" : 50000, "text": "Iron"},
+        "gold": { "pph" : 0, "amount" : 500000, "text": "Gold", "name": "Gold"},
+        "gems": { "pph" : 0, "amount" : 5000, "text": "Gems"}
     },
     "buildings": [
         {"id": 1, "type": 0, "level": 1, "name": "Town Hall", "gridPos": {"x":4, "y":4}},

@@ -6,8 +6,6 @@ class Item {
             //console.log(data[name]);
             this[name] = data[name];
         }
-
-        this.dk = "ace";
     }
 
 

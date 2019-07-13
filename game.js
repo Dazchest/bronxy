@@ -4,6 +4,8 @@
 
 window.onload = init;
 
+var game = {};
+
 var canvas, ctx;
 var mouse = {};
 var camera = {"x": 0, "y": 0};
@@ -17,6 +19,9 @@ var resources = {};
 var troopTrainingScreen = {"active": false};
 var troops = {};
 var troopList = [];
+for(let x=0; x<10; x++) {
+    //troopList[x] = {};
+}
 var troopManager = new TroopManager();
 
 var buildings;
@@ -50,6 +55,9 @@ var rp;
 var clicked = false;
 var scrolling = false;
 var mouseDownFired = false;
+
+var database;
+
 
 
 function init() {
@@ -181,10 +189,125 @@ function init() {
             // }
         //}
         buildingHandler.loadImages();
+        assets = new Assets();
+        assets.loadIcons();
+
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDyF4fVz_XN-R1fujOhFwEMmxNeufLlvM8",
+            authDomain: "bronxcraft-54554.firebaseapp.com",
+            databaseURL: "https://bronxcraft-54554.firebaseio.com",
+            projectId: "bronxcraft-54554",
+            storageBucket: "",
+            messagingSenderId: "1086695219970",
+            appId: "1:1086695219970:web:03bf35a0e8983a58"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        console.log(firebase);
+        database = firebase.database();
+        console.log(database.ref('users'));
+        //return;
+        var ref = database.ref('users');
+        var data = {
+            ID: "3",
+            Name: "hello world"
+        }
+        //ref.push(data); 
+
+        ref.on('value', gotData, errData);
+
         setTimeout(draw, 2000);
         //draw();
         
     }
+}
+
+function gotData(data) {
+    var users = data.val();
+    //console.log(users);
+}
+function errData() {
+    return false;
+}
+
+function saveGame() {
+    var ref = database.ref('users');
+    let saveData = {};
+    //saveData.id = document.getElementById('savename').value;
+    game.buildingList = buildingList;
+    game.researchList = researchList;
+    game.troopList = troopList;
+    game.resources = resources;
+    game.itemList = itemList;
+    let gameData = JSON.stringify(game);
+
+    let buildingData = JSON.stringify(buildingList);
+    //saveData.buildingList = buildingData;
+    saveData.game = gameData;
+   // ref.push(saveData); 
+
+    saveName = document.getElementById('savename').value;
+    writeUserData(saveName, saveData);
+
+    function writeUserData(userId, saveData) {
+        firebase.database().ref('users/' + userId).set(saveData);
+    }
+}
+
+
+/**
+ * FIRST TIME LOADING OF THE GAME
+ * INITIALISES EVERYTHING AS FRESH
+ * TODO: NEED TO HAVE A SEPERATE LOADER, JUST FOR INFORMATION TO UPDATE CURRENT OBJECTS (BUILDINGLIST ETC)
+ */
+var jb;
+function loadGame() {   
+    saveName = document.getElementById('savename').value;
+    var ref = database.ref('users/' + saveName);
+    ref.once('value', function(data) {
+        //b = data.val().buildingList;
+        b = data.val().game;
+        jb = JSON.parse(b);
+        console.log(jb);
+
+        for(let x=0; x<jb.buildingList.length; x++) {
+            if(jb.buildingList[x].troopProduction) {
+                buildingList[x] = new troopTrainingBuilding(jb.buildingList[x]);
+            } else {
+                buildingList[x] = new Building(jb.buildingList[x]);
+            }
+        }
+
+        for(let x=0; x<jb.researchList.length; x++) {
+            researchList[x] = new Research(jb.researchList[x]);
+        }
+        console.log("troop list length = " + jb.troopList.length);
+        for(let x=0; x<jb.troopList.length; x++) {
+             if(jb.troopList[x]) {
+                troopList[x] = new Troop(jb.troopList[x]);
+             }
+             //console.log(x);
+        }
+        console.log(jb.troopList);
+
+        for(let x=0; x<jb.itemList.length; x++) {
+            itemList[x] = new Item(jb.itemList[x]);
+        }
+
+        resources = jb.resources;
+
+
+    });
+    //let keys = Object.keys(ref);
+    //console.log(keys);
+    // let saveData = {};
+    // saveData.id = "Lilly";
+    // let buildingData = JSON.stringify(buildingList);
+    // saveData.buildingList = buildingData;
+    // ref.push(saveData); 
+
+  
 }
 
 function doClick() {

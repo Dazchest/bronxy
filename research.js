@@ -7,15 +7,16 @@ class Research {
         this.active = false;
         this.upgrading = false;
         this.level = 0;
+        this.show = false;
 
         for(let x=0; x<Object.keys(data).length; x++) {
             name = Object.keys(data)[x];// (data[x]).value;
             //console.log(data[name]);
             this[name] = data[name];
         }
-        this.show = false;
-        this.button = new Button({"active": true, "drawButton": true, "x": 50, "y": 150 + (this.row * 45), "w": 100, "h": 30, "text": this.name, "where": this, "action":  this.showResearch});
-        this.upgradebutton = new Button({"active": false, "drawButton": true, "x": 50, "y": 200, "w": 100, "h": 30, "text": "upgrade", "where": this, "action":  this.upgrade});
+        
+        this.button = new Button({"active": true, "drawButton": true, "x": 50, "y": 150 + (this.row * 45), "w": 100, "h": 30, "text": this.name, "action":  this.showResearch});
+        this.upgradebutton = new Button({"active": false, "drawButton": true, "x": 50, "y": 200, "w": 100, "h": 30, "text": "upgrade",  "action":  this.upgrade});
     }
 
 
@@ -68,7 +69,7 @@ class Research {
             ctx.fillText(this.name, 70, 150);
 
             this.upgradebutton.draw();
-            this.upgradebutton.check();
+            this.upgradebutton.check(this);
             this.displayUpgradeRequirements();
         }
     }
@@ -271,6 +272,24 @@ class Research {
 
     displayUpgradeTimer(c) {
         popup(this.endTime - Date.now()/1000, 180, 565 + (c * 20));
+    }
+
+
+
+    checkResearchButtons() {
+        if(this.show == false) {  //not showing reseach, so can pick another
+            if(clicked) {   //mouse is clicked, check if it was on a research button
+                let b = this.button;
+                if(mouse.x > b.x && mouse.x < b.x + b.w && mouse.y > b.y && mouse.y < b.y + b.h) {
+                    if(b.action && b.active) {
+                        clicked = false;
+                        console.log(b.text + " pressed");
+                        let callback = b.action;
+                        callback(this, b);
+                    }
+                }
+            }
+        }
     }
 
 

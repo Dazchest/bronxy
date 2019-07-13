@@ -14,6 +14,7 @@ class TroopTrainingScreen extends ScreenView {
         }
 
         this.troopBuilding = troopBuilding;
+        this.training = troopBuilding.training;
         troopBuilding.trainingScreen = this;
         this.troopType = troopBuilding.troopType
         this.troopName = troopBuilding.troopName
@@ -51,7 +52,7 @@ class TroopTrainingScreen extends ScreenView {
         this.inputs.push(i);
         document.getElementById('maindiv').appendChild(i);
 
-        if(this.troopBuilding.training) {
+        if(this.troopBuilding.training) {   //this.troopBuilding.training
             setButtonState(this.buttons, "train", false);
             console.log("we are already training hyou know...");
         }
@@ -79,7 +80,7 @@ class TroopTrainingScreen extends ScreenView {
             this.displayTroops(1);      //which tier to display
             this.drawButtons();
             this.checkButtons();
-            if(this.troopBuilding.training) {
+            if(this.troopBuilding.training) {   //this.troopBuilding.training
                 this.displayTrainingTimer();
             }
 
@@ -125,7 +126,7 @@ class TroopTrainingScreen extends ScreenView {
         ctx.fillStyle = '#ffffff';
         ctx.fillText("Total Time: " + quantityInput * this.troops.levels[tier].baseTrainTime, this.x + 375, this.y + 380)
 
-        if(this.troopBuilding.training) {
+        if(this.troopBuilding.training) { //this.troopBuilding.training
             this.requirementsMet = false;
         }
 
