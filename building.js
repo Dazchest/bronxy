@@ -124,6 +124,12 @@ class Building {
         resources.wood.amount -= buildings[this.type].levels[this.level].requirements.resources.wood;
         resources.stone.amount -= buildings[this.type].levels[this.level].requirements.resources.stone;
         resources.iron.amount -= buildings[this.type].levels[this.level].requirements.resources.iron;
+
+        //saveList({buildingList});       //must have the brackets in
+        //saveList({resources});
+        saveGame2();
+        //saveList(getVarNameFromObject({troopList}));
+
     }
 
     checkUpgrading() {
@@ -137,6 +143,7 @@ class Building {
                 }
                 this.collectionTime = Date.now();
                 this.level ++;
+                saveGame2();
             }
         }
     }
@@ -195,10 +202,12 @@ class Building {
                     buildingList[x].amount = 0;
                 }
             }
+            saveGame2();
         } else {
             resources[this.production].amount += this.amount;
             this.collectionTime = Date.now();
             this.amount = 0;
+            saveGame2();
         }
     }
 
@@ -282,6 +291,7 @@ class troopTrainingBuilding extends Building {
                 //console.log(this.trainingQueue.quantity);
 
 
+
                 // check if we have this troop type and tier already.. if true, just add quantity... if false, create new troop and push
                 if(troopList[this.troopType]) {
                     if(troopList[this.troopType].levels[this.trainingQueue.tier]) {
@@ -307,6 +317,9 @@ class troopTrainingBuilding extends Building {
                 if(this.trainingScreen) {
                     setButtonState(this.trainingScreen.buttons, "train", true);
                 }
+
+                saveGame2();
+
             }
         }
     }
@@ -337,6 +350,7 @@ class troopTrainingBuilding extends Building {
         resources.stone.amount -= t.requirements.resources.stone * qty;
         resources.iron.amount -= t.requirements.resources.iron * qty;
 
+        saveGame2();
 
     }
 

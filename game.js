@@ -58,9 +58,20 @@ var mouseDownFired = false;
 
 var database;
 
+var username
+
 
 
 function init() {
+    username = localStorage.getItem("username");
+    if(username) {
+        login = true;
+    }
+    if(!login) {
+        console.log("not logged in");
+        return;
+    }
+    //-------------------------------------------
     console.log("initialising game");
 
     //init cavnas
@@ -217,6 +228,9 @@ function init() {
 
         ref.on('value', gotData, errData);
 
+        
+        loadGame();
+
         setTimeout(draw, 2000);
         //draw();
         
@@ -247,11 +261,47 @@ function saveGame() {
     saveData.game = gameData;
    // ref.push(saveData); 
 
-    saveName = document.getElementById('savename').value;
-    writeUserData(saveName, saveData);
+    userName = document.getElementById('savename').value;
+    writeUserData(userName, saveData);
 
-    function writeUserData(userId, saveData) {
-        firebase.database().ref('users/' + userId).set(saveData);
+    function writeUserData(userName, saveData) {
+        firebase.database().ref('users/' + userName).set(saveData);
+    }
+}
+
+let getVarNameFromObject = (nameObject) => {
+    for(let varName in nameObject) {
+        return varName;
+    }
+    }
+
+function saveList(listToSave) {
+    var listName = Object.keys(listToSave)[0];
+    var listToSave = listToSave[listName];
+    console.log(listName);        //prints foo
+    console.log(listToSave);       //prints bar
+
+    console.log("saving to database???");
+    //userName = document.getElementById('savename').value;
+    saveData = JSON.stringify(listToSave);
+    firebase.database().ref(username + "/" + listName).set(saveData);
+}
+
+function saveGame2() {
+    game.buildingList = buildingList;
+    game.researchList = researchList;
+    game.itemList = itemList;
+    game.troopList = troopList;
+    game.resources = resources;
+
+   // userName = document.getElementById('savename').value;
+    //if(!userName) { userName = "Bronxy";}
+
+    for(let x=0; x<Object.keys(game).length; x++) {
+        listName = Object.keys(game)[x];
+        data = game[listName];
+        saveData = JSON.stringify(data);
+        firebase.database().ref(username + "/" + listName).set(saveData);
     }
 }
 
@@ -261,41 +311,47 @@ function saveGame() {
  * INITIALISES EVERYTHING AS FRESH
  * TODO: NEED TO HAVE A SEPERATE LOADER, JUST FOR INFORMATION TO UPDATE CURRENT OBJECTS (BUILDINGLIST ETC)
  */
-var jb;
-function loadGame() {   
-    saveName = document.getElementById('savename').value;
-    var ref = database.ref('users/' + saveName);
-    ref.once('value', function(data) {
-        //b = data.val().buildingList;
-        b = data.val().game;
-        jb = JSON.parse(b);
-        console.log(jb);
 
-        for(let x=0; x<jb.buildingList.length; x++) {
-            if(jb.buildingList[x].troopProduction) {
-                buildingList[x] = new troopTrainingBuilding(jb.buildingList[x]);
+function loadGame() {   
+    //userName = document.getElementById('savename').value;
+    //if(!userName) { userName = "Bronxy";}
+
+    var ref = firebase.database().ref(username);
+
+    ref.once('value', function(data) {
+        gameData = data.val();
+        
+        let jb = JSON.parse(gameData.buildingList);
+
+        for(let x=0; x<jb.length; x++) {
+            if(jb[x].troopProduction) {
+                buildingList[x] = new troopTrainingBuilding(jb[x]);
             } else {
-                buildingList[x] = new Building(jb.buildingList[x]);
+                buildingList[x] = new Building(jb[x]);
             }
         }
 
-        for(let x=0; x<jb.researchList.length; x++) {
-            researchList[x] = new Research(jb.researchList[x]);
+        jb = JSON.parse(gameData.researchList);
+        for(let x=0; x<jb.length; x++) {
+             researchList[x] = new Research(jb[x]);
         }
-        console.log("troop list length = " + jb.troopList.length);
-        for(let x=0; x<jb.troopList.length; x++) {
-             if(jb.troopList[x]) {
-                troopList[x] = new Troop(jb.troopList[x]);
+
+        jb = JSON.parse(gameData.troopList);
+        for(let x=0; x<jb.length; x++) {
+             if(jb[x]) {
+                troopList[x] = new Troop(jb[x]);
              }
-             //console.log(x);
-        }
-        console.log(jb.troopList);
-
-        for(let x=0; x<jb.itemList.length; x++) {
-            itemList[x] = new Item(jb.itemList[x]);
         }
 
-        resources = jb.resources;
+        //return;
+
+        jb = JSON.parse(gameData.itemList);
+        for(let x=0; x<jb.length; x++) {
+            itemList[x] = new Item(jb[x]);
+        }
+
+        jb = JSON.parse(gameData.resources);
+        resources = jb;
 
 
     });

@@ -229,6 +229,8 @@ class Research {
 
         //let itemsUsed = self.levels[self.level+1].requirements.resources.gold;
         resources.gold.amount -= self.requiredQuantity;
+        saveGame2();
+
     }
 
     checkUpgrading() {
@@ -239,6 +241,9 @@ class Research {
                 researchManager.usedSlots--;
                 researchManager.upgrading = false;
                 this.active = true;
+
+                saveGame2();
+
 
                 // update the buffs
                 // loop through each buff available

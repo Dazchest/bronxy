@@ -41,25 +41,50 @@
     <script src="game.js"></script>
 
     <script>
-
-
-    function fetchCityData(data) {
-        cityData = data;
-        // buildingData[1].name = "academy";
-        // buildingData[1].startTime = "213215645643";
-        //console.log(cityData);
-        for(var x=0; x<cityData.length; x++) {
-            cities.push(new City(cityData[x]));
+        u = localStorage.getItem("username");
+        if(u) {
+            login = true;
+        } else {
+            login = false;
         }
-        // console.log(buildingList[1]);
-    }
 
+        function checkLogin(username) {
+            user = username.value;
+
+            localStorage.setItem("username", user);
+            console.log(user + " trying to login");
+            if(!user) {
+                return;
+            }
+            location.reload();
+            
+            return;
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    //document.getElementById("").innerHTML = this.responseText;
+                    console.log(this.responseText);
+                }
+            };
+            xhttp.open("GET", "checkLogin?username=username", true);
+            xhttp.send();
+        }
+   
     </script>
 </head>
 <body>
-    <button onclick="saveGame()">save</button>
-    <button onclick="loadGame()">load</button>
-    <input type="text" id="savename" value="">
+
+    <script>
+        if(!login) {
+            document.writeln('<form>');
+            document.writeln('<label>enter username</label><input type="text" name="username">');
+            document.writeln('<label>enter password</label><input type="password" name="password">');
+            document.writeln('<button onclick="checkLogin(this.form.username)" type="button" name="login">Login</button>');
+            document.writeln('</form>');
+        }
+
+    </script>
+
     <div id="maindiv" style="position:relative;width:800px;height:800px">
         <canvas id="canvas" width="600" height="600"></canvas>
         <!-- <input type="text" style="position:absolute;left:100px;top:300px;width:100px;" /> -->

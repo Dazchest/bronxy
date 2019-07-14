@@ -52,6 +52,7 @@ class Item {
             console.log("using " + amount + " " + rss);
             resources[rss].amount += amount;
         }
+        saveGame2();
     }
 
     useChestItem() {
@@ -65,7 +66,7 @@ class Item {
             console.log("using type " + type + " - Level " + level + " - qty " + quantity);
             itemManager.addItem(itemData);
         }
-
+        saveGame2();
     }
 
     /**

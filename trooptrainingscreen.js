@@ -15,7 +15,7 @@ class TroopTrainingScreen extends ScreenView {
 
         this.troopBuilding = troopBuilding;
         this.training = troopBuilding.training;
-        troopBuilding.trainingScreen = this;
+       // troopBuilding.trainingScreen = this;
         this.troopType = troopBuilding.troopType
         this.troopName = troopBuilding.troopName
         this.troops = troopBuilding.troops;
