@@ -5,7 +5,7 @@
         "building": 6,     
         "levels" : [
         {   "level": 1,
-            "name": "Warrior",
+            "name": "Warriorsss",
             "baseTrainTime": 1,
             "requirements": {   "resources" : {"food": 50, "wood": 25, "stone": 24, "iron": 23},
                                 "buildings" : [{"type": 6, "level": 1}]
@@ -19,7 +19,7 @@
         },
         {   "level": 2,
             "name": "Bronx Warrior",
-            "baseTrainTime": 20,
+            "baseTrainTime": 2,
             "requirements": {   "resources" : {"food": 50, "wood": 15, "stone": 10, "iron": 5},
                                 "buildings" : [{"type": 6, "level": 1}]
                             },

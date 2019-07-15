@@ -19,8 +19,6 @@ class ResearchManager {
         for(let x=0; x<researchTree.length; x++) {
             let r = new Research(researchTree[x]);
             researchList.push(r);
-
-
         }
     }
 

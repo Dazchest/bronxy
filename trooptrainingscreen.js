@@ -18,7 +18,7 @@ class TroopTrainingScreen extends ScreenView {
        // troopBuilding.trainingScreen = this;
         this.troopType = troopBuilding.troopType
         this.troopName = troopBuilding.troopName
-        this.troops = troopBuilding.troops;
+        this.troops = troops[troopBuilding.troopType];
         this.troopList = troopBuilding.troopList;
         //this.tiers = this.troopList.tiers;
         // if(this.troopList.length>0) {
@@ -32,16 +32,18 @@ class TroopTrainingScreen extends ScreenView {
 
         this.buttons = [];
 
-        this.buttons.push(new Button({"active": true, "x": 500, "y": 500, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
-        this.buttons.push(new Button({"active": true, "name": "train", "x": 420, "y": 200, "w": 100, "h": 30, "text": "Train", "screen": this, "action":  this.train}));
+        this.buttons.push(new Button({"active": true, "x": 475, "y": 500, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
+        this.buttons.push(new Button({"active": true, "name": "train", "x": 365, "y": 365, "w": 100, "h": 30, "text": "Train", "screen": this, "action":  this.train}));
         //this.buttons.push(new Button({"active": true, "x": 400, "y": 350, "w": 100, "h": 30, "text": "Details", "screen": this, "action":  this.detailsScreen}));
+        this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "left", "name": "troopleft", "x": 75, "y": 200, "w": 128, "h": 128, "text": "Left", "screen": this, "action":  this.viewTiers}));
+        this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "right", "name": "troopright", "x": 420, "y": 200, "w": 128, "h": 128, "text": "Right", "screen": this, "action":  this.viewTiers}));
 
         let i = document.createElement('input');
         i.id = 'quantityInput';
         i.style.position = 'absolute';
-        i.style.left = (150 + this.x) + 'px';
-        i.style.top =  (165 + camera.x) + 'px';
-        i.style.width = '200px';
+        i.style.left = (268 + this.x) + 'px';
+        i.style.top =  (365) + 'px';
+        i.style.width = '64px';
         i.type = 'number';  
         i.min = 1;
         i.value = 1;
@@ -77,7 +79,7 @@ class TroopTrainingScreen extends ScreenView {
             ctx.font = "20px Georgia";
             ctx.fillText(this.name, this.x, this.y + 20);
     
-            this.displayTroops(1);      //which tier to display
+            this.displayTroops(this.currentTier);      //which tier to display
             this.drawButtons();
             this.checkButtons();
             if(this.troopBuilding.training) {   //this.troopBuilding.training
@@ -99,10 +101,26 @@ class TroopTrainingScreen extends ScreenView {
 
         if(troopList[this.troopType]) {
             if(troopList[this.troopType].levels[tier]) {
-                ctx.fillText(troopList[this.troopType].levels[tier].quantity + " " + this.troops.levels[tier].name, this.x + 100, this.y + 180);
+                ctx.fillText(troopList[this.troopType].levels[tier].quantity + " " + this.troops.levels[tier].name, this.x + 100, this.y + 350);
+            } else {
+                ctx.fillText("0 " + this.troops.levels[tier].name, this.x + 100, this.y + 350);
             }
         } else {
-            ctx.fillText("0 " + this.troops.levels[tier].name, this.x + 100, this.y + 180);
+            ctx.fillText("0 " + this.troops.levels[tier].name, this.x + 100, this.y + 350);
+        }
+
+        // draw left and right buttons
+        if(buttonImages[0].icon.complete) {
+            ctx.drawImage(buttonImages[0].icon, 75, 200, gridSize.x * 2, gridSize.y * 2);
+        }
+        if(buttonImages[1].icon.complete) {
+            ctx.drawImage(buttonImages[1].icon, 420, 200, gridSize.x * 2, gridSize.y * 2);
+        }
+
+        if(troops[this.troopType].levels[tier].image) { // check image is available
+            if(troops[this.troopType].levels[tier].image.complete) {
+                ctx.drawImage(troops[this.troopType].levels[tier].image, 236, 200, gridSize.x * 2, gridSize.y * 2);
+            }
         }
 
         // check requirements
@@ -119,8 +137,7 @@ class TroopTrainingScreen extends ScreenView {
                 ctx.fillStyle = '#ff0000';
                 this.requirementsMet = false;
             }
-            ctx.fillText("hello", 150, 25);
-            ctx.fillText(resources[resCheck[x]].text + ": " + quantityInput * r.resources[resCheck[x]], this.x + 25 + (x * 95), this.y + 260)    
+            ctx.fillText(resources[resCheck[x]].text + ": " + quantityInput * r.resources[resCheck[x]], this.x + 25 + (x * 95), this.y + 420)    
         }
 
         ctx.fillStyle = '#ffffff';
@@ -147,6 +164,18 @@ class TroopTrainingScreen extends ScreenView {
         }
         setButtonState(self.buttons, "train", false);
         self.troopBuilding.train(self.currentTier, quantityInput);
+    }
+
+    viewTiers(self, b) {
+        console.log(b);
+        if(b.direction == "left" && self.currentTier > 1) {
+            self.currentTier -= 1;
+        }
+        if(b.direction == "right" && self.currentTier < troops[self.troopType].levels.length) {
+            self.currentTier += 1;
+        }
+        
+        self.displayTroops(self.currentTier);
     }
 
     displayTrainingTimer() {

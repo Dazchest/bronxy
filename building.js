@@ -294,13 +294,24 @@ class troopTrainingBuilding extends Building {
 
                 // check if we have this troop type and tier already.. if true, just add quantity... if false, create new troop and push
                 if(troopList[this.troopType]) {
+                    console.log("found some type " + this.troopType);
+                    console.log(this.trainingQueue);
                     if(troopList[this.troopType].levels[this.trainingQueue.tier]) {
                         troopList[this.troopType].levels[this.trainingQueue.tier].quantity += this.trainingQueue.quantity;
-                        //console.log(troopList[this.troopType].levels[this.trainingQueue.tier]);
-                        //console.log("adding to existing troops");
+                        console.log(troopList[this.troopType].levels[this.trainingQueue.tier]);
+                        console.log("adding to existing troops");
+                    } else {    // only insert the new tier/level data
+                        let tierData = {};
+                        tierData.level = this.trainingQueue.tier + 1;
+                        tierData.quantity = this.trainingQueue.quantity;
+                        tierData.type = this.troopType;
+                        tierData.name = troops[this.troopType].levels[this.trainingQueue.tier].name;
+                        troopList[this.troopType].levels[this.trainingQueue.tier] = tierData;
+    
+                        console.log("creating new troops")
                     }
                 } else {
-                    //console.log(this.troopType);
+                    console.log(this.troopType);
                     let troopData = {};
                     troopData.type = this.troopType;
                     troopData.levels = [];
@@ -312,7 +323,7 @@ class troopTrainingBuilding extends Building {
                     troopData.levels.push(tierData);
                     troopList[this.troopType] = (new Troop(troopData));
 
-                    //console.log("creating new troops")
+                    console.log("creating new troops")
                 }
                 if(this.trainingScreen) {
                     setButtonState(this.trainingScreen.buttons, "train", true);
@@ -336,7 +347,7 @@ class troopTrainingBuilding extends Building {
         this.trainingQueue.tier = tier;
 
         this.trainingQueue.startTime = Date.now()/1000;   //convert to seconds
-        let trainTime = qty * this.troops.levels[tier].baseTrainTime;
+        let trainTime = qty * troops[this.troopType].levels[tier].baseTrainTime;
         //this.trainTime = Math.ceil(trainTime / (1+(pBuff/100)));   //this need fixing
         //this.trainTime -= vBuff;
         this.trainingQueue.trainTime = trainTime;

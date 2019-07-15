@@ -69,7 +69,7 @@ class BuildingHandler {
             tempData.troopProduction = buildings[this.selectedBuilding].troopProduction;
             tempData.troopType = buildings[this.selectedBuilding].troopType;
             tempData.troopName = buildings[this.selectedBuilding].name;
-            tempData.troops = troops[tempData.troopType];
+            //tempData.troops = troops[tempData.troopType];
             tempData.troopList = troopList[tempData.troopType];
             tempData.training = false;
             tempData.trainingQueue = {};

@@ -49,6 +49,9 @@ var items;
 var itemList = [];
 var itemManager = new ItemManager();
 
+var buttonImages = [];
+var assets;
+
 var promises = [];
 
 var rp;
@@ -130,6 +133,9 @@ function init() {
         .then(parseJsonData)
         .then(function(mj) {
             troops = mj;
+            a = new Assets();
+            a.loadTroopImages();
+
             console.log(troops);
         })
         .catch(gotErr);
@@ -139,7 +145,8 @@ function init() {
         .then(parseJsonData)
         .then(function(mj) {
             researchTree = mj;
-            console.log(items);
+            researchManager.initResearch();
+            console.log(researchTree);
         })
         .catch(gotErr);
     
@@ -168,7 +175,7 @@ function init() {
         console.log(resourceData);
     
         researchData = cityData.research;
-        researchManager.initResearch();
+        //researchManager.initResearch();
 
         cities.push(new City(cityData.citydata));
 
@@ -194,7 +201,6 @@ function init() {
             resources.iron = new Resource(resourceData.iron);
             resources.gold = new Resource(resourceData.gold);
             resources.gems = new Resource(resourceData.gems);
-            console.log(resources.food.amount);
             // resources.food.add = function() {
             //     resources.food = resources.food.amount + Number(1000);
             // }
@@ -202,6 +208,7 @@ function init() {
         buildingHandler.loadImages();
         assets = new Assets();
         assets.loadIcons();
+        assets.loadTroopImages();
 
         // Your web app's Firebase configuration
         var firebaseConfig = {
@@ -351,7 +358,15 @@ function loadGame() {
         }
 
         jb = JSON.parse(gameData.resources);
-        resources = jb;
+        resources.food = new Resource(jb.food);
+        resources.wood = new Resource(jb.wood);
+        resources.stone = new Resource(jb.stone);
+        resources.iron = new Resource(jb.iron);
+        resources.gold = new Resource(jb.gold);
+        resources.gems = new Resource(jb.gems);
+        assets.loadIcons();
+        //todo:: this needs to be optimised
+        //resources = jb;
 
 
     });

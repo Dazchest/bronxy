@@ -17,8 +17,7 @@
         "gems": { "pph" : 0, "amount" : 5000, "text": "Gems"}
     },
     "buildings": [
-        {"id": 1, "type": 0, "level": 1, "name": "Town Hall", "gridPos": {"x":4, "y":4}},
-        {"id": 2, "type": 1, "level": 1, "name": "Walls", "gridPos": {"x":3, "y":2}}
+        {"id": 1, "type": 0, "level": 1, "name": "Town Hall", "gridPos": {"x":4, "y":4}}
     ],
     "research": [
         {"id": 1, "type": 1, "level": 1, "name": "Food Production", "buff": [{"food": 10}]}
