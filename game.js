@@ -44,6 +44,9 @@ var city = {"name": "city", "active": true};
 var tick = Date.now();
 var screenManager;
 
+var mapScreen = {"active": false};
+var startOnMap = false;
+
 var itemScreen = {"active": false};
 var items;
 var itemList = [];
@@ -107,8 +110,14 @@ function init() {
 
     //initilaiase the player
     player = new Player;
-    cityScreen = new CityScreen();
-    screenManager = new ScreenManager(cityScreen);
+
+    if(startOnMap) {
+        mapScreen = new MapScreen();
+        screenManager = new ScreenManager(mapScreen);
+    } else {
+        cityScreen = new CityScreen();
+        screenManager = new ScreenManager(cityScreen);
+    }
 
     let jsonfile2 = "buildings.json";
     let promise2 = fetch(jsonfile2)

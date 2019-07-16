@@ -26,5 +26,12 @@ function scrollCity(e) {
         }
         camera.y += e.movementY;
     }
+    if(mapScreen.active) {
+        scrolling = true;
+        //if(camera.x + e.movementX >= 0) {
+            camera.x += e.movementX;
+        //}
+        camera.y += e.movementY;
+    }
 
 }

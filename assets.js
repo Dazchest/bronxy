@@ -29,8 +29,26 @@ class Assets {
         troops[0].levels[0].image.src = "images/troops/1/1_IDLE_000.png";
         troops[0].levels[1].image = new Image;
         troops[0].levels[1].image.src = "images/troops/2/1_IDLE_000.png";
+
         troops[1].levels[0].image = new Image;
         troops[1].levels[0].image.src = "images/troops/3/1_IDLE_000.png";
+        troops[1].levels[1].image = new Image;
+        troops[1].levels[1].image.src = "images/troops/3/5_ATTACK_007.png";
+
+        troops[2].levels[0].image = new Image;
+        troops[2].levels[0].image.src = "images/troops/cav/6.png";
+        troops[2].levels[1].image = new Image;
+        troops[2].levels[1].image.src = "images/troops/cav/4.png";
+
+        troops[3].levels[0].image = new Image;
+        troops[3].levels[0].image.src = "images/troops/siege/12.png";
+        troops[3].levels[1].image = new Image;
+        troops[3].levels[1].image.src = "images/troops/siege/10.png";
+
+        troops[5].levels[0].image = new Image;
+        troops[5].levels[0].image.src = "images/troops/settler/1_IDLE_000.png";
+        troops[5].levels[1].image = new Image;
+        troops[5].levels[1].image.src = "images/troops/settler/2_IDLE_000.png";
 
 
         // for(let x=0; x<Object.keys(troops).length; x++) {

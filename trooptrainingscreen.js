@@ -119,7 +119,8 @@ class TroopTrainingScreen extends ScreenView {
 
         if(troops[this.troopType].levels[tier].image) { // check image is available
             if(troops[this.troopType].levels[tier].image.complete) {
-                ctx.drawImage(troops[this.troopType].levels[tier].image, 236, 200, gridSize.x * 2, gridSize.y * 2);
+                let troopimage = troops[this.troopType].levels[tier].image;
+                ctx.drawImage(troopimage, 236, 200, troopimage.width / 4, troopimage.height / 4  );
             }
         }
 
@@ -147,6 +148,38 @@ class TroopTrainingScreen extends ScreenView {
             this.requirementsMet = false;
         }
 
+
+        // check buildings required
+        let br = r.buildings;
+        //console.log(br);
+        for(let x=0; x<br.length; x++) {
+            let brName = buildings[br[x].type].name;
+            let brType = br[x].type;
+            var fontC = '#0000ff';
+
+            var typeFound = false;
+            var type;
+            for(let y=0; y<buildingList.length; y++) { // check if building required is even built yet 
+                if(buildingList[y].type == brType) { 
+                    typeFound = true;  // set typefound to the buildingList index found
+                    type = y;
+                }
+            }
+            if(typeFound) { //check if building found is at required level
+                if(buildingList[type].level < br[x].level) {
+                    this.requirementsMet = false;
+                    fontC = '#ff0000';
+                }
+            } else {
+                fontC = '#ff0000';
+                this.requirementsMet = false;
+            }
+
+            ctx.fillStyle = fontC;
+            ctx.fillText("build req: " + brName + " - " + brType + " - " + br[x].level, 100, 500 + (x * 25));
+            //ctx.fillText("build req: " + buildingList[brType].level, 50, 550 + (x * 25));
+        }
+
         if(this.requirementsMet == false) {
             setButtonState(this.buttons, "train", false);
         } else {
@@ -154,6 +187,7 @@ class TroopTrainingScreen extends ScreenView {
         }
 
     }
+    //---------------------------------------
 
     train(self) {
         console.log("lets train some troops");

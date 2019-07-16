@@ -69,22 +69,23 @@ class BuildingUpgradeScreen extends ScreenView {
                 fontC = '#0000ff';
 
                 var typeFound = false;
+                var type;
                 for(let y=0; y<buildingList.length; y++) { // check if building required is even built yet 
-                    //console.log("type found = " + brType);
                     if(buildingList[y].type == brType) { 
-                        typeFound = true;
+                        typeFound = true;  // set typefound to the buildingList index found
+                        type = y;
                     }
                 }
-                if(typeFound) {
-                    if(buildingList[brType].level < br[x].level) {
-                        requirementMet = false;
+                if(typeFound) { //check if building found is at required level
+                    if(buildingList[type].level < br[x].level) {
+                        this.requirementsMet = false;
                         fontC = '#ff0000';
                     }
                 } else {
                     fontC = '#ff0000';
-                    requirementMet = false;
+                    this.requirementsMet = false;
                 }
-
+    
 
                 ctx.fillStyle = fontC;
                 ctx.fillText("build req: " + brName + " - " + brType + " - " + br[x].level, 100, 500 + (x * 25));
