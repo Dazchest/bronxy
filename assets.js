@@ -58,4 +58,20 @@ class Assets {
         // }
     }
 
+    static loadMapImages() {
+        mapImages[0] = {};
+        mapImages[0].image  = new Image();
+        mapImages[0].image.src = "images/buildings/castle_1.png"
+        mapImages[1] = {};
+        mapImages[1].image  = new Image();
+        mapImages[1].image.src = "images/buildings/castle_3.png"
+        mapImages[2] = {};
+        mapImages[2].image  = new Image();
+        mapImages[2].image.src = "images/buildings/hex_castle_1.png"
+        mapImages[3] = {};
+        mapImages[3].image  = new Image();
+        mapImages[3].image.src = "images/map.png"
+
+    }
+
 }

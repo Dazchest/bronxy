@@ -1,9 +1,11 @@
 class MapScreen extends ScreenView {
 
     // get the defaults from ScreenView
-    constructor() {
+    constructor(whichMap) {
 
         super();
+
+        this.whichMap = whichMap;
         
         // this.buttons = [];
         this.name = "Map";
@@ -23,57 +25,71 @@ class MapScreen extends ScreenView {
     }
 
     initMap() {
-        this.grid = {"width": 5, "height": 5};
+        mapTiles = [];
+        this.grid = {"width": 50, "height": 50};
+
+        //this.active = false;
+        Assets.loadMapImages();
 
 
-        for(let y=0; y<this.grid.height; y++) {
-            for(let x=0; x<this.grid.width; x++) {
-                //ctx.translate(-50,0);
-                let t = (y % 2) * 100;
+        console.log(this.whichMap);
+        if(this.whichMap == 1) {
+            for(let y=0; y<this.grid.height; y++) {
+                for(let x=0; x<this.grid.width; x++) {
+                    //ctx.translate(-50,0);
+                    let t = (x % 2) * -50;
+                    t=0;
+                    let p = (x % 2) * 50;
 
-                let coords = [];
-                coords.push(new Vector3d(t + 50 + (x*200), 50 +(y*50)));
-                coords.push(new Vector3d(t + 100 + (x*200), 50 +(y*50)));
-                coords.push(new Vector3d(t + 150 + (x*200), 100 +(y*50)));
-                coords.push(new Vector3d(t + 100 + (x*200), 150 +(y*50)));
-                coords.push(new Vector3d(t + 50 + (x*200), 150 +(y*50)));
-                coords.push(new Vector3d(t + 0 + (x*200), 100 +(y*50)));
-                mapTiles.push(new Tile(coords));
+                    let coords = [];
+                    coords.push(new Vector3d(t + 50 + (x*100), p + 50 +(y*100)));
+                    coords.push(new Vector3d(t + 100 + (x*100), p + 50 +(y*100)));
+                    coords.push(new Vector3d(t + 150 + (x*100), p + 100 +(y*100)));
+                    coords.push(new Vector3d(t + 100 + (x*100), p + 150 +(y*100)));
+                    coords.push(new Vector3d(t + 50 + (x*100), p + 150 +(y*100)));
+                    coords.push(new Vector3d(t + 0 + (x*100), p + 100 +(y*100)));
+                    mapTiles.push(new Tile(coords));
+                }
+            }
+        }   
+
+
+        if(this.whichMap == 2) {
+            for(let y=0; y<this.grid.height; y++) {
+                for(let x=0; x<this.grid.width; x++) {
+                    //ctx.translate(-50,0);
+                    let t = (y % 2) * 75;
+
+                    let coords = [];
+                    coords.push(new Vector3d(t + 75 + (x*150), 50 +(y*75)));
+                    coords.push(new Vector3d(t + 150 + (x*150), 75 +(y*75)));
+                    coords.push(new Vector3d(t + 150 + (x*150), 125 +(y*75)));
+                    coords.push(new Vector3d(t + 75 + (x*150), 150 +(y*75)));
+                    coords.push(new Vector3d(t + 0 + (x*150), 125 +(y*75)));
+                    coords.push(new Vector3d(t + 0 + (x*150), 75 +(y*75)));
+                    mapTiles.push(new Tile(coords));
+                }
             }
         }
 
+        if(this.whichMap == 3) {
+            for(let y=0; y<this.grid.height; y++) {
+                for(let x=0; x<this.grid.width; x++) {
+                    //ctx.translate(-50,0);
+                    let t = (x % 2) * -100;
+                    t=0;
+                    let p = (x % 2) * 50;
+                    p = 0;
 
-        for(let y=0; y<5; y++) {
-            for(let x=0; x<5; x++) {
-                //ctx.translate(-50,0);
-                let t = (y % 2) * 75;
-
-                let coords = [];
-                coords.push(new Vector3d(t + 75 + (x*150), 50 +(y*75)));
-                coords.push(new Vector3d(t + 150 + (x*150), 75 +(y*75)));
-                coords.push(new Vector3d(t + 150 + (x*150), 125 +(y*75)));
-                coords.push(new Vector3d(t + 75 + (x*150), 150 +(y*75)));
-                coords.push(new Vector3d(t + 0 + (x*150), 125 +(y*75)));
-                coords.push(new Vector3d(t + 0 + (x*150), 75 +(y*75)));
-                mapTiles.push(new Tile(coords));
+                    let coords = [];
+                    coords.push(new Vector3d(t + 50 + (x*100) - (y*100), p + 100 +(y*50) + (x*50)));
+                    coords.push(new Vector3d(t + 150 + (x*100) - (y*100), p + 50 +(y*50) + (x*50)));
+                    coords.push(new Vector3d(t + 250 + (x*100) - (y*100), p + 100 +(y*50) + (x*50)));
+                    coords.push(new Vector3d(t + 150 + (x*100) - (y*100), p + 150 +(y*50) + (x*50)));
+                    mapTiles.push(new Tile(coords));
+                }
             }
         }
-
-        for(let y=0; y<5; y++) {
-            for(let x=0; x<5; x++) {
-                //ctx.translate(-50,0);
-                let t = (y % 2) * 100;
-
-                let coords = [];
-                coords.push(new Vector3d(t + 50 + (x*200), 100 +(y*50)));
-                coords.push(new Vector3d(t + 150 + (x*200), 50 +(y*50)));
-                coords.push(new Vector3d(t + 250 + (x*200), 100 +(y*50)));
-                coords.push(new Vector3d(t + 150 + (x*200), 150 +(y*50)));
-                mapTiles.push(new Tile(coords));
-            }
-        }
-
-
     }
 
     tick() {
@@ -84,7 +100,7 @@ class MapScreen extends ScreenView {
         if(this.active) {
 
             ctx.save();
-            ctx.scale(.7, .7);
+            ctx.scale(1, 1);
 
 
             ctx.strokeStyle = "#000000";
@@ -99,58 +115,92 @@ class MapScreen extends ScreenView {
 
             ctx.strokeStyle = "#ff0000";
 
-            for(let y=0; y<this.grid.height; y++) {
-                for(let x=0; x<this.grid.width; x++) {
-                    let coords = mapTiles[x + (y*5)].coords;
-                    ctx.beginPath();
-                    ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y);
-                    for(let j=1; j<6; j++) {
-                        ctx.lineTo(coords[j].x + camera.x, coords[j].y + camera.y);
+            if(this.whichMap == 1) {
+                for(let y=0; y<this.grid.height; y++) {
+                    for(let x=0; x<this.grid.width; x++) {
+                        let coords = mapTiles[x + (y*this.grid.width)].coords;
+                        ctx.beginPath();
+                        ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y);
+                        for(let j=1; j<6; j++) {
+                            ctx.lineTo(coords[j].x + camera.x, coords[j].y + camera.y);
+                        }
+                        ctx.lineTo(coords[0].x + camera.x, coords[0].y + camera.y);
+                        ctx.stroke();
+                        ctx.fillStyle = '#44dd44';
+                        ctx.fill();
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillText(x + ", " + y, coords[0].x + camera.x, coords[0].y + camera.y + 20);
                     }
-                    ctx.lineTo(coords[0].x + camera.x, coords[0].y + camera.y);
-                    ctx.stroke();
-                    ctx.fillStyle = '#44dd44';
-                    ctx.fill();
                 }
             }
 
-            // draw the second grid
-            for(let y=0; y<5; y++) {
-                for(let x=0; x<5; x++) {
-                    let coords = mapTiles[25 + x + (y*5)].coords;    //skips the first row
-                    
-                    ctx.beginPath();
-                    ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y + 300);
-                    for(let j=1; j<6; j++) {
-                        ctx.lineTo(coords[j].x + camera.x, coords[j].y + camera.y + 300);
+            if(this.whichMap == 2) {
+                // draw the second grid
+                for(let y=0; y<this.grid.height; y++) {
+                    for(let x=0; x<this.grid.width; x++) {
+                        let coords = mapTiles[x + (y*this.grid.width)].coords;    //skips the first row
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y);
+                        for(let j=1; j<6; j++) {
+                            ctx.lineTo(coords[j].x + camera.x, coords[j].y + camera.y);
+                        }
+                        ctx.lineTo(coords[0].x + camera.x, coords[0].y + camera.y);
+                        ctx.stroke();
+                        ctx.fillStyle = '#44dd44';
+                        ctx.fill();
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillText(x + ", " + y, coords[0].x + camera.x, coords[0].y + camera.y + 20);
                     }
-                    ctx.lineTo(coords[0].x + camera.x, coords[0].y + camera.y + 300);
-                    ctx.stroke();
-                    ctx.fillStyle = '#44dd44';
-                    ctx.fill();
                 }
             }
 
             // draw the third grid
-            for(let y=0; y<5; y++) {
-                for(let x=0; x<5; x++) {
-                    let coords = mapTiles[50 + x + (y*5)].coords;
-                    ctx.beginPath();
-                    ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y + 700);
-                    for(let j=1; j<4; j++) {
-                        ctx.lineTo(coords[j].x + camera.x, coords[j].y + camera.y + 700);
+            if(this.whichMap == 3) {
+                ctx.translate(200,0);
+                for(let y=0; y<this.grid.height; y++) {
+                    for(let x=0; x<this.grid.width; x++) {
+                        let coords = mapTiles[x + (y*this.grid.width)].coords;
+                        ctx.beginPath();
+                        ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y);
+                        for(let j=1; j<4; j++) {
+                            ctx.lineTo(coords[j].x + camera.x, coords[j].y + camera.y);
+                        }
+                        ctx.lineTo(coords[0].x + camera.x, coords[0].y + camera.y);
+                        ctx.stroke();
+                        ctx.fillStyle = '#44dd44';
+                        ctx.fill();
+                        ctx.fillStyle = '#ffffff';
+                        ctx.fillText(x + ", " + y, coords[0].x + camera.x + 70, coords[0].y + camera.y + 0);
                     }
-                    ctx.lineTo(coords[0].x + camera.x, coords[0].y + camera.y + 700);
-                    ctx.stroke();
-                    ctx.fillStyle = '#44dd44';
-                    ctx.fill();
                 }
             }
+
+
+        // test draw a castle
+        if(mapImages[0].image.complete && mapImages[1].image.complete) {
+            let x = mapTiles[0].coords[0].x;
+            let y = mapTiles[0].coords[0].y;
+            ctx.drawImage(mapImages[0].image, x + camera.x, y + camera.y , 200, 155);
+            x = mapTiles[3+(2 * this.grid.width)].coords[0].x;
+            y = mapTiles[3+(2 * this.grid.width)].coords[0].y;
+            ctx.drawImage(mapImages[1].image, x + camera.x, y + camera.y , 200, 155);
+        }
+        // if(mapImages[2].image.complete) {
+        //     let x = mapTiles[0].coords[0].x;
+        //     let y = mapTiles[0].coords[0].y;
+        //     ctx.drawImage(mapImages[2].image, x + camera.x, y + camera.y , 200, 155);
+        // }
+        // if(mapImages[3].image.complete) {
+        //     let x = mapTiles[2].coords[0].x;
+        //     let y = mapTiles[2].coords[0].y;
+        //     ctx.drawImage(mapImages[3].image, x + camera.x, y + camera.y , 200, 155);
+        // }
 
         ctx.restore();
 
 
-        drawHex();
+        //drawHex();
 
         this.drawButtons();
         this.checkButtons();

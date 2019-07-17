@@ -308,6 +308,25 @@
             "baseBuildTime": 5
         }
         ]
+    },
+
+    {   "type": 13,
+        "name": "Shop",
+        "quantityAllowed" : 1,
+        "levels" : [
+        {   "level": 1,
+            "requirements":    {   "resources" : {"food": 4000, "wood": 4000, "stone": 4000, "iron": 2000},
+                                    "buildings" : [{"type": 0, "level": 2}]
+                                },
+            "baseBuildTime": 10
+        },
+        {   "level": 2,
+            "requirements":    {   "resources" : {"food": 10000, "wood": 10000, "stone": 15000, "iron": 3500},
+                                    "buildings" : [{"type": 0, "level": 3}]
+                                },
+            "baseBuildTime": 100
+        }
+        ]
     }
 
 ]

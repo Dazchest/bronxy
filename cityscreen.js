@@ -11,7 +11,9 @@ class CityScreen extends ScreenView {
         console.log("this is CityScreen constructor");
         this.buttons.push(new Button({"active": true, "x": 500, "y": 100, "w": 80, "h": 30, "text": "Items", "screen": this, "action":  this.itemScreen}));
         this.buttons.push(new Button({"active": true, "x": 500, "y": 140, "w": 80, "h": 30, "text": "Research", "screen": this, "action":  this.researchScreen}));
-        this.buttons.push(new Button({"active": true, "x": 300, "y": 20, "w": 80, "h": 30, "text": "Map", "screen": this, "action":  this.mapScreen}));
+        this.buttons.push(new Button({"active": true, "x": 260, "y": 20, "w": 70, "h": 30, "text": "Map 1", "screen": this, "action":  this.mapScreen}));
+        this.buttons.push(new Button({"active": true, "x": 340, "y": 20, "w": 70, "h": 30, "text": "Map 2", "screen": this, "action":  this.mapScreen2}));
+        this.buttons.push(new Button({"active": true, "x": 420, "y": 20, "w": 70, "h": 30, "text": "Map 3", "screen": this, "action":  this.mapScreen3}));
         return;
         let b = {}; // new Button();
         b.x = 50;
@@ -73,8 +75,20 @@ class CityScreen extends ScreenView {
     }
 
     mapScreen() {
-        console.log("going to the map");
-        mapScreen = new MapScreen();
+        console.log("going to the map 1");
+        mapScreen = new MapScreen(1);
+        screenManager.screen = mapScreen;
+    }
+
+    mapScreen2() {
+        console.log("going to the map 2");
+        mapScreen = new MapScreen(2);
+        screenManager.screen = mapScreen;
+    }
+
+    mapScreen3() {
+        console.log("going to the map 3");
+        mapScreen = new MapScreen(3);
         screenManager.screen = mapScreen;
     }
 

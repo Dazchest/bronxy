@@ -53,6 +53,7 @@ var itemList = [];
 var itemManager = new ItemManager();
 
 var buttonImages = [];
+var mapImages = [];
 var assets;
 
 var promises = [];
