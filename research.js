@@ -76,7 +76,7 @@ class Research {
 
     checkClickOutside() {
         if(this.show && clicked){
-            if(mouse.x < 50 || mouse.x > 350 || mouse.y < 100 || mouse.y > 400) {
+            if(mouse.x < 50*zoom.x || mouse.x > 350*zoom.x || mouse.y < 100*zoom.y || mouse.y > 400*zoom.y) {
                     clicked = false;
                     this.show = false;
                     researchManager.showingResearch = false;
@@ -285,7 +285,7 @@ class Research {
         if(this.show == false) {  //not showing reseach, so can pick another
             if(clicked) {   //mouse is clicked, check if it was on a research button
                 let b = this.button;
-                if(mouse.x > b.x && mouse.x < b.x + b.w && mouse.y > b.y && mouse.y < b.y + b.h) {
+                if(mouse.x > b.x*zoom.x && mouse.x < b.x*zoom.x + b.w*zoom.x && mouse.y > b.y*zoom.y && mouse.y < b.y*zoom.y + b.h*zoom.y) {
                     if(b.action && b.active) {
                         clicked = false;
                         console.log(b.text + " pressed");

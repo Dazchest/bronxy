@@ -60,8 +60,9 @@ class ScreenView {
     checkButtons() {
         for(let x=0; x<this.buttons.length; x++) {
             if(clicked) {   //mouse is clicked, check if it was on a button
+                
                 let b = this.buttons[x];
-                if(mouse.x > b.x && mouse.x < b.x + b.w && mouse.y > b.y && mouse.y < b.y + b.h) {
+                if(mouse.x > b.x*zoom.x && mouse.x < b.x*zoom.x + b.w*zoom.x && mouse.y > b.y*zoom.y && mouse.y < b.y*zoom.y + b.h*zoom.y) {
                     if(b.action && b.active) {
                         clicked = false;
                         console.log(b.text + " pressed");

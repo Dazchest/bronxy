@@ -408,7 +408,14 @@ function d2() {
     console.log("mouse over canvas");
 }
 
+var zoom = {"x": 1, "y": 1};
+// --- MAIN GAME LOOP ---
 function draw() {
+
+    ctx.save();
+    
+    //ctx.scale(zoom.x, zoom.y);
+
     ctx.fillStyle = "#cccc66";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
@@ -429,6 +436,8 @@ function draw() {
 
 
     clicked = false;
+
+    ctx.restore();
     requestAnimationFrame(draw);    
 }
 

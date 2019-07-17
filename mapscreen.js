@@ -57,6 +57,20 @@ class MapScreen extends ScreenView {
             }
         }
 
+        for(let y=0; y<5; y++) {
+            for(let x=0; x<5; x++) {
+                //ctx.translate(-50,0);
+                let t = (y % 2) * 100;
+
+                let coords = [];
+                coords.push(new Vector3d(t + 50 + (x*200), 100 +(y*50)));
+                coords.push(new Vector3d(t + 150 + (x*200), 50 +(y*50)));
+                coords.push(new Vector3d(t + 250 + (x*200), 100 +(y*50)));
+                coords.push(new Vector3d(t + 150 + (x*200), 150 +(y*50)));
+                mapTiles.push(new Tile(coords));
+            }
+        }
+
 
     }
 
@@ -68,7 +82,7 @@ class MapScreen extends ScreenView {
         if(this.active) {
 
             ctx.save();
-            ctx.scale(.7, .7);
+            //ctx.scale(1, 1);
 
 
             ctx.strokeStyle = "#000000";
@@ -99,15 +113,32 @@ class MapScreen extends ScreenView {
             }
 
             // draw the second grid
-            for(let y=5; y<4+this.grid.height; y++) {
-                for(let x=5; x<4+this.grid.width; x++) {
-                    let coords = mapTiles[x + (y*5)].coords;
+            for(let y=0; y<5; y++) {
+                for(let x=0; x<5; x++) {
+                    let coords = mapTiles[25 + x + (y*5)].coords;    //skips the first row
+                    
                     ctx.beginPath();
                     ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y + 300);
                     for(let j=1; j<6; j++) {
                         ctx.lineTo(coords[j].x + camera.x, coords[j].y + camera.y + 300);
                     }
                     ctx.lineTo(coords[0].x + camera.x, coords[0].y + camera.y + 300);
+                    ctx.stroke();
+                    ctx.fillStyle = '#44dd44';
+                    ctx.fill();
+                }
+            }
+
+            // draw the third grid
+            for(let y=0; y<5; y++) {
+                for(let x=0; x<5; x++) {
+                    let coords = mapTiles[50 + x + (y*5)].coords;
+                    ctx.beginPath();
+                    ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y + 700);
+                    for(let j=1; j<4; j++) {
+                        ctx.lineTo(coords[j].x + camera.x, coords[j].y + camera.y + 700);
+                    }
+                    ctx.lineTo(coords[0].x + camera.x, coords[0].y + camera.y + 700);
                     ctx.stroke();
                     ctx.fillStyle = '#44dd44';
                     ctx.fill();
@@ -152,6 +183,25 @@ class Hex {
 }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // for(let y=0; y<this.grid.height; y++) {
 //     for(let x=0; x<this.grid.width; x++) {
 //         let t = (y % 2) * 100;
@@ -179,10 +229,11 @@ function drawHex() {
     coords.push(new Vector3d(50 + (200), 150 +(50)));
     coords.push(new Vector3d(0 + (200), 100 +(50)));
 
+
     // Make point and hex objects
     const target1 = new Point(130,130);
     const target2 = new Point(mouse.x, mouse.y);
-    const hex = new Hexagon(400,400,100);
+    const hex = new Hexagon(180,120,100);
 
     let jack;
     jack = hex.isPointInside(target2);
@@ -209,14 +260,20 @@ class Hexagon {
 
     makePoints()
     {    
+        // let coords = [];
+        // coords.push(new Vector3d(300, 350));
+        // coords.push(new Vector3d(400, 300));
+        // coords.push(new Vector3d(500, 350));
+        // coords.push(new Vector3d(500, 400));
+        // coords.push(new Vector3d(400, 450));
+        // coords.push(new Vector3d(300, 400));
         let coords = [];
-        coords.push(new Vector3d(300, 350));
-        coords.push(new Vector3d(400, 300));
-        coords.push(new Vector3d(500, 350));
-        coords.push(new Vector3d(500, 400));
-        coords.push(new Vector3d(400, 450));
-        coords.push(new Vector3d(300, 400));
-    
+        coords.push(new Vector3d(50, 100));
+        coords.push(new Vector3d(150, 50));
+        coords.push(new Vector3d(250, 100));
+        coords.push(new Vector3d(286, 201));
+        coords.push(new Vector3d(150, 150));
+
         this.points = coords;
         // let vec = new Point(0, this.radius);
         // vec.rotate(360 / 2);        //(360 / 12)
@@ -230,7 +287,7 @@ class Hexagon {
     {
         for (var i = 0; i < this.points.length; i++) {
             ctx.moveTo(this.points[i].x, this.points[i].y);
-            ctx.lineTo(this.points[(i+1)%6].x, this.points[(i+1)%6].y);
+            ctx.lineTo(this.points[(i+1)%5].x, this.points[(i+1)%5].y);
             ctx.strokeStyle = color;
             ctx.stroke();
         }
@@ -251,12 +308,12 @@ class Hexagon {
 
         // A Hex is composite of 6 trianges, lets do a point in triangle test for each one.
         // Step through our triangles
-        for (var i = 0; i < 6; i++) {
+        for (var i = 0; i < 4; i++) {
             // check for point inside, if so, return true for this function;
             //console.log(i);
             if(pointInTriangle( this.origin.x, this.origin.y,
                                 this.points[i].x, this.points[i].y,
-                                this.points[(i+1)%6].x, this.points[(i+1)%6].y,
+                                this.points[(i+1)%5].x, this.points[(i+1)%5].y,
                                 point.x, point.y))
                 return true;
         }

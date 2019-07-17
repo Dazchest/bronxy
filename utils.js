@@ -1,6 +1,8 @@
 function convertMouseXYtoGridXY() {
-    let x = Math.floor((mouse.x - camera.x)/ gridSize.x);
-    let y = Math.floor((mouse.y - camera.y)/ gridSize.y);
+    let x = Math.floor(((mouse.x - camera.x)/ gridSize.x));
+    let y = Math.floor(((mouse.y - camera.y)/ gridSize.y));
+     x = Math.floor(((mouse.x - camera.x* zoom.x)/ (gridSize.x * zoom.x)));
+     y = Math.floor(((mouse.y - camera.y * zoom.y)/ (gridSize.y * zoom.y)));
     return {"x": x, "y": y};
 }
 
@@ -32,4 +34,16 @@ function checkInput() {
     if(document.getElementById('quantityInput').value < 0) {
         document.getElementById('quantityInput').value = 1;
     }
+}
+
+
+function zoomScreen(inout) {
+    if(inout == "in") {
+        var zoomlevel = .01
+    } else {
+        var zoomlevel = -.01
+    }
+
+    zoom.x += zoomlevel;
+    zoom.y += zoomlevel;
 }

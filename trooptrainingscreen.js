@@ -41,9 +41,9 @@ class TroopTrainingScreen extends ScreenView {
         let i = document.createElement('input');
         i.id = 'quantityInput';
         i.style.position = 'absolute';
-        i.style.left = (268 + this.x) + 'px';
-        i.style.top =  (365) + 'px';
-        i.style.width = '64px';
+        i.style.left = ((268 + this.x) * zoom.x) + 'px';
+        i.style.top =  (365 * zoom.y) + 'px';
+        i.style.width = '48px';
         i.type = 'number';  
         i.min = 1;
         i.value = 1;
@@ -71,6 +71,9 @@ class TroopTrainingScreen extends ScreenView {
 
     draw() {
         if(this.active) {
+            ctx.save;
+            ctx.scale(1,1);
+
             ctx.strokeStyle = "#000000";
             ctx.fillStyle = "#333333";
             ctx.fillRect(this.x, this.y, this.w, this.h);
@@ -89,6 +92,7 @@ class TroopTrainingScreen extends ScreenView {
             Resource.drawAll(); // draw resources at the top of the screen
             //this.checkDisplayResearch();
             //this.checkResearchButtons();
+            ctx.restore();
 
         }
     }

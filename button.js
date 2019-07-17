@@ -34,7 +34,7 @@ class Button {
     //TODO: maybe have it so accepts a button and this --- so.. (b = this)
     check(researchThis) {
         if(clicked) {   //mouse is clicked, check if it was on a button
-            if(mouse.x > this.x && mouse.x < this.x + this.w && mouse.y > this.y && mouse.y < this.y + this.h) {
+            if(mouse.x > this.x*zoom.x && mouse.x < this.x*zoom.x + this.w*zoom.x && mouse.y > this.y*zoom.y && mouse.y < this.y*zoom.y + this.h*zoom.y) {
                 if(this.action && this.active) {
                     clicked = false;
                     console.log(this.text + " pressed");
