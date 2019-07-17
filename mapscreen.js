@@ -84,7 +84,7 @@ class MapScreen extends ScreenView {
         if(this.active) {
 
             ctx.save();
-            //ctx.scale(1, 1);
+            ctx.scale(.7, .7);
 
 
             ctx.strokeStyle = "#000000";
