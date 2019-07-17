@@ -10,8 +10,10 @@ class MapScreen extends ScreenView {
         // this.currentTree = "City";
 
         // console.log("this is Research Screen constructor");
-        // this.buttons.push(new Button({"active": true, "x": 400, "y": 300, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
+       this.buttons.push(new Button({"active": true, "x": 300, "y": 20, "w": 100, "h": 30, "text": "Exit Map", "screen": this, "action":  this.exitScreen}));
 
+       camera.x = 0;
+       camera.y = 0;
 
         this.initMap();
         if(cities[currentCity]) {
@@ -149,6 +151,10 @@ class MapScreen extends ScreenView {
 
 
         drawHex();
+
+        this.drawButtons();
+        this.checkButtons();
+
 
         }   // end if active
     }

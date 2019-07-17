@@ -35,6 +35,13 @@ class ScreenView {
 
     exitScreen = function(self) {
         console.log("closing the screen");
+
+        // only reset the camera if exiing the map screen
+        if(screenManager.screen == mapScreen) {
+            camera.x = 0;
+            camera.y = 0;
+        }
+
         self.active = false;
         cities[currentCity].active = true;
         //screenManager.screen =    
