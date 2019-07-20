@@ -5,7 +5,24 @@ class MapScreen extends ScreenView {
 
         super();
 
+        this.grid = {"width": 50, "height": 50};
         this.whichMap = whichMap;
+
+        this.mapTiles = [];
+        for(let x=0; x<this.grid.width; x++) {
+            //for(let y=0; y<this.grid.height; y++) {
+                this.mapTiles[x] = new Array(this.grid.height);
+            //this.mapTiles[(y * this.grid.width) * x] = [];
+            //}
+        }
+        // put Tile class into each mapTile array
+        for(let y=0; y<this.grid.height; y++) {
+            for(let x=0; x<this.grid.width; x++) {
+                this.mapTiles[x][y] = new Tile();
+                this.mapTiles[x][y].gridXY = {"x": x, "y": y};
+            }
+        }
+    
         
         // this.buttons = [];
         this.name = "Map";
@@ -25,8 +42,7 @@ class MapScreen extends ScreenView {
     }
 
     initMap() {
-        mapTiles = [];
-        this.grid = {"width": 50, "height": 50};
+        //this.mapTiles = [];
 
         //this.active = false;
         Assets.loadMapImages();
@@ -48,7 +64,7 @@ class MapScreen extends ScreenView {
                     coords.push(new Vector3d(t + 100 + (x*100), p + 150 +(y*100)));
                     coords.push(new Vector3d(t + 50 + (x*100), p + 150 +(y*100)));
                     coords.push(new Vector3d(t + 0 + (x*100), p + 100 +(y*100)));
-                    mapTiles.push(new Tile(coords));
+                    this.mapTiles[x][y].coords = coords;
                 }
             }
         }   
@@ -67,7 +83,7 @@ class MapScreen extends ScreenView {
                     coords.push(new Vector3d(t + 75 + (x*150), 150 +(y*75)));
                     coords.push(new Vector3d(t + 0 + (x*150), 125 +(y*75)));
                     coords.push(new Vector3d(t + 0 + (x*150), 75 +(y*75)));
-                    mapTiles.push(new Tile(coords));
+                    this.mapTiles[x][y].coords = coords;
                 }
             }
         }
@@ -86,7 +102,7 @@ class MapScreen extends ScreenView {
                     coords.push(new Vector3d(t + 150 + (x*100) - (y*100), p + 50 +(y*50) + (x*50)));
                     coords.push(new Vector3d(t + 250 + (x*100) - (y*100), p + 100 +(y*50) + (x*50)));
                     coords.push(new Vector3d(t + 150 + (x*100) - (y*100), p + 150 +(y*50) + (x*50)));
-                    mapTiles.push(new Tile(coords));
+                    this.mapTiles[x][y].coords = coords;
                 }
             }
         }
@@ -118,7 +134,7 @@ class MapScreen extends ScreenView {
             if(this.whichMap == 1) {
                 for(let y=0; y<this.grid.height; y++) {
                     for(let x=0; x<this.grid.width; x++) {
-                        let coords = mapTiles[x + (y*this.grid.width)].coords;
+                        let coords = this.mapTiles[x][y].coords;
                         ctx.beginPath();
                         ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y);
                         for(let j=1; j<6; j++) {
@@ -138,7 +154,7 @@ class MapScreen extends ScreenView {
                 // draw the second grid
                 for(let y=0; y<this.grid.height; y++) {
                     for(let x=0; x<this.grid.width; x++) {
-                        let coords = mapTiles[x + (y*this.grid.width)].coords;    //skips the first row
+                        let coords = this.mapTiles[x][y].coords;    //skips the first row
                         
                         ctx.beginPath();
                         ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y);
@@ -157,10 +173,10 @@ class MapScreen extends ScreenView {
 
             // draw the third grid
             if(this.whichMap == 3) {
-                ctx.translate(200,0);
+                //ctx.translate(200,0);
                 for(let y=0; y<this.grid.height; y++) {
                     for(let x=0; x<this.grid.width; x++) {
-                        let coords = mapTiles[x + (y*this.grid.width)].coords;
+                        let coords = this.mapTiles[x][y].coords;
                         ctx.beginPath();
                         ctx.moveTo(coords[0].x + camera.x, coords[0].y + camera.y);
                         for(let j=1; j<4; j++) {
@@ -179,11 +195,11 @@ class MapScreen extends ScreenView {
 
         // test draw a castle
         if(mapImages[0].image.complete && mapImages[1].image.complete) {
-            let x = mapTiles[0].coords[0].x;
-            let y = mapTiles[0].coords[0].y;
+            let x = this.mapTiles[0][0].coords[0].x;
+            let y = this.mapTiles[0][0].coords[0].y;
             ctx.drawImage(mapImages[0].image, x + camera.x, y + camera.y , 200, 155);
-            x = mapTiles[3+(2 * this.grid.width)].coords[0].x;
-            y = mapTiles[3+(2 * this.grid.width)].coords[0].y;
+            x = this.mapTiles[3][2].coords[0].x;
+            y = this.mapTiles[3][2].coords[0].y;
             ctx.drawImage(mapImages[1].image, x + camera.x, y + camera.y , 200, 155);
         }
         // if(mapImages[2].image.complete) {
@@ -204,6 +220,31 @@ class MapScreen extends ScreenView {
 
         this.drawButtons();
         this.checkButtons();
+        
+        this.g = [];
+        //for(let x=0; x<10; x++) {
+            for(let y=0; y<100; y++) {
+                this.g[y] = [];
+                }
+        //    }
+
+        for(let y=0; y<10; y++) {
+            for(let x=0; x<10; x++) {
+                this.g[x][y] = x + ", " + y;
+            }
+        }
+
+        popup(this.g[5][6], 10, 80);
+
+
+        let inside = coordsAreInside(mouse, this.mapTiles[0][0].coords)
+        //let inside = checkPoly(mouse);
+       // popup(inside.x + ", " + inside.y, 300,300);
+        popup(inside[0], 300,300);
+        if(inside) {
+            console.log(inside);
+            
+        }
 
 
         }   // end if active
@@ -220,12 +261,24 @@ class Vector3d {
     }
 }
 
-var mapTiles = [];
+//var mapTiles = [];
+
 class Tile {
 
-    constructor(coords) {
+    constructor() {
 
-        this.coords = coords;
+        this.coords;
+        this.monster = false;
+        this.boss = false;
+        this.city = false;
+        this.food = false;
+        this.wood = false;
+        this.stone = false;
+        this.iron = false;
+
+        this.water = false;
+        this.mountain = false;
+        this.buildon = true;    // can we build on this site
 
     }
 }

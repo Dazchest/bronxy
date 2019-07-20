@@ -2,7 +2,7 @@ class Building {
 
 
     constructor(data) {
-        console.log("this is building constructor");
+        //console.log("this is building constructor");
         this.upgrading = false;
         this.amount = 0;
         this.collectable = false;

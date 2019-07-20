@@ -2,7 +2,7 @@ var rss,t;
 class Resource {
 
     constructor(data) {
-        console.log("this is resources constructor");
+        //console.log("this is resources constructor");
         for(let x=0; x<Object.keys(data).length; x++) {
             name = Object.keys(data)[x];
             this[name] = data[name];

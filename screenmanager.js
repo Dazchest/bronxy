@@ -11,9 +11,9 @@ class ScreenManager {
 
 }
 
-class ScreenView {
+function ScreenView() {
     
-    constructor() {
+    //constructor() {
         this.margin = 10;
         this.x = 10;
         this.y = 100;
@@ -27,13 +27,13 @@ class ScreenView {
 
         console.log("this is ScreenView constructor");
 
-    }
+    //}
 
-    ticktock() {
+    this.ticktock = function() {
         this.tick();
     }
 
-    exitScreen = function(self) {
+    this.exitScreen = function(self) {
         console.log("closing the screen");
 
         // only reset the camera if exiing the map screen
@@ -57,14 +57,14 @@ class ScreenView {
         screenManager = new ScreenManager(cityScreen);
         }
 
-    drawButtons() {
+    this.drawButtons = function() {
         //console.log(this.buttons.length);
         for(let x=0; x<this.buttons.length; x++) {
              this.buttons[x].draw();
          }
     }
 
-    checkButtons() {
+    this.checkButtons = function() {
         for(let x=0; x<this.buttons.length; x++) {
             if(clicked) {   //mouse is clicked, check if it was on a button
                 
@@ -83,7 +83,7 @@ class ScreenView {
 
 
 
-    bing() {
+    this.bing = function() {
         console.log("pressed the bong");
     }
 }

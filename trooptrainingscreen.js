@@ -66,7 +66,7 @@ class TroopTrainingScreen extends ScreenView {
 
 
     tick() {
-        draw();
+        this.draw();
     }
 
     draw() {
