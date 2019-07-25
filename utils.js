@@ -72,12 +72,12 @@ function Vec2(x, y) {
   }
   Vec2.nsub = function (v1, v2) {
       popup("nsub", 200, 400);
-    return Vec2(v1.x - v2.x, v1.y - v2.y)
+    return Vec2(v1.x - v2.x, v1.y - v2.y);
     //return Vec2(v1[0]-v2[0], v1[1]-v2[1])
   }
   // aka the "scalar cross product"
   Vec2.perpdot = function (v1, v2) {
-    return v1.x * v2.y - v1.y * v2.x
+    return v1.x * v2.y - v1.y * v2.x;
     //return v1[0]*v2[1] - v1[1]*v2[0]
   }
   
@@ -89,13 +89,15 @@ function Vec2(x, y) {
   // polyVerts - Array of Vec2's (2-element Arrays). The vertices that make
   //             up the polygon, in clockwise order around the polygon.
   //
-  function coordsAreInside(point, coords) {
-    let i, len, v1, v2, edge, x
-    //point=Vec2(mouse.x*2,mouse.y*2);
-    //point = Vec2(150, 100);
+  function pointInside(point, coords) {
+    let i, len, v1, v2, edge, x;
     let polyVerts = [...coords];
-    //polyVerts[0].x = 10;
-    l = [];
+    // add the camera position to the 
+    for (i = 0, len = polyVerts.length; i < len; i++) {
+        // polyVerts[i].x += camera.x;
+        // polyVerts[i].y += camera.y;
+    }
+        l = [];
     for (i = 0, len = polyVerts.length; i < len; i++) {
       v1 = Vec2.nsub(polyVerts[i], point)
       v2 = Vec2.nsub(polyVerts[i+1 > len-1 ? 0 : i+1], point)
@@ -109,7 +111,7 @@ function Vec2(x, y) {
         }
         l.push(edge);
     }
-    return l;
+    return true;
   }
   //----------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------

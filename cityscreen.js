@@ -1,19 +1,19 @@
-function CityScreen() {
+class CityScreen extends ScreenView {
 
     // get the defaults from ScreenView
-    // constructor() {
+     constructor() {
 
-    //     super();
+         super();
 
        // this.bing();
-       ScreenView.call(this);
+        //ScreenView.call(this);
         this.name = "City";
 
         console.log("this is CityScreen constructor");
         this.buttons.push(new Button({"active": true, "x": 500, "y": 100, "w": 80, "h": 30, "text": "Items", "screen": this, "action":  this.itemScreen}));
         this.buttons.push(new Button({"active": true, "x": 500, "y": 140, "w": 80, "h": 30, "text": "Research", "screen": this, "action":  this.researchScreen}));
-        this.buttons.push(new Button({"active": true, "x": 260, "y": 20, "w": 70, "h": 30, "text": "Map 1", "screen": this, "action":  this.mapScreen}));
-        this.buttons.push(new Button({"active": true, "x": 340, "y": 20, "w": 70, "h": 30, "text": "Map 2", "screen": this, "action":  this.mapScreen2}));
+        //this.buttons.push(new Button({"active": true, "x": 260, "y": 20, "w": 70, "h": 30, "text": "Map 1", "screen": this, "action":  this.mapScreen}));
+        //this.buttons.push(new Button({"active": true, "x": 340, "y": 20, "w": 70, "h": 30, "text": "Map 2", "screen": this, "action":  this.mapScreen2}));
         this.buttons.push(new Button({"active": true, "x": 420, "y": 20, "w": 70, "h": 30, "text": "Map 3", "screen": this, "action":  this.mapScreen3}));
         // return;
         // let b = {}; // new Button();
@@ -35,15 +35,15 @@ function CityScreen() {
         
         // cities[currentCity].active = false;
         // buildingHandler.highlightGrid = false;
-    // }
+     }
 
-    this.tick = function() {
+    tick() {
         //console.log("fff");
         this.draw();
 
     }
 
-    this.draw = function() {
+    draw() {
         //console.log("cityscreen here");
         //return;
         if(this.active) {
@@ -62,32 +62,32 @@ function CityScreen() {
             }
     }
 
-    this.itemScreen = function() {
+    itemScreen() {
         console.log("going to item screen");
         itemScreen = new ItemScreen();
         screenManager.screen = itemScreen;
 
     }
 
-    this.researchScreen = function() {
+    researchScreen() {
         console.log("going to Research screen");
         researchScreen = new ResearchScreen();
         screenManager.screen = researchScreen;
     }
 
-    this.mapScreen = function() {
+    mapScreen() {
         console.log("going to the map 1");
         mapScreen = new MapScreen(1);
         screenManager.screen = mapScreen;
     }
 
-    this.mapScreen2 = function() {
+    mapScreen2() {
         console.log("going to the map 2");
         mapScreen = new MapScreen(2);
         screenManager.screen = mapScreen;
     }
 
-    this.mapScreen3 = function() {
+    mapScreen3() {
         console.log("going to the map 3");
         mapScreen = new MapScreen(3);
         screenManager.screen = mapScreen;

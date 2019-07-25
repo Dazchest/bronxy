@@ -21,9 +21,9 @@ class Resource {
                 ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 470, 55);
             } else {
                 if(resources[t].icon.complete) {
-                ctx.drawImage(resources[t].icon, 10 + (x*80), 80-16, 32, 32);
+                ctx.drawImage(resources[t].icon, 10 + (x*110), 80-16, 32, 32);
                 }
-                ctx.fillText(resources[t].amount.toString(), 50 + (x*80), 80);
+                ctx.fillText(resources[t].amount.toString(), 50 + (x*110), 80);
             }
         }
     }

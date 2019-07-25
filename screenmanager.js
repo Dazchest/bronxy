@@ -11,9 +11,9 @@ class ScreenManager {
 
 }
 
-function ScreenView() {
+class ScreenView {
     
-    //constructor() {
+    constructor() {
         this.margin = 10;
         this.x = 10;
         this.y = 100;
@@ -27,23 +27,30 @@ function ScreenView() {
 
         console.log("this is ScreenView constructor");
 
-    //}
+    }
 
-    this.ticktock = function() {
+    ticktock() {
         this.tick();
     }
 
-    this.exitScreen = function(self) {
+    exitScreen(self) {
         console.log("closing the screen");
 
         // only reset the camera if exiing the map screen
-        if(screenManager.screen == mapScreen) {
+        if(screenManager.screen == mapScreen) {   // TODO: need a better way to keepe track of previous screens
             camera.x = 0;
             camera.y = 0;
         }
+        if(screenManager.screen == marchScreen) {   // TODO: need a better way to keepe track of previous screens
+            mapScreen.active = true;
+            screenManager = new ScreenManager(mapScreen);
+        } else {
+            cities[currentCity].active = true;
+            screenManager = new ScreenManager(cityScreen);
+
+        }
 
         self.active = false;
-        cities[currentCity].active = true;
         //screenManager.screen =    
         //cityScreen = new CityScreen();
         if(self.troopBuilding) {
@@ -54,17 +61,16 @@ function ScreenView() {
         for(let x=0; x<self.inputs.length; x++) {
             document.getElementById('maindiv').removeChild(self.inputs[x]);
         }
-        screenManager = new ScreenManager(cityScreen);
-        }
+    }
 
-    this.drawButtons = function() {
+    drawButtons() {
         //console.log(this.buttons.length);
         for(let x=0; x<this.buttons.length; x++) {
              this.buttons[x].draw();
          }
     }
 
-    this.checkButtons = function() {
+    checkButtons() {
         for(let x=0; x<this.buttons.length; x++) {
             if(clicked) {   //mouse is clicked, check if it was on a button
                 
@@ -83,7 +89,7 @@ function ScreenView() {
 
 
 
-    this.bing = function() {
+    bing() {
         console.log("pressed the bong");
     }
 }

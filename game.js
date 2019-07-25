@@ -5,6 +5,7 @@
 window.onload = init;
 
 var game = {};
+var fps;
 
 var canvas, ctx;
 var mouse = {};
@@ -47,6 +48,10 @@ var screenManager;
 var mapScreen = {"active": false};
 var startOnMap = false;
 
+var marches = [];
+var marchScreen = {"active": false};
+var marchManager = new MarchManager();
+
 var itemScreen = {"active": false};
 var items;
 var itemList = [];
@@ -66,6 +71,7 @@ var mouseDownFired = false;
 var database;
 
 var username
+var lastLoop = Date.now();
 
 
 
@@ -410,8 +416,14 @@ function d2() {
 }
 
 var zoom = {"x": 1, "y": 1};
+
+
+// ----------------------------------------------------------
 // --- MAIN GAME LOOP ---
 function draw() {
+    var thisLoop = new Date();
+    fps = 1000 / (thisLoop - lastLoop);
+    lastLoop = thisLoop;
 
     ctx.save();
     
@@ -434,11 +446,18 @@ function draw() {
 
     troopManager.checkTroopTraining();
 
+    marchManager.tick();
+
 
 
     clicked = false;
 
     ctx.restore();
+
+    ctx.font = "20px Georgia";
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText("fps: " + fps, 400, 70);
+
     requestAnimationFrame(draw);    
 }
 

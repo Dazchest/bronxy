@@ -25,4 +25,22 @@ class Troop {
 
     }
 
+    draw(level, position) {
+        if(troops[this.type].levels[level].image) { // check image is available
+            if(troops[this.type].levels[level].image.complete) {
+                let troopimage = troops[this.type].levels[level].image;
+                ctx.drawImage(troopimage, position.x + camera.x, position.y-80 + camera.y, troopimage.width / 8, troopimage.height / 8);
+            }
+        }
+    }
+
+    draw2(level, position) {
+        if(troops[this.type].levels[level].image) { // check image is available
+            if(troops[this.type].levels[level].image.complete) {
+                let troopimage = troops[this.type].levels[level].image;
+                ctx.drawImage(troopimage, position.x, position.y-80, troopimage.width / 8, troopimage.height / 8);
+            }
+        }
+    }
+
 }

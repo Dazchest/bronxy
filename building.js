@@ -299,7 +299,7 @@ class troopTrainingBuilding extends Building {
                     if(troopList[this.troopType].levels[this.trainingQueue.tier]) {
                         troopList[this.troopType].levels[this.trainingQueue.tier].quantity += this.trainingQueue.quantity;
                         console.log(troopList[this.troopType].levels[this.trainingQueue.tier]);
-                        console.log("adding to existing troops");
+                        console.log("adding to existing troops and existing tier");
                     } else {    // only insert the new tier/level data
                         let tierData = {};
                         tierData.level = this.trainingQueue.tier + 1;
@@ -308,7 +308,7 @@ class troopTrainingBuilding extends Building {
                         tierData.name = troops[this.troopType].levels[this.trainingQueue.tier].name;
                         troopList[this.troopType].levels[this.trainingQueue.tier] = tierData;
     
-                        console.log("creating new troops")
+                        console.log("adding to existing troops with a new tier")
                     }
                 } else {
                     console.log(this.troopType);
@@ -316,14 +316,14 @@ class troopTrainingBuilding extends Building {
                     troopData.type = this.troopType;
                     troopData.levels = [];
                     let tierData = {};
-                    tierData.level = this.trainingQueue.tier + 1;
+                    tierData.level = this.trainingQueue.tier;
                     tierData.quantity = this.trainingQueue.quantity;
                     tierData.type = this.troopType;
                     tierData.name = troops[this.troopType].levels[this.trainingQueue.tier].name;
-                    troopData.levels.push(tierData);
+                    troopData.levels[tierData.level] = (tierData);
                     troopList[this.troopType] = (new Troop(troopData));
 
-                    console.log("creating new troops")
+                    console.log("creating new troops and new tier")
                 }
                 if(this.trainingScreen) {
                     setButtonState(this.trainingScreen.buttons, "train", true);
