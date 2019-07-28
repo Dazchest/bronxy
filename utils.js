@@ -71,7 +71,7 @@ function Vec2(x, y) {
     //return [x, y]
   }
   Vec2.nsub = function (v1, v2) {
-      popup("nsub", 200, 400);
+      //popup("nsub", 200, 400);
     return Vec2(v1.x - v2.x, v1.y - v2.y);
     //return Vec2(v1[0]-v2[0], v1[1]-v2[1])
   }

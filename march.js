@@ -9,14 +9,18 @@ class March {
         this.size = 0;
         this.speed = 0;         // tile per hour
 
-        this.startPosition = new Vector3d(mapScreen.mapTiles[1][1].points[0].x - camera.x, mapScreen.mapTiles[1][1].points[0].y - camera.y);
-        this.endPostition = new Vector3d(tile.points[0].x - camera.x, tile.points[0].y - camera.y);
-        this.position = new Vector3d(mapScreen.mapTiles[1][1].points[0].x - camera.x, mapScreen.mapTiles[1][1].points[0].y - camera.y);
-        this.startCoords = new Vector3d(1, 1);
+        this.startCoords = new Vector3d(cityCoords.x, cityCoords.y);
         this.endCoords = tile.coords;
+
+        let sp = mapScreen.mapTiles[cityCoords.x][cityCoords.y].getCenter();
+        this.startPosition = new Vector3d(sp.x, sp.y);
+        this.position = new Vector3d(sp.x, sp.y);
+        let ep = tile.getCenter();
+        this.endPostition = new Vector3d(ep.x, ep.y);
+
         //this.distance = 
 
-        this.travelTime = 2;   // seconds
+        this.travelTime = 10;   // seconds
         this.elasped;
         this.startTime = Date.now();
         this.arriveTime = Date.now() + (this.travelTime*1000);
@@ -50,6 +54,20 @@ class March {
     draw() {
         this.troops.draw(1, this.position);
         //console.log(marches);
+
+        ctx.save();
+        // draw a march line
+        ctx.strokeStyle = '#0000ff';
+        ctx.lineWidth = '3'
+        let sp = this.startPosition;
+        ctx.beginPath();
+        ctx.moveTo(sp.x + camera.x, sp.y + camera.y);
+        let ep = this.endPostition;
+        ctx.lineTo(ep.x + camera.x, ep.y + camera.y);
+        ctx.stroke();
+
+        ctx.restore();
+
     }
 
     checkArrived() {
@@ -82,7 +100,7 @@ class March {
                 this.arrived = false;
 
                 // reverse some settings, and bring the march home
-                this.travelTime = 3;   // seconds
+                this.travelTime = 10;   // seconds
                 this.elasped = 0;
                 this.startTime = Date.now();
                 this.arriveTime = Date.now() + (this.travelTime*1000);
@@ -122,7 +140,7 @@ class March {
         this.arrived = false;
 
         // reverse some settings, and bring the march home
-        this.travelTime = 3;   // seconds
+        this.travelTime = 10;   // seconds
         this.elasped = 0;
         this.startTime = Date.now();
         this.arriveTime = Date.now() + (this.travelTime*1000);

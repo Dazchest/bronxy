@@ -1,17 +1,31 @@
-
-
-
-
 window.onload = init;
+
+var map = [];
+let grid_w = 1200;
+let grid_h = 1200;
+for(let x=0; x<grid_w; x++) {
+    map[x] = new Array(grid_h);
+}
+
+// put Tile class into each mapTile array
+for(let y=0; y<grid_h; y++) {
+    for(let x=0; x<grid_w; x++) {
+        map[x][y] = new Tile();
+        map[x][y].coords = {"x": x, "y": y};
+    }
+}
 
 var game = {};
 var fps;
 
 var canvas, ctx;
-var mouse = {};
+var mouse = {"x": 0, "y": 0, "movement": {"x": 0, "y": 0}};
 var camera = {"x": 0, "y": 0};
 var gridSize = {"x":64, "y": 64};
 var currentCity = 0;
+
+var cityCoords = new Vector3d(9, 8);
+
 var thisCity;
 var cities = [];
 var player;
@@ -87,6 +101,12 @@ function init() {
     //-------------------------------------------
     console.log("initialising game");
 
+    // get operating system - mobile etc
+    opsys = getMobileOperatingSystem();
+    let downtype, movetype, uptype;
+    if (opsys=="unknown"){downtype = 'mousedown'; movetype = 'mousemove'; uptype = 'mouseup';}
+    if (opsys!="unknown"){downtype = 'touchstart'; movetype = 'touchmove'; uptype = 'touchleave';}
+
     //init cavnas
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
@@ -94,20 +114,22 @@ function init() {
     ctx.fillStyle = "#ff0000";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    canvas.addEventListener('mousemove', function(e) {
+    canvas.addEventListener(movetype, function(e) {
         mouse.x = e.offsetX;
         mouse.y = e.offsetY;
+        mouse.movement.x = e.movementX;
+        mouse.movement.y = e.movementY;
     });
 
    // mouseDownFired = false;
-    canvas.addEventListener('mousedown', function(e) {
+    canvas.addEventListener(downtype, function(e) {
         mouseDownFired = false;
-        canvas.addEventListener('mousemove', scrollCity);
-        canvas.addEventListener('mouseup', function() {
-            canvas.removeEventListener('mousemove', scrollCity);
+        canvas.addEventListener(movetype, scrollCity);
+        canvas.addEventListener(uptype, function() {
+            canvas.removeEventListener(movetype, scrollCity);
         })
         canvas.addEventListener('mouseout', function() {
-            canvas.removeEventListener('mousemove', scrollCity);
+            canvas.removeEventListener(movetype, scrollCity);
         })
     }); 
 
@@ -258,6 +280,23 @@ function init() {
         //draw();
         
     }
+}
+
+function getMobileOperatingSystem() {
+    var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+
+            // Windows Phone must come first because its UA also contains "Android"
+        if (/windows phone/i.test(userAgent)) {
+                return "Windows Phone";
+        }
+        if (/android/i.test(userAgent)) {
+                return "Android";
+        }
+        // iOS detection from: http://stackoverflow.com/a/9039885/177710
+        if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                return "iOS";
+        }
+        return "unknown";
 }
 
 function gotData(data) {
@@ -432,7 +471,6 @@ function draw() {
     ctx.fillStyle = "#cccc66";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    popup(mouse.x + ", " + mouse.y, 10, 20);
     let gridCoord = convertMouseXYtoGridXY();
     popup(gridCoord.x + ", " + gridCoord.y, 10, 50);
 
@@ -457,6 +495,9 @@ function draw() {
     ctx.font = "20px Georgia";
     ctx.fillStyle = '#ffffff';
     ctx.fillText("fps: " + fps, 400, 70);
+
+    ctx.fillStyle = '#000000';
+    popup(mouse.x + ", " + mouse.y, 10, 20);
 
     requestAnimationFrame(draw);    
 }

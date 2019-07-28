@@ -7,7 +7,7 @@ class MapScreen extends ScreenView {
 
         this.name = "Map";
 
-        this.grid = {"width": 50, "height": 50};
+        this.grid = {"width": 150, "height": 150};
         this.mapOffset = {"x":0, "y": 0};
         this.grid_x = 0;    // 
         this.grid_y = 0;    // 
@@ -23,23 +23,18 @@ class MapScreen extends ScreenView {
         // put Tile class into each mapTile array
         for(let y=0; y<this.grid.height; y++) {
             for(let x=0; x<this.grid.width; x++) {
-                this.mapTiles[x][y] = new Tile(x, y);   // sets the cords as well
+                this.mapTiles[x][y] = new Tile(x, y);
+                //this.mapTiles[x][y].coords = {"x": x, "y": y};
             }
         }
        
         this.mapTiles[4][1] = new FoodTile(1, 4, 1);
-        this.mapTiles[8][12] = new FoodTile(2, 8, 12);
+        this.mapTiles[8][12] = new FoodTile(1, 8, 12);
         this.mapTiles[35][41] = new FoodTile(1, 35, 41);
-
-        this.mapTiles[3][5] = new WoodTile(1, 3, 5);
-
-        this.mapTiles[6][9] = new StoneTile(1, 6, 9);
-
-        this.mapTiles[12][6] = new IronTile(1, 12, 6);
-
+        //this.mapTiles[4][1].coords = {"x": 4, "y": 1};
+       // this.mapTiles[2][3] = new FoodTile(1);
         
         this.buttons.push(new Button({"active": true, "x": 300, "y": 20, "w": 100, "h": 30, "text": "Exit Map", "screen": this, "action":  this.exitScreen}));
-        this.buttons.push(new Button({"active": true, "x": 450, "y": 20, "w": 100, "h": 30, "text": "Home", "screen": this, "action":  this.gotoCity}));
 
         camera.x = 0;
         camera.y = 0;
@@ -54,16 +49,6 @@ class MapScreen extends ScreenView {
     initMap() {
         Assets.loadMapImages();
 
-    }
-
-    gotoCity(self) {
-        let x = cityCoords.x;
-        let y = cityCoords.y;
-        self.grid_x = x-4;    
-        self.grid_y = y-4;    
-        //camera.x = (y - x) * (mapScreen.tileDimensioins . x / 2);
-        camera.x = (y - x) * 100;
-        camera.y = ((x-4 + y-4 + 1) * -50) - 50;
     }
 
     createTile(x, y, which, level) {
@@ -113,50 +98,61 @@ class MapScreen extends ScreenView {
             //----------------------------------
             // draw the grid
             //----------------------------------
+            //camera.x = 500;
+            //camera.y = 500;
             this.tileDimensioins = {"width": 200, "height": 100};
-
+            // let grid_x = Math.floor(mapScreen.mapOffset.x / 200);    // 200 is tile width
+            // let grid_y = Math.floor(mapScreen.mapOffset.y / 100);    // 100 is tile height
+            // if(camera.x > 500) {
+            //     camera.x = 500;
+            // };
             this.gridOffset = new Vector3d(this.grid_x, this.grid_y);
-            this.gridDisplay = {"width": 22, "height": 22};
+            this.gridDisplay = {"width": 15, "height": 15};
 
-            // this.grid_x = Math.floor(camera.x / 200);    // 200 is tile width
-            // this.grid_y = Math.floor(camera.y / 100);    // 100 is tile height
-
-            for(let y=-5+this.grid_y; y<this.gridDisplay.height+this.grid_y-5; y++) {
-                for(let x=-5+this.grid_x; x<this.gridDisplay.width+this.grid_x-5; x++) {
+            for(let y=-1; y<this.gridDisplay.height; y++) {
+                for(let x=-1; x<this.gridDisplay.width; x++) {
                     //add points for the tiles we want to view first
     
-                    let points = createPoints(x, y);
+                    let points = [];
+                    points.push(new Vector3d(0 + (x*100) - (y*100), 50 +(y*50) + (x*50)));
+                    points.push(new Vector3d(100 + (x*100) - (y*100), 0 +(y*50) + (x*50)));
+                    points.push(new Vector3d(200 + (x*100) - (y*100), 50 +(y*50) + (x*50)));
+                    points.push(new Vector3d(100 + (x*100) - (y*100), 100 +(y*50) + (x*50)));
+                    // points[0].add(200+100, 300-50);  // centre
+                    // points[1].add(200+100, 300-50);
+                    // points[2].add(200+100, 300-50);
+                    // points[3].add(200+100, 300-50);
                     //-----------
 
                     ctx.beginPath();
-                    //points[0] = points[0].addCamera(this.mapOffset);
-                    points[0] = points[0].addCamera(camera);
+                    points[0] = points[0].addCamera(this.mapOffset);
+                    //points[0] = points[0].addCamera(camera);
                     ctx.moveTo(points[0].x, points[0].y);
                     for(let j=1; j<4; j++) {
-                        //points[j] = points[j].addCamera(this.mapOffset);
-                        points[j] = points[j].addCamera(camera);
+                        points[j] = points[j].addCamera(this.mapOffset);
+                        //points[j] = points[j].addCamera(camera);
                         ctx.lineTo(points[j].x, points[j].y);
                     }
                     ctx.lineTo(points[0].x, points[0].y);
                     ctx.stroke();
-                    if(x < 1 || x > this.grid.width-1 || y < 1 || y > this.grid.height-1) {
+                    if(x + this.grid_x < 1 || y + this.grid_y < 1) {
                         ctx.fillStyle = '#7777ff';
                     } else {
                         ctx.fillStyle = '#44dd44';
                     }
                     ctx.fill();
 
-                    if(x >= 0 && x<this.grid.width && y >= 0 && y<this.grid.height) {
-                        this.mapTiles[x][y].points = points;
+                    // if(x + this.grid_x >= 0 && y + this.grid_y >= 0) {
+                    //     this.mapTiles[x+this.grid_x][y+this.grid_y].points = points;
 
-                        ctx.fillStyle = '#ffffff';
-                        //console.log(x + " , " + y);
-                        let tile = this.mapTiles[x][y];
-                        ctx.fillText(tile.coords.x + ", " + tile.coords.y, points[0].x + 70, points[0].y + 0);
-                        //ctx.fillText(t.coords.x + ", " + t.coords.y,  70 + 200,  0 -100);
-                        ctx.fillText(tile.text, points[0].x + 70, points[0].y - 20);
-                        //ctx.fillText("Level: " + this.mapTiles[x][y].level, points[0].x + 65 + 200, points[0].y + 20 -100);
-                    }
+                    //     ctx.fillStyle = '#ffffff';
+                    //     //console.log(x + " , " + y);
+                    //     let tile = this.mapTiles[x+this.grid_x][y+this.grid_y];
+                    //     ctx.fillText(tile.coords.x + ", " + tile.coords.y, points[0].x + 70, points[0].y + 0);
+                    //     //ctx.fillText(t.coords.x + ", " + t.coords.y,  70 + 200,  0 -100);
+                    //     ctx.fillText(tile.text, points[0].x + 70, points[0].y - 20);
+                    //     //ctx.fillText("Level: " + this.mapTiles[x][y].level, points[0].x + 65 + 200, points[0].y + 20 -100);
+                    // }
                 }
             }
             //----------------------------
@@ -166,10 +162,9 @@ class MapScreen extends ScreenView {
         // test draw a castle
         if(mapImages[0].image.complete && mapImages[1].image.complete) {
             //points[j] = pointsOrigin[j].addCamera(camera);
-            let x = this.mapTiles[cityCoords.x][cityCoords.y].points[0].x;
-            let y = this.mapTiles[cityCoords.x][cityCoords.y].points[0].y;
-            //point
-            ctx.drawImage(mapImages[0].image, x, y - 100, 200, 155);
+            // let x = this.mapTiles[0][0].points[0].x;
+            // let y = this.mapTiles[0][0].points[0].y;
+            // ctx.drawImage(mapImages[0].image, x , y , 200, 155);
             // x = this.mapTiles[3][2].points[0].x;
             // y = this.mapTiles[3][2].points[0].y;
             // ctx.drawImage(mapImages[1].image, x, y , 200, 155);
@@ -183,9 +178,9 @@ class MapScreen extends ScreenView {
 
         ctx.restore();
 
-        Resource.drawAll();
-
-        //return;
+        //Resource.drawAll();
+        
+        return;
 
         this.drawButtons();
         this.checkButtons();
@@ -212,25 +207,45 @@ class MapScreen extends ScreenView {
 
     checkClick() {
         if(clicked) {
-            for(let y=-5+this.grid_y; y<this.gridDisplay.height+this.grid_y-5; y++) {
-                for(let x=-5+this.grid_x; x<this.gridDisplay.width+this.grid_x-5; x++) {
-                    if(x >= 0 && x<this.grid.width && y >= 0 && y<this.grid.height) {
+            //return;
+           // this.mapTiles[x][y].hideButtons();
+           let offset = {"x": 0, "y": 0};
 
-                        let inside = false;
-                        inside = pointInside(mouse, this.mapTiles[x][y].points);
-                        if(inside) {
-                            marchManager.hideOuterButtons();
-                            this.mapTiles[x][y].highlight();
-                            this.mapTiles[x][y].showButtons();
-                            console.log("clicked at " + x + ", " + y);
-                            this.tileClicked = new Vector3d(x, y);
-                            let c = this.mapTiles[x][y].getCenter();
-                            console.log(c);
-                            return;
-                        }
+            //if(this.grid_x >= 0 && this.grid_y >= 0) {
+            //if(this.grid_x < 4 && this.grid_x >= 0 &&this.grid_x - 4 >= 0 && this.grid_y - 4 >= 0) {
+
+            if(this.grid_x > 4) {
+                offset.x = this.grid_x - 4;
+            }
+            if(this.grid_x < 0 ) {
+                offset.x = 0;
+            }
+            if(this.grid_y > 4) {
+                offset.y = this.grid_y - 4;
+            }
+            if(this.grid_y < 0 ) {
+                offset.y = 0;
+            }
+    
+            for(let y=offset.y; y<this.gridDisplay.height + offset.y; y++) {
+                for(let x=offset.x; x<this.gridDisplay.width + offset.x; x++) {
+                    let inside = false;
+                    //console.log(this.mapTiles[x][y].coords);
+                    inside = pointInside(mouse, this.mapTiles[x][y].points);
+                    //popup(inside, 300, 300);
+                    if(inside) {
+                        marchManager.hideOuterButtons();
+                        this.mapTiles[x][y].highlight();
+                        this.mapTiles[x][y].showButtons();
+                        console.log("clicked at " + x + ", " + y);
+                        this.tileClicked = new Vector3d(x, y);
+                        return;
                     }
                 }
             }
+            // console.log("clicked at " + x + ", " + y);
+            // this.mapTiles[x][y].showButtons();
+            // this.mapTiles[x][y].highlight();
         }
     }
 
@@ -263,15 +278,19 @@ class Vector3d {
 
 function createPoints(x, y) {
     let points = [];
-    let tileW = mapScreen.tileDimensioins.width;
-    let tileH = mapScreen.tileDimensioins.height;
-    points.push(new Vector3d(-tileW/2 + (x*tileW/2) - (y*tileW/2) + canvas.width/2, 0 +(y*tileH/2) + (x*tileH/2)));
-    points.push(new Vector3d(0 + (x*tileW/2) - (y*tileW/2) + canvas.width/2, -tileH/2 +(y*tileH/2) + (x*tileH/2)));
-    points.push(new Vector3d(tileW/2 + (x*tileW/2) - (y*tileW/2) + canvas.width/2, 0 +(y*tileH/2) + (x*tileH/2)));
-    points.push(new Vector3d(0 + (x*tileW/2) - (y*tileW/2) + canvas.width/2, tileH/2 +(y*tileH/2) + (x*tileH/2)));
+    points.push(new Vector3d(0 + (x*100) - (y*100), 50 +(y*50) + (x*50)));
+    points.push(new Vector3d(100 + (x*100) - (y*100), 0 +(y*50) + (x*50)));
+    points.push(new Vector3d(200 + (x*100) - (y*100), 50 +(y*50) + (x*50)));
+    points.push(new Vector3d(100 + (x*100) - (y*100), 100 +(y*50) + (x*50)));
+    // points[0].add(200+100, 300-50);  // centre
+    // points[1].add(200+100, 300-50);
+    // points[2].add(200+100, 300-50);
+    // points[3].add(200+100, 300-50);
 
     return points;
 }
+
+//var mapTiles = [];
 
 class Tile {
 
@@ -297,18 +316,6 @@ class Tile {
         this.text = "";
 
 
-    }
-
-    getCenter() {
-        let point;
-        let x = this.coords.x;
-        let y = this.coords.y;
-        let tileW = mapScreen.tileDimensioins.width;
-        let tileH = mapScreen.tileDimensioins.height;
-            
-        point = new Vector3d((x*tileW/2) - (y*tileW/2) + canvas.width/2, (y*tileH/2) + (x*tileH/2));
-    
-        return point;
     }
 
     draw() {
@@ -381,12 +388,19 @@ class Tile {
         ctx.fillText(this.coords.x + ", " + this.coords.y, points[0].x + 70, points[0].y + 0);
 
         // draw line to it
+        let startPoints = createPoints(6, 2);
+        //startPoints[0].addCamera(camera);
+        startPoints[0].add(camera.x, camera.y);
+        //startPoints[1].addCamera(camera);
+        //startPoints[2].addCamera(camera);
+        //startPoints[3].addCamera(camera);
 
-        let sp = mapScreen.mapTiles[cityCoords.x][cityCoords.y].getCenter();
         ctx.beginPath();
-        ctx.moveTo(sp.x + camera.x, sp.y + camera.y);
-        let ep = this.getCenter();
-        ctx.lineTo(ep.x + camera.x, ep.y + camera.y);
+        ctx.moveTo(startPoints[0].x, startPoints[0].y);
+        // for(let j=1; j<4; j++) {
+        //     ctx.lineTo(points[j].x, points[j].y);
+        // }
+        ctx.lineTo(points[0].x, points[0].y);
         ctx.stroke();
 
     }
@@ -422,142 +436,11 @@ class FoodTile extends ResourceTile {
                 break;
             case 2:
                 this.startAmount = 2000;
-                this.baseGatheringSpeed = 90000;
+                this.baseGatheringSpeed = 3000;
                 break;
             case 3:
                 this.startAmount = 3000;
-                this.baseGatheringSpeed = 120000;
-                break;
-                    
-            default:
-                break;
-        }
-        this.availableAmount = this.startAmount - this.gatheredAmount;
-
-        this.buttons.push(new Button({"active": false, "drawButton": true, "offset" : {"x": 0, "y": 40}, "w": 75, "h": 30, "text": "Gather", "screen": this, "action": this.gather}));
-
-    }
-
-    gather(self) {
-        mapScreen.tileClicked = false;
-        console.log("gathering");
-        marchScreen = new MarchScreen(self);
-        screenManager.screen = marchScreen;
-
-    }
-}
-
-class WoodTile extends ResourceTile {
-
-    constructor(level, x, y) {
-        super(level, x, y);
-
-        this.startAmount = 0;
-        this.baseGatheringSpeed = 0;    // gph - gathering per hour
-        this.gatheredAmount = 0;
-        this.wood = true;
-        this.type = "wood";
-        this.text = "WOOD";
-
-        switch (level) {
-            case 1:
-                this.startAmount = 1000;
-                this.baseGatheringSpeed = 60000;     // per hour
-                break;
-            case 2:
-                this.startAmount = 2000;
-                this.baseGatheringSpeed = 90000;
-                break;
-            case 3:
-                this.startAmount = 3000;
-                this.baseGatheringSpeed = 120000;
-                break;
-                    
-            default:
-                break;
-        }
-        this.availableAmount = this.startAmount - this.gatheredAmount;
-
-        this.buttons.push(new Button({"active": false, "drawButton": true, "offset" : {"x": 0, "y": 40}, "w": 75, "h": 30, "text": "Gather", "screen": this, "action": this.gather}));
-
-    }
-
-    gather(self) {
-        mapScreen.tileClicked = false;
-        console.log("gathering");
-        marchScreen = new MarchScreen(self);
-        screenManager.screen = marchScreen;
-
-    }
-}
-
-class StoneTile extends ResourceTile {
-
-    constructor(level, x, y) {
-        super(level, x, y);
-
-        this.startAmount = 0;
-        this.baseGatheringSpeed = 0;    // gph - gathering per hour
-        this.gatheredAmount = 0;
-        this.stone = true;
-        this.type = "stone";
-        this.text = "STONE";
-
-        switch (level) {
-            case 1:
-                this.startAmount = 1000;
-                this.baseGatheringSpeed = 60000;     // per hour
-                break;
-            case 2:
-                this.startAmount = 2000;
-                this.baseGatheringSpeed = 90000;
-                break;
-            case 3:
-                this.startAmount = 3000;
-                this.baseGatheringSpeed = 120000;
-                break;
-                    
-            default:
-                break;
-        }
-        this.availableAmount = this.startAmount - this.gatheredAmount;
-
-        this.buttons.push(new Button({"active": false, "drawButton": true, "offset" : {"x": 0, "y": 40}, "w": 75, "h": 30, "text": "Gather", "screen": this, "action": this.gather}));
-
-    }
-
-    gather(self) {
-        mapScreen.tileClicked = false;
-        console.log("gathering");
-        marchScreen = new MarchScreen(self);
-        screenManager.screen = marchScreen;
-
-    }
-}
-class IronTile extends ResourceTile {
-
-    constructor(level, x, y) {
-        super(level, x, y);
-
-        this.startAmount = 0;
-        this.baseGatheringSpeed = 0;    // gph - gathering per hour
-        this.gatheredAmount = 0;
-        this.iron = true;
-        this.type = "iron";
-        this.text = "IRON";
-
-        switch (level) {
-            case 1:
-                this.startAmount = 1000;
-                this.baseGatheringSpeed = 60000;     // per hour
-                break;
-            case 2:
-                this.startAmount = 2000;
-                this.baseGatheringSpeed = 90000;
-                break;
-            case 3:
-                this.startAmount = 3000;
-                this.baseGatheringSpeed = 120000;
+                this.baseGatheringSpeed = 5000;
                 break;
                     
             default:
