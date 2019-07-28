@@ -1,22 +1,23 @@
 window.onload = init;
 
-var map = [];
-let grid_w = 1200;
-let grid_h = 1200;
-for(let x=0; x<grid_w; x++) {
-    map[x] = new Array(grid_h);
-}
+// var map = [];
+// let grid_w = 1200;
+// let grid_h = 1200;
+// for(let x=0; x<grid_w; x++) {
+//     map[x] = new Array(grid_h);
+// }
 
-// put Tile class into each mapTile array
-for(let y=0; y<grid_h; y++) {
-    for(let x=0; x<grid_w; x++) {
-        map[x][y] = new Tile();
-        map[x][y].coords = {"x": x, "y": y};
-    }
-}
+// // put Tile class into each mapTile array
+// for(let y=0; y<grid_h; y++) {
+//     for(let x=0; x<grid_w; x++) {
+//         map[x][y] = new Tile();
+//         map[x][y].coords = {"x": x, "y": y};
+//     }
+// }
 
 var game = {};
 var fps;
+var opsys = "unknown";
 
 var canvas, ctx;
 var mouse = {"x": 0, "y": 0, "movement": {"x": 0, "y": 0}};
@@ -88,6 +89,9 @@ var username
 var lastLoop = Date.now();
 
 
+var touchStart = {"x": 99999, "y": 0};
+var distX, distY;
+var elem;
 
 function init() {
     username = localStorage.getItem("username");
@@ -103,6 +107,7 @@ function init() {
 
     // get operating system - mobile etc
     opsys = getMobileOperatingSystem();
+    console.log(opsys);
     let downtype, movetype, uptype;
     if (opsys=="unknown"){downtype = 'mousedown'; movetype = 'mousemove'; uptype = 'mouseup';}
     if (opsys!="unknown"){downtype = 'touchstart'; movetype = 'touchmove'; uptype = 'touchleave';}
@@ -114,26 +119,70 @@ function init() {
     ctx.fillStyle = "#ff0000";
     ctx.fillRect(0,0,canvas.width,canvas.height);
 
-    canvas.addEventListener(movetype, function(e) {
-        mouse.x = e.offsetX;
-        mouse.y = e.offsetY;
-        mouse.movement.x = e.movementX;
-        mouse.movement.y = e.movementY;
+    canvas.addEventListener('mousemove', function(e) {
+        //if (opsys=="unknown") {
+            mouse.x = e.offsetX;
+            mouse.y = e.offsetY;
+            mouse.movement.x = e.movementX;
+            mouse.movement.y = e.movementY;
+        //} else {
+            // var touchobj = e.changedTouches[0];    // get the first touch position
+            // mouse.x = parseInt(touchobj.clientX);
+            // mouse.y = parseInt(touchobj.clientY);
+        //}
     });
 
    // mouseDownFired = false;
-    canvas.addEventListener(downtype, function(e) {
+    canvas.addEventListener('mousedown', function(e) {
         mouseDownFired = false;
-        canvas.addEventListener(movetype, scrollCity);
+        canvas.addEventListener('mousemove', scrollCity);
         canvas.addEventListener(uptype, function() {
-            canvas.removeEventListener(movetype, scrollCity);
+            canvas.removeEventListener('mousemove', scrollCity);
         })
         canvas.addEventListener('mouseout', function() {
-            canvas.removeEventListener(movetype, scrollCity);
+            canvas.removeEventListener('mousemove', scrollCity);
         })
     }); 
 
-    canvas.addEventListener(downtype, doClick); 
+    canvas.addEventListener("touchmove", scrollCity);
+
+
+
+    // canvas.addEventListener("touchstart", function(e) {
+    //     var touch = e.touches[0];
+    //     touchStart.x = touch.clientX;
+    //     touchStart.y = touch.clientY;
+
+    //     e.preventDefault()
+    // });
+    // canvas.addEventListener("touchmove", function(e) {
+    //     return;
+    //     var touch = e.touches[0];
+    //     if(touchStart.x == 99999) {
+    //         touchStart.x = touch.clientX;   // reset current touch position
+    //         touchStart.y = touch.clientY;
+    //     }
+    //     distX = touch.clientX - touchStart.x;
+    //     distY = touch.clientY - touchStart.y;
+
+    //     camera.x += distX;
+    //     camera.y += distY;
+
+    //     touchStart.x = touch.clientX;   // reset current touch position
+    //     touchStart.y = touch.clientY;
+    //     e.preventDefault()
+    //     //alert("move");
+    // });
+    canvas.addEventListener("touchend", function(e) {
+        touchStart.x = 99999;
+    });
+
+
+    canvas.addEventListener("click", doClick); 
+
+
+
+
 
     //window.addEventListener('keydown', getInput);
 
@@ -276,6 +325,7 @@ function init() {
         
         loadGame();
 
+        elem = document.documentElement;
         setTimeout(draw, 2000);
         //draw();
         
@@ -297,6 +347,20 @@ function getMobileOperatingSystem() {
                 return "iOS";
         }
         return "unknown";
+}
+
+function fullScreen() {
+    if (elem.requestFullscreen) {
+        elem.requestFullscreen();
+      } else if (elem.mozRequestFullScreen) { /* Firefox */
+        elem.mozRequestFullScreen();
+      } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+        elem.webkitRequestFullscreen();
+      } else if (elem.msRequestFullscreen) { /* IE/Edge */
+        elem.msRequestFullscreen();
+      }
+      
+
 }
 
 function gotData(data) {
@@ -498,6 +562,7 @@ function draw() {
 
     ctx.fillStyle = '#000000';
     popup(mouse.x + ", " + mouse.y, 10, 20);
+    popup(distX + ", " + distY, 10, 200)
 
     requestAnimationFrame(draw);    
 }

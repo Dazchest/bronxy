@@ -7,7 +7,7 @@ class MapScreen extends ScreenView {
 
         this.name = "Map";
 
-        this.grid = {"width": 50, "height": 50};
+        this.grid = {"width": 500, "height": 500};
         this.mapOffset = {"x":0, "y": 0};
         this.grid_x = 0;    // 
         this.grid_y = 0;    // 
@@ -27,15 +27,6 @@ class MapScreen extends ScreenView {
             }
         }
        
-        this.mapTiles[4][1] = new FoodTile(1, 4, 1);
-        this.mapTiles[8][12] = new FoodTile(2, 8, 12);
-        this.mapTiles[35][41] = new FoodTile(1, 35, 41);
-
-        this.mapTiles[3][5] = new WoodTile(1, 3, 5);
-
-        this.mapTiles[6][9] = new StoneTile(1, 6, 9);
-
-        this.mapTiles[12][6] = new IronTile(1, 12, 6);
 
         
         this.buttons.push(new Button({"active": true, "x": 300, "y": 20, "w": 100, "h": 30, "text": "Exit Map", "screen": this, "action":  this.exitScreen}));
@@ -54,6 +45,29 @@ class MapScreen extends ScreenView {
     initMap() {
         Assets.loadMapImages();
 
+        //lets create random res tiles
+        for(let t=0; t<200; t++){
+            let x = Math.floor(Math.random() * 100 + 1);
+            let y = Math.floor(Math.random() * 100 + 1);
+            let level = Math.floor(Math.random() * 3 + 1);
+            this.mapTiles[x][y] = new FoodTile(level, x, y);
+
+            x = Math.floor(Math.random() * 100 + 1);
+            y = Math.floor(Math.random() * 100 + 1);
+            level = Math.floor(Math.random() * 3 + 1);
+            this.mapTiles[x][y] = new WoodTile(level, x, y);
+
+            x = Math.floor(Math.random() * 100 + 1);
+            y = Math.floor(Math.random() * 100 + 1);
+            level = Math.floor(Math.random() * 3 + 1);
+            this.mapTiles[x][y] = new StoneTile(level, x, y);
+
+            x = Math.floor(Math.random() * 100 + 1);
+            y = Math.floor(Math.random() * 100 + 1);
+            level = Math.floor(Math.random() * 3 + 1);
+            this.mapTiles[x][y] = new IronTile(level, x, y);
+        }
+        
     }
 
     gotoCity(self) {
@@ -61,7 +75,7 @@ class MapScreen extends ScreenView {
         let y = cityCoords.y;
         self.grid_x = x-4;    
         self.grid_y = y-4;    
-        //camera.x = (y - x) * (mapScreen.tileDimensioins . x / 2);
+        //camera.x = (y - x) * (mapScreen.tileDimensions . x / 2);
         camera.x = (y - x) * 100;
         camera.y = ((x-4 + y-4 + 1) * -50) - 50;
     }
@@ -113,7 +127,7 @@ class MapScreen extends ScreenView {
             //----------------------------------
             // draw the grid
             //----------------------------------
-            this.tileDimensioins = {"width": 200, "height": 100};
+            this.tileDimensions = {"width": 200, "height": 100};
 
             this.gridOffset = new Vector3d(this.grid_x, this.grid_y);
             this.gridDisplay = {"width": 22, "height": 22};
@@ -154,8 +168,11 @@ class MapScreen extends ScreenView {
                         let tile = this.mapTiles[x][y];
                         ctx.fillText(tile.coords.x + ", " + tile.coords.y, points[0].x + 70, points[0].y + 0);
                         //ctx.fillText(t.coords.x + ", " + t.coords.y,  70 + 200,  0 -100);
-                        ctx.fillText(tile.text, points[0].x + 70, points[0].y - 20);
-                        //ctx.fillText("Level: " + this.mapTiles[x][y].level, points[0].x + 65 + 200, points[0].y + 20 -100);
+                        if(tile.resources) {
+                            ctx.fillStyle = '#0000ff';
+                            ctx.fillText(tile.text, points[0].x + 70, points[0].y - 20);
+                            ctx.fillText("Level: " + tile.level, points[0].x + 65, points[0].y + 20);
+                        }
                     }
                 }
             }
@@ -202,8 +219,9 @@ class MapScreen extends ScreenView {
             let t = this.mapTiles[this.tileClicked.x][this.tileClicked.y]
             t.highlight();
             if(t.availableAmount) {
-                let g = t.availableAmount;
-                ctx.fillText("g =  " + g, t.points[0].x + 30, t.points[0].y + 30);
+                let g = Math.floor(t.availableAmount);
+                ctx.fillStyle = '#ff00ff';
+                ctx.fillText("Available =  " + g, t.points[0].x + 30, t.points[0].y + 30);
             }
         }
 
@@ -263,8 +281,8 @@ class Vector3d {
 
 function createPoints(x, y) {
     let points = [];
-    let tileW = mapScreen.tileDimensioins.width;
-    let tileH = mapScreen.tileDimensioins.height;
+    let tileW = mapScreen.tileDimensions.width;
+    let tileH = mapScreen.tileDimensions.height;
     points.push(new Vector3d(-tileW/2 + (x*tileW/2) - (y*tileW/2) + canvas.width/2, 0 +(y*tileH/2) + (x*tileH/2)));
     points.push(new Vector3d(0 + (x*tileW/2) - (y*tileW/2) + canvas.width/2, -tileH/2 +(y*tileH/2) + (x*tileH/2)));
     points.push(new Vector3d(tileW/2 + (x*tileW/2) - (y*tileW/2) + canvas.width/2, 0 +(y*tileH/2) + (x*tileH/2)));
@@ -303,8 +321,8 @@ class Tile {
         let point;
         let x = this.coords.x;
         let y = this.coords.y;
-        let tileW = mapScreen.tileDimensioins.width;
-        let tileH = mapScreen.tileDimensioins.height;
+        let tileW = mapScreen.tileDimensions.width;
+        let tileH = mapScreen.tileDimensions.height;
             
         point = new Vector3d((x*tileW/2) - (y*tileW/2) + canvas.width/2, (y*tileH/2) + (x*tileH/2));
     

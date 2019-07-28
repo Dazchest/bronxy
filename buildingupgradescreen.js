@@ -40,7 +40,7 @@ class BuildingUpgradeScreen extends ScreenView {
         ctx.font = "20px Georgia";
         let fontC = '#0000ff';
 
-        let requirementMet = true;
+        this.requirementsMet = true;
         let level = this.level; //level will be 1 above, because of index 0
         let levelMaxed = false;
         let buildingType = this.type;
@@ -101,7 +101,7 @@ class BuildingUpgradeScreen extends ScreenView {
 
             fontC = '#0000ff';
             if(resources.food.amount < food) {
-                requirementMet = false;
+                this.requirementsMet = false;
                 fontC = '#ff0000';
             }
             ctx.fillStyle = fontC;
@@ -109,7 +109,7 @@ class BuildingUpgradeScreen extends ScreenView {
 
             fontC = '#0000ff';
             if(resources.wood.amount < wood) {
-                requirementMet = false;
+                this.requirementsMet = false;
                 fontC = '#ff0000';
             }
             ctx.fillStyle = fontC;
@@ -117,7 +117,7 @@ class BuildingUpgradeScreen extends ScreenView {
 
             fontC = '#0000ff';
             if(resources.stone.amount < stone) {
-                requirementMet = false;
+                this.requirementsMet = false;
                 fontC = '#ff0000';
             }
             ctx.fillStyle = fontC;
@@ -125,24 +125,24 @@ class BuildingUpgradeScreen extends ScreenView {
 
             fontC = '#0000ff';
             if(resources.iron.amount < iron) {
-                requirementMet = false;
+                this.requirementsMet = false;
                 fontC = '#ff0000';
             }
             ctx.fillStyle = fontC;
             ctx.fillText("Iron: " + iron, 200, 475);
         } else {
-            requirementMet = false;
+            this.requirementsMet = false;
         }
 
         // check if build slots are full
         if(buildingHandler.usedSlots >= buildingHandler.slots) {
-            requirementMet = false;
+            this.requirementsMet = false;
             console.log("all slots are full");
         }
 
-        ctx.fillText("requirements met: " + requirementMet, 375, 100);
+        ctx.fillText("requirements met: " + this.requirementsMet, 375, 100);
 
-        if(requirementMet) {
+        if(this.requirementsMet) {
             setButtonActive(this.buttons, "upgrade");
         }
 

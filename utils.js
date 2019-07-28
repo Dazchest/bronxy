@@ -6,6 +6,10 @@ function convertMouseXYtoGridXY() {
     return {"x": x, "y": y};
 }
 
+function getRandom(value) {
+
+}
+
 
 function setButtonActive(buttons, type) {
     for(let x=0; x< buttons.length; x++) {
@@ -116,3 +120,31 @@ function Vec2(x, y) {
   //----------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------
   
+
+
+
+  class newInput {
+
+    // inputs = [];
+
+    constructor(id) {
+        let i = document.createElement('input');
+        i.id = 'input';
+        i.style.position = 'absolute';
+        i.style.left = ((268 + this.x) * zoom.x) + 'px';
+        i.style.top =  (365 * zoom.y) + 'px';
+        i.style.width = '48px';
+        i.type = 'hidden';
+        //i.type = 'number';  
+        // i.min = 1;
+        // i.value = 1;
+        //i.addEventListener('keydown', getInput);
+        //i.addEventListener('change', checkInput); 
+
+        // console.log(i);
+        // this.inputs.push(i);
+        // document.getElementById('maindiv').appendChild(i);
+
+    }
+
+  }

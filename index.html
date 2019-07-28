@@ -96,12 +96,12 @@
 
     </script>
 
-    <div id="maindiv" style="position:relative;width:800px;height:800px">
-        <canvas id="canvas" width="800" height="600"></canvas>
+    <div id="maindiv" style="position:relative;width:800px;height:620px">
+        <canvas id="canvas" width="800" height="800"></canvas>
         <!-- <input type="text" style="position:absolute;left:100px;top:300px;width:100px;" /> -->
     </div>
 
-    <div id="buildingDiv" style="visibility: hidden; position:absolute; top:100px; left: 650px">
+    <div id="buildingDiv" style="visibility: hidden; position:absolute; top:100px; left: 600px">
         select building
         <select onchange="buildingHandler.selectNewBuilding(this)" name="buildingSelect" id="buildingSelect">
             <option value="">Select Building</option>
@@ -116,5 +116,10 @@
         <button onclick="zoomScreen('in')">zoom in</button>
         <button onclick="zoomScreen('out')">zoom out</button>
     </div>
+
+    <div id="" style="position:absolute; top:800px; left: 120px">
+        <button onclick="fullScreen()">full screen</button>
+    </div>
+
 </body>
 </html>

@@ -40,33 +40,35 @@ class MarchScreen extends ScreenView {
         // this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "left", "name": "troopleft", "x": 75, "y": 200, "w": 128, "h": 128, "text": "Left", "screen": this, "action":  this.viewTiers}));
         // this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "right", "name": "troopright", "x": 420, "y": 200, "w": 128, "h": 128, "text": "Right", "screen": this, "action":  this.viewTiers}));
 
-        let counter = 0;
-        for(let x=0; x<troopList.length; x++) {
-            for(let y=0; y<troopList[x].levels.length; y++) {
-                //this.troopsAvailable.push(troopList[x].levels[y]);
-                if(troopList[x].levels[y] != null) {
-                    let availableQuantity = troopList[x].levels[y].quantity;
+        if(troopList) {
+            let counter = 0;
+            for(let x=0; x<troopList.length; x++) {
+                for(let y=0; y<troopList[x].levels.length; y++) {
+                    //this.troopsAvailable.push(troopList[x].levels[y]);
+                    if(troopList[x].levels[y] != null) {
+                        let availableQuantity = troopList[x].levels[y].quantity;
 
-                    let i = document.createElement('input');
-                    i.id = 'quantityInput';
-                    i.name = 'quantityInput[]';
-                    i.style.position = 'absolute';
-                    i.style.left = ((268 + this.x) * zoom.x) + 'px';
-                    i.style.top =  (265 + (counter * 25) * zoom.y) + 'px';
-                    i.style.width = '48px';
-                    i.type = 'number';  
-                    i.min = 0;
-                    i.max = availableQuantity;
-                    i.value = 0;
-                    //i.addEventListener('keydown', getInput);
-                    //i.addEventListener('change', checkInput); 
+                        let i = document.createElement('input');
+                        i.id = 'quantityInput';
+                        i.name = 'quantityInput[]';
+                        i.style.position = 'absolute';
+                        i.style.left = ((268 + this.x) * zoom.x) + 'px';
+                        i.style.top =  (265 + (counter * 25) * zoom.y) + 'px';
+                        i.style.width = '48px';
+                        i.type = 'number';  
+                        i.min = 0;
+                        i.max = availableQuantity;
+                        i.value = 0;
+                        //i.addEventListener('keydown', getInput);
+                        //i.addEventListener('change', checkInput); 
 
-                    counter ++;
-                    console.log(i);
-                    this.inputs.push(i);
-                    document.getElementById('maindiv').appendChild(i);
+                        counter ++;
+                        console.log(i);
+                        this.inputs.push(i);
+                        document.getElementById('maindiv').appendChild(i);
+                    }
+
                 }
-
             }
         }
 
@@ -93,7 +95,14 @@ class MarchScreen extends ScreenView {
             ctx.font = "20px Georgia";
             ctx.fillText(this.name, this.x, this.y + 20);
     
-            this.displayTroops();      
+            if(troopList.length > 0) {
+                this.displayTroops();   
+            } else {
+                ctx.fillStyle = '#eeee33';
+                ctx.font = "30px Georgia";
+                ctx.fillText("train some troops please", 200, 300);
+                setButtonState(this.buttons, "march", false);
+            }  
             this.drawButtons();
             this.checkButtons();
             // if(this.troopBuilding.training) {   //this.troopBuilding.training
