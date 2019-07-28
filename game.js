@@ -133,7 +133,7 @@ function init() {
         })
     }); 
 
-    canvas.addEventListener('click', doClick); 
+    canvas.addEventListener(downtype, doClick); 
 
     //window.addEventListener('keydown', getInput);
 
