@@ -23,12 +23,7 @@ var canvas, ctx;
 var mouse = {"x": 0, "y": 0, "movement": {"x": 0, "y": 0}};
 var camera = {"x": 0, "y": 0};
 var gridSize = {"x":64, "y": 64};
-var currentCity = 0;
 
-var cityCoords = new Vector3d(9, 8);
-
-var thisCity;
-var cities = [];
 var player;
 var resources = {};
 
@@ -55,8 +50,12 @@ var researchManager = new ResearchManager();
 
 var buffManager = new BuffManager();
 
+var currentCity = 0;
+//var cityCoords = new Vector3d(9, 8);
+var thisCity;
+var cities = [];
 var cityScreen;
-var city = {"name": "city", "active": true};
+var city = {"name": "Bronx House", "coords": {"x": 9, "y": 8}, "active": true};
 var tick = Date.now();
 var screenManager;
 
@@ -84,6 +83,7 @@ var scrolling = false;
 var mouseDownFired = false;
 
 var database;
+var db;
 
 var username
 var lastLoop = Date.now();
@@ -321,12 +321,72 @@ function init() {
         //ref.push(data); 
 
         ref.on('value', gotData, errData);
+        //db = firebase.firestore();
+        //---------------
 
+    //     db.collection("cities").where("capital", "==", true)
+    // .get()
+    // .then(function(querySnapshot) {
+    //     querySnapshot.forEach(function(doc) {
+    //         // doc.data() is never undefined for query doc snapshots
+    //         console.log(doc.id, " => ", doc.data());
+    //     });
+    // })
+    // .catch(function(error) {
+    //     console.log("Error getting documents: ", error);
+    // });
+
+    // db.collection("map").doc("0")
+    //     .onSnapshot(function(doc) {
+    //     console.log("Current data: ", doc.data());
+    //     //mapScreen.mapTiles[0][0].type = doc.data().type;
+    // });
+
+    // db.collection("map")
+    //     .onSnapshot(function(doc) {
+    //     console.log("Current data: ", doc.docs[0].data());
+    //     //mapScreen.mapTiles[0][0].type = doc.data().type;
+    // });
+
+    //db.collection("map").doc("0").update({"type":"trees"});
+    //--------------------
+
+    // db.collection("cities").where("state", "==", "CA")
+    // .onSnapshot(function(querySnapshot) {
+    //     var cities = [];
+    //     querySnapshot.forEach(function(doc) {
+    //         cities.push(doc.data().name);
+    //     });
+    //     console.log("Current cities in CA: ", cities.join(", "));
+    // });
+
+    //---------------------------
+    // this works great
+    // var commentsRef = firebase.database().ref('map/');
+    // commentsRef.on('child_changed', function(data) {
+    //     //console.log(data.key, data.val().id, data.val().type);
+    //     let c = data.val().coords;
+    //     if(data.val().type == "food") {
+    //         mapScreen.mapTiles[c.x][c.y] = new FoodTile(1, c.x, c.y);
+    //     } else {
+    //         mapScreen.mapTiles[c.x][c.y] = new Tile(c.x, c.y);
+
+    //     }
+    //     console.log(data.val());
+    // });
+    //------------------------
+
+        mapScreen = new MapScreen(3);
+
+        loadMap2();
         
-        loadGame();
+        // loadGame();
 
-        elem = document.documentElement;
-        setTimeout(draw, 2000);
+         elem = document.documentElement;
+
+
+
+        // setTimeout(draw, 2000);
         //draw();
         
     }
@@ -414,6 +474,7 @@ function saveList(listToSave) {
 }
 
 function saveGame2() {
+    game.city = city;
     game.buildingList = buildingList;
     game.researchList = researchList;
     game.itemList = itemList;
@@ -431,6 +492,213 @@ function saveGame2() {
     }
 }
 
+function saveMap() {
+    return;
+    // let saveData;
+    // saveData = [];
+    // let s = {"type": "food"};
+    // //saveData.push(s);
+    // s = {"type": "wood"};
+    // //saveData.push(s);
+    // saveData.push(mapScreen.mapTiles[0][0]);
+    // saveData.push(mapScreen.mapTiles[1][0]);
+    //firebase.database().ref("map" + "/").set(saveData);
+//return;
+    let startSaveTime = Date.now()/1000;
+    console.clear();
+    console.log(startSaveTime);
+
+
+    let mapData = [];
+
+    let start = 180;
+    let end = 200;  
+
+    for(let y=0; y<mapScreen.grid.height; y++) {
+        for(let x=start; x<end; x++) {
+            let tileData = {};
+            tileData.coords = mapScreen.mapTiles[x][y].coords;
+            tileData.type = mapScreen.mapTiles[x][y].type;
+            //tileData.buildon = mapScreen.mapTiles[x][y].buildon;
+            if(mapScreen.mapTiles[x][y].resources) {
+                //tileData.amount = mapScreen.mapTiles[x][y].amount;
+                tileData.availableAmount = mapScreen.mapTiles[x][y].availableAmount;
+                //tileData.buildon = false;
+                tileData.type = mapScreen.mapTiles[x][y].type;
+                tileData.level = mapScreen.mapTiles[x][y].level;
+            }
+            let id = Number(x + (y * mapScreen.grid.width));
+            firebase.database().ref("map" + "/" + id.toString()).set(tileData);
+            //mapData.push(tileData);
+        }
+    }
+    //saveData = JSON.stringify(tileData);
+    //firebase.database().ref("map" + "/" + x+(y*mapScreen.grid.width)).set(mapData);
+    //firebase.database().ref("map" + "/").set(mapData);
+
+
+    let endSaveTime = Date.now()/1000 - startSaveTime;
+    console.log(endSaveTime);
+}
+function addFood() {
+            //lets create random res tiles
+        // for(let t=0; t<500; t++){
+        //     let x = Math.floor(Math.random() * this.grid.width);
+        //     let y = Math.floor(Math.random() * this.grid.height);
+        //     let level = Math.floor(Math.random() * 3 + 1);
+        //     this.mapTiles[x][y] = new FoodTile(level, x, y);
+
+        //     x = Math.floor(Math.random() * this.grid.width);
+        //     y = Math.floor(Math.random() * this.grid.height);
+        //     level = Math.floor(Math.random() * 3 + 1);
+        //     this.mapTiles[x][y] = new WoodTile(level, x, y);
+
+        //     x = Math.floor(Math.random() * this.grid.width);
+        //     y = Math.floor(Math.random() * this.grid.height);
+        //     level = Math.floor(Math.random() * 3 + 1);
+        //     this.mapTiles[x][y] = new StoneTile(level, x, y);
+
+        //     x = Math.floor(Math.random() * this.grid.width);
+        //     y = Math.floor(Math.random() * this.grid.height);
+        //     level = Math.floor(Math.random() * 3 + 1);
+        //     this.mapTiles[x][y] = new IronTile(level, x, y);
+        // }
+
+        for(let t=0; t<100; t++){
+            let tileData = {};
+            let x = Math.floor(Math.random() * mapScreen.grid.width);
+            let y = Math.floor(Math.random() * mapScreen.grid.height);
+            tileData.coords = {"x": x, "y":y};
+            tileData.type = "food";
+            tileData.level = Math.floor(Math.random() * 3 + 1);
+            let id = Number(x + (y * mapScreen.grid.width));
+            firebase.database().ref("map" + "/" + id.toString()).set(tileData);
+        }
+}
+
+function saveMap2() {
+    return;
+    let startSaveTime = Date.now()/1000;
+    console.clear();
+    console.log(startSaveTime);
+    let mapData = [];
+
+    for(let y=0; y<mapScreen.grid.height; y++) {
+        for(let x=0; x<mapScreen.grid.width; x++) {
+            let tileData = {};
+            tileData.type = mapScreen.mapTiles[x][y].type;
+            tileData.buildon = mapScreen.mapTiles[x][y].buildon;
+            tileData.id = Number(x+(y*mapScreen.grid.width));
+            if(mapScreen.mapTiles[x][y].resources) {
+                tileData.amount = mapScreen.mapTiles[x][y].amount;
+                tileData.availableAmount = mapScreen.mapTiles[x][y].availableAmount;
+                tileData.buildon = false;
+                tileData.type = mapScreen.mapTiles[x][y].type;
+                tileData.level = mapScreen.mapTiles[x][y].level;
+            }
+            saveData = JSON.stringify(tileData);
+            let doc = x+(y*mapScreen.grid.width);
+            db.collection("map").doc(doc.toString()).set(tileData)
+            .then(function(docRef) {
+                //console.log("Document written with ID: ", docRef.id);
+            })
+            .catch(function(error) {
+                console.error("Error adding document: ", error);
+            });
+        }
+    }
+    let endSaveTime = Date.now()/1000 - startSaveTime;
+    console.log(endSaveTime);
+}
+
+function loadMap() {   // this uses firestore
+    //return;
+    db.collection("map").where("id", "<", 50)
+    .get()
+    .then(function(querySnapshot) {
+        querySnapshot.forEach(function(doc) {
+            // doc.data() is never undefined for query doc snapshots
+            console.log(doc.id, " => ", doc.data());
+        });
+    })
+    .catch(function(error) {
+        console.log("Error getting documents: ", error);
+    });
+
+
+}
+
+var md;
+function loadMap2() {
+    let startSaveTime = Date.now()/1000;
+    console.clear();
+    console.log("start = " + startSaveTime);
+
+    let retrieveQuantity = 40000;
+
+    //var ref = firebase.database().ref('map').limitToFirst(retrieveQuantity);
+    var ref = firebase.database().ref('map');
+
+    ref.once('value', function(data) {
+        //querySnapshot.forEach(function(doc)
+        //console.log(data.val());
+        data.forEach(function(info){
+            //console.log(info.val());
+            md = info.val();
+             switch (md.type) {
+                case "food":
+                    mapScreen.mapTiles[md.coords.x][md.coords.y] = new FoodTile(md.level, md.coords.x, md.coords.y);
+                    mapScreen.mapTiles[md.coords.x][md.coords.y].availableAmount = md.availableAmount; 
+                    break;
+                case "wood":
+                    mapScreen.mapTiles[md.coords.x][md.coords.y] = new WoodTile(md.level, md.coords.x, md.coords.y);
+                    mapScreen.mapTiles[md.coords.x][md.coords.y].availableAmount = md.availableAmount; 
+                    break;
+                case "stone":
+                    mapScreen.mapTiles[md.coords.x][md.coords.y] = new StoneTile(md.level, md.coords.x, md.coords.y);
+                    mapScreen.mapTiles[md.coords.x][md.coords.y].availableAmount = md.availableAmount; 
+                    break;
+                case "iron":
+                    mapScreen.mapTiles[md.coords.x][md.coords.y] = new IronTile(md.level, md.coords.x, md.coords.y);
+                    mapScreen.mapTiles[md.coords.x][md.coords.y].availableAmount = md.availableAmount; 
+                    break;
+
+                default:
+                    mapScreen.mapTiles[md.coords.x][md.coords.y] = new Tile(md.coords.x, md.coords.y);
+                    break;
+
+             }
+        });
+
+        console.log("done loading map tiles" + (Date.now()/1000 - startSaveTime));
+        //console.log(Date.now()/1000 - startSaveTime);
+        loadGame();
+
+        elem = document.documentElement;
+
+
+        setTimeout(draw, 2000);
+        console.log(Date.now()/1000 - startSaveTime);
+
+        //---------------------------
+        // this works great
+        var commentsRef = firebase.database().ref('map/');
+        commentsRef.on('child_changed', function(data) {
+            //console.log(data.key, data.val().id, data.val().type);
+            let c = data.val().coords;
+            if(data.val().type == "food") {
+                mapScreen.mapTiles[c.x][c.y] = new FoodTile(1, c.x, c.y);
+            } else {
+                mapScreen.mapTiles[c.x][c.y] = new Tile(c.x, c.y);
+            }
+            //console.log(data.val());
+        });
+        //------------------------
+    });
+
+    //console.log(Date.now()/1000 - startSaveTime);
+
+}
 
 /**
  * FIRST TIME LOADING OF THE GAME
@@ -446,9 +714,12 @@ function loadGame() {
 
     ref.once('value', function(data) {
         gameData = data.val();
-        
-        let jb = JSON.parse(gameData.buildingList);
+        let jb;
 
+        jb = JSON.parse(gameData.city);
+        city = jb;
+
+        jb = JSON.parse(gameData.buildingList);
         for(let x=0; x<jb.length; x++) {
             if(jb[x].troopProduction) {
                 buildingList[x] = new troopTrainingBuilding(jb[x]);
@@ -558,7 +829,7 @@ function draw() {
 
     ctx.font = "20px Georgia";
     ctx.fillStyle = '#ffffff';
-    ctx.fillText("fps: " + fps, 400, 70);
+    ctx.fillText("fps: " + Math.floor(fps), 400, 70);
 
     ctx.fillStyle = '#000000';
     popup(mouse.x + ", " + mouse.y, 10, 20);

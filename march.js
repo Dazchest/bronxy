@@ -9,10 +9,10 @@ class March {
         this.size = 0;
         this.speed = 0;         // tile per hour
 
-        this.startCoords = new Vector3d(cityCoords.x, cityCoords.y);
+        this.startCoords = new Vector3d(city.coords.x, city.coords.y);
         this.endCoords = tile.coords;
 
-        let sp = mapScreen.mapTiles[cityCoords.x][cityCoords.y].getCenter();
+        let sp = mapScreen.mapTiles[city.coords.x][city.coords.y].getCenter();
         this.startPosition = new Vector3d(sp.x, sp.y);
         this.position = new Vector3d(sp.x, sp.y);
         let ep = tile.getCenter();
@@ -115,9 +115,14 @@ class March {
                 this.tile.gatheredAmount = Math.round(this.tile.gatheredAmount, 0);
                 this.resources = {"type": this.tile.type, "quantity": this.tile.gatheredAmount};
 
-        
-                mapScreen.createTile(x, y, Tile);
-                //mapScreen.createTile(5, 3, FoodTile , 1);
+                let tileData = {};
+                tileData.coords = {"x": x, "y":y};
+                tileData.type = "grass1";
+                let id = Number(x+(y*mapScreen.grid.width));
+                firebase.database().ref("map" + "/" + id.toString()).set(tileData);
+                
+                //mapScreen.createTile(x, y, Tile);
+                
         
             }
         }

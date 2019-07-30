@@ -128,23 +128,42 @@ function Vec2(x, y) {
     // inputs = [];
 
     constructor(id) {
-        let i = document.createElement('input');
-        i.id = 'input';
-        i.style.position = 'absolute';
-        i.style.left = ((268 + this.x) * zoom.x) + 'px';
-        i.style.top =  (365 * zoom.y) + 'px';
-        i.style.width = '48px';
-        i.type = 'hidden';
+        this.i = document.createElement('input');
+        this.i.id = 'input';
+        this.i.style.position = 'absolute';
+        this.i.style.left = ((268) * zoom.x) + 'px';
+        this.i.style.top =  (365 * zoom.y) + 'px';
+        this.i.style.width = '48px';
+        //this.i.type = 'hidden';
+        this.i.style.opacity = .5;
+       
         //i.type = 'number';  
         // i.min = 1;
         // i.value = 1;
-        //i.addEventListener('keydown', getInput);
-        //i.addEventListener('change', checkInput); 
+        //this.i.addEventListener('keydown', getInput);
+        //this.i.addEventListener('change', this.updateInput); 
 
         // console.log(i);
         // this.inputs.push(i);
-        // document.getElementById('maindiv').appendChild(i);
-
+        document.getElementById('maindiv').appendChild(this.i);
+        //document.getElementById('input').focus();
+        this.i.focus();
     }
 
+        draw() {
+            let text = this.i.value;
+            ctx.fillStyle = '#000000';
+            ctx.fillText(text, 400, 200);
+        }
+
   }
+
+  function getInput() {
+      //alert("f");
+      ctx.fillStyle = '#000000';
+      ctx.fillText("wahsfsefwefwefweefooo", 400, 200);
+      ctx.font = "20px Georgia";
+      ctx.fillStyle = '#ffffff';
+      ctx.fillText("fps: " + fps, 400, 300);
+  
+}

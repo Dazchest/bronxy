@@ -13,8 +13,9 @@ class Button {
 
     draw() {
         if(this.drawButton) {
+            let color = this.color ? this.color : '#00ff55';
             if(this.active) {
-                ctx.fillStyle = "#00ff00";
+                ctx.fillStyle = color;
             } else {
                 ctx.fillStyle = "#ff4444";
             }

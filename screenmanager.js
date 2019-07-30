@@ -25,7 +25,7 @@ class ScreenView {
         this.buttons = [];
         this.inputs = [];
 
-        console.log("this is ScreenView constructor");
+        //console.log("this is ScreenView constructor");
 
     }
 
@@ -54,7 +54,7 @@ class ScreenView {
         //screenManager.screen =    
         //cityScreen = new CityScreen();
         if(self.troopBuilding) {
-            console.log("exiting - from a troop building");
+            //console.log("exiting - from a troop building");
             self.troopBuilding.trainingScreen = null;
         }
 
@@ -90,6 +90,6 @@ class ScreenView {
 
 
     bing() {
-        console.log("pressed the bong");
+        //console.log("pressed the bong");
     }
 }

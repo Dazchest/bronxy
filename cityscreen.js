@@ -8,6 +8,8 @@ class CityScreen extends ScreenView {
        // this.bing();
         //ScreenView.call(this);
         this.name = "City";
+        this.inputs = [];
+        this.inputs.push(new newInput("f"));
 
         console.log("this is CityScreen constructor");
         this.buttons.push(new Button({"active": true, "x": 500, "y": 100, "w": 80, "h": 30, "text": "Items", "screen": this, "action":  this.itemScreen}));
@@ -59,6 +61,8 @@ class CityScreen extends ScreenView {
             this.checkButtons();
             buildingHandler.drawBuildings();
             Resource.drawAll();
+
+            this.inputs[0].draw();
             }
     }
 
@@ -75,22 +79,23 @@ class CityScreen extends ScreenView {
         screenManager.screen = researchScreen;
     }
 
-    mapScreen() {
-        console.log("going to the map 1");
-        mapScreen = new MapScreen(1);
-        screenManager.screen = mapScreen;
-    }
+    // mapScreen() {
+    //     console.log("going to the map 1");
+    //     mapScreen = new MapScreen(1);
+    //     screenManager.screen = mapScreen;
+    // }
 
-    mapScreen2() {
-        console.log("going to the map 2");
-        mapScreen = new MapScreen(2);
-        screenManager.screen = mapScreen;
-    }
+    // mapScreen2() {
+    //     console.log("going to the map 2");
+    //     mapScreen = new MapScreen(2);
+    //     screenManager.screen = mapScreen;
+    // }
 
     mapScreen3() {
         console.log("going to the map 3");
-        mapScreen = new MapScreen(3);
+        //mapScreen = new MapScreen(3);
         screenManager.screen = mapScreen;
+        mapScreen.setup();
     }
 
 }

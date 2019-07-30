@@ -6,8 +6,10 @@ class MapScreen extends ScreenView {
         super();
 
         this.name = "Map";
+        this.active = false;
 
-        this.grid = {"width": 500, "height": 500};
+        this.grid = {"width": 200, "height": 200};
+        this.tileDimensions = {"width": 160, "height": 80};
         this.mapOffset = {"x":0, "y": 0};
         this.grid_x = 0;    // 
         this.grid_y = 0;    // 
@@ -31,6 +33,11 @@ class MapScreen extends ScreenView {
         
         this.buttons.push(new Button({"active": true, "x": 300, "y": 20, "w": 100, "h": 30, "text": "Exit Map", "screen": this, "action":  this.exitScreen}));
         this.buttons.push(new Button({"active": true, "x": 450, "y": 20, "w": 100, "h": 30, "text": "Home", "screen": this, "action":  this.gotoCity}));
+        
+        this.buttons.push(new Button({"active": false, "drawButton": true, "x": 20, "y": 160, "w": 100, "h": 30, "text": "Save map", "color": '#aa2244', "screen": this, "action":  saveMap}));
+        this.buttons.push(new Button({"active": false, "drawButton": true, "x": 20, "y": 200, "w": 100, "h": 30, "text": "Load map", "color": '#aa3355', "screen": this, "action":  loadMap2}));
+
+        this.buttons.push(new Button({"active": true, "drawButton": true, "x": 20, "y": 240, "w": 100, "h": 30, "text": "add food", "color": '#aa3355', "screen": this, "action":  addFood}));
 
         camera.x = 0;
         camera.y = 0;
@@ -40,44 +47,79 @@ class MapScreen extends ScreenView {
             cities[currentCity].active = false;
         }
         buildingHandler.highlightGrid = false;
+
+        //this.loadMap();
     }
 
     initMap() {
         Assets.loadMapImages();
 
         //lets create random res tiles
-        for(let t=0; t<200; t++){
-            let x = Math.floor(Math.random() * 100 + 1);
-            let y = Math.floor(Math.random() * 100 + 1);
-            let level = Math.floor(Math.random() * 3 + 1);
-            this.mapTiles[x][y] = new FoodTile(level, x, y);
+        // for(let t=0; t<500; t++){
+        //     let x = Math.floor(Math.random() * this.grid.width);
+        //     let y = Math.floor(Math.random() * this.grid.height);
+        //     let level = Math.floor(Math.random() * 3 + 1);
+        //     this.mapTiles[x][y] = new FoodTile(level, x, y);
 
-            x = Math.floor(Math.random() * 100 + 1);
-            y = Math.floor(Math.random() * 100 + 1);
-            level = Math.floor(Math.random() * 3 + 1);
-            this.mapTiles[x][y] = new WoodTile(level, x, y);
+        //     x = Math.floor(Math.random() * this.grid.width);
+        //     y = Math.floor(Math.random() * this.grid.height);
+        //     level = Math.floor(Math.random() * 3 + 1);
+        //     this.mapTiles[x][y] = new WoodTile(level, x, y);
 
-            x = Math.floor(Math.random() * 100 + 1);
-            y = Math.floor(Math.random() * 100 + 1);
-            level = Math.floor(Math.random() * 3 + 1);
-            this.mapTiles[x][y] = new StoneTile(level, x, y);
+        //     x = Math.floor(Math.random() * this.grid.width);
+        //     y = Math.floor(Math.random() * this.grid.height);
+        //     level = Math.floor(Math.random() * 3 + 1);
+        //     this.mapTiles[x][y] = new StoneTile(level, x, y);
 
-            x = Math.floor(Math.random() * 100 + 1);
-            y = Math.floor(Math.random() * 100 + 1);
-            level = Math.floor(Math.random() * 3 + 1);
-            this.mapTiles[x][y] = new IronTile(level, x, y);
+        //     x = Math.floor(Math.random() * this.grid.width);
+        //     y = Math.floor(Math.random() * this.grid.height);
+        //     level = Math.floor(Math.random() * 3 + 1);
+        //     this.mapTiles[x][y] = new IronTile(level, x, y);
+        // }
+    }
+
+    loadMap() {
+
+    }
+
+    setup() {
+        this.grid_x = 0;    // 
+        this.grid_y = 0;    // 
+        this.tileClicked = null;
+
+        camera.x = 0;
+        camera.y = 0;
+
+        if(cities[currentCity]) {
+            cities[currentCity].active = false;
         }
-        
+        buildingHandler.highlightGrid = false;
+
+        this.active = true;
+        this.gotoCity2(9, 8);
+
     }
 
     gotoCity(self) {
-        let x = cityCoords.x;
-        let y = cityCoords.y;
-        self.grid_x = x-4;    
-        self.grid_y = y-4;    
+        let x = city.coords.x;
+        let y = city.coords.y;
+        let cw = Math.floor(canvas.width / mapScreen.tileDimensions.width);
+        let ch = Math.floor(canvas.height / mapScreen.tileDimensions.height) / 2;
+        self.grid_x = x-cw;    
+        self.grid_y = y-ch;    
         //camera.x = (y - x) * (mapScreen.tileDimensions . x / 2);
-        camera.x = (y - x) * 100;
-        camera.y = ((x-4 + y-4 + 1) * -50) - 50;
+        camera.x = (y - x) * mapScreen.tileDimensions.width/2;
+        camera.y = ((x-cw + y-ch + 1) * -mapScreen.tileDimensions.height/2) - mapScreen.tileDimensions.height/2;
+    }
+
+    gotoCity2(x, y) {
+        let cw = Math.floor(canvas.width / mapScreen.tileDimensions.width);
+        let ch = Math.floor(canvas.height / mapScreen.tileDimensions.height) / 2;
+        this.grid_x = x-cw;    
+        this.grid_y = y-ch;    
+        //camera.x = (y - x) * (mapScreen.tileDimensions . x / 2);
+        camera.x = (y - x) * mapScreen.tileDimensions.width/2;
+        camera.y = ((x-cw + y-ch + 1) * -mapScreen.tileDimensions.height/2) - mapScreen.tileDimensions.height/2;
     }
 
     createTile(x, y, which, level) {
@@ -127,7 +169,6 @@ class MapScreen extends ScreenView {
             //----------------------------------
             // draw the grid
             //----------------------------------
-            this.tileDimensions = {"width": 200, "height": 100};
 
             this.gridOffset = new Vector3d(this.grid_x, this.grid_y);
             this.gridDisplay = {"width": 22, "height": 22};
@@ -180,14 +221,15 @@ class MapScreen extends ScreenView {
 
 
 
-        // test draw a castle
+        // test draw a castle - home city
         if(mapImages[0].image.complete && mapImages[1].image.complete) {
-            //points[j] = pointsOrigin[j].addCamera(camera);
-            let x = this.mapTiles[cityCoords.x][cityCoords.y].points[0].x;
-            let y = this.mapTiles[cityCoords.x][cityCoords.y].points[0].y;
-            //point
+            let cc = city.coords;
+            let x = this.mapTiles[cc.x][cc.y].points[0].x;
+            let y = this.mapTiles[cc.x][cc.y].points[0].y;
             ctx.drawImage(mapImages[0].image, x, y - 100, 200, 155);
-            // x = this.mapTiles[3][2].points[0].x;
+            ctx.fillStyle = '#ffee44';
+            ctx.fillText(city.name, x + 20, y);
+                // x = this.mapTiles[3][2].points[0].x;
             // y = this.mapTiles[3][2].points[0].y;
             // ctx.drawImage(mapImages[1].image, x, y , 200, 155);
         }
@@ -207,9 +249,11 @@ class MapScreen extends ScreenView {
         this.drawButtons();
         this.checkButtons();
         
-        for(let y=0; y<45; y++) {
-            for(let x=0; x<45; x++) {
-                this.mapTiles[x][y].draw();
+        for(let y=-5+this.grid_y; y<this.gridDisplay.height+this.grid_y-5; y++) {
+            for(let x=-5+this.grid_x; x<this.gridDisplay.width+this.grid_x-5; x++) {
+                if(x >= 0 && x<this.grid.width && y >= 0 && y<this.grid.height) {
+                    this.mapTiles[x][y].draw();
+                }
             }
         }
 
@@ -243,7 +287,7 @@ class MapScreen extends ScreenView {
                             console.log("clicked at " + x + ", " + y);
                             this.tileClicked = new Vector3d(x, y);
                             let c = this.mapTiles[x][y].getCenter();
-                            console.log(c);
+                            console.log(this.mapTiles[x][y]);
                             return;
                         }
                     }
@@ -258,20 +302,20 @@ class Vector3d {
     constructor(x, y, z) {
         this.x = x;
         this.y = y;
-        this.z = z;
+        this.z = 0;
     }
 
     addCamera(camera) {
         let x = this.x + camera.x;
         let y = this.y + camera.y;
         let z = this.z + camera.z;
-        return new Vector3d(x, y);
+        return new Vector3d(x, y, 0);
     }
     subCamera(camera) {
         let x = this.x - camera.x;
         let y = this.y - camera.y;
         let z = this.z - camera.z;
-        return new Vector3d(x, y);
+        return new Vector3d(x, y, 0);
     }
     add(x, y) {
         this.x += x;
@@ -313,6 +357,9 @@ class Tile {
         this.buildon = true;    // can we build on this site
 
         this.text = "";
+
+        //this.id = x + (y * mapScreen.grid.width);    // TODO: needs to be inserted on create new tile
+        this.type = "grass1";
 
 
     }
@@ -400,7 +447,7 @@ class Tile {
 
         // draw line to it
 
-        let sp = mapScreen.mapTiles[cityCoords.x][cityCoords.y].getCenter();
+        let sp = mapScreen.mapTiles[city.coords.x][city.coords.y].getCenter();
         ctx.beginPath();
         ctx.moveTo(sp.x + camera.x, sp.y + camera.y);
         let ep = this.getCenter();
