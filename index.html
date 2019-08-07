@@ -18,6 +18,7 @@
     <script src="building.js"></script>
     <script src="screenmanager.js"></script>
     <script src="itemmanager.js"></script>
+    <script src="resourcemanager.js"></script>
     <script src="cityscreen.js"></script>
     <script src="mapscreen.js"></script>
     <script src="researchscreen.js"></script>
@@ -25,6 +26,8 @@
     <script src="marchscreen.js"></script>
     <script src="marchmanager.js"></script>
     <script src="march.js"></script>
+    <script src="tavernscreen.js"></script>
+    <script src="general.js"></script>
     
     <script src="researchmanager.js"></script>
     <script src="troopmanager.js"></script>
@@ -85,6 +88,36 @@
             padding: 0;
             margin: 0;
         }
+        .toast {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+                
+            position: fixed;
+            top: 90%;
+            left: 50%;
+            transform: translateX(-50%);
+
+            width: 80%;
+            height: 30px;
+            visibility: hidden;
+            opacity: 1;
+
+            background-color: #b5b5b5;
+            color: black;
+            border: 1px solid black;
+            border-radius: 35px;
+
+            font-family: Arial, Helvetica, sans-serif;
+            font-size: 18px;
+            font-weight: bold;
+            text-align: center;
+            vertical-align: middle;
+
+            z-index: 99999;
+
+            transition: 5s;
+        }
     </style>
 </head>
 <body>
@@ -93,7 +126,7 @@
         if(!login) {
             document.writeln('<form>');
             document.writeln('<label>enter username</label><input type="text" name="username">');
-            document.writeln('<label>enter password</label><input type="password" name="password">');
+            // document.writeln('<label>enter password</label><input type="password" name="password">');
             document.writeln('<button onclick="checkLogin(this.form.username)" type="button" name="login">Login</button>');
             document.writeln('</form>');
         }
@@ -116,14 +149,20 @@
         </select>
     </div>
 
-    <div id="" style="position:absolute; top:20px; left: 120px">
+    <!-- <div id="" style="position:absolute; top:20px; left: 120px">
         <button onclick="zoomScreen('in')">zoom in</button>
         <button onclick="zoomScreen('out')">zoom out</button>
-    </div>
+    </div> -->
 
     <div id="" style="position:absolute; top:800px; left: 120px">
         <button onclick="fullScreen()">full screen</button>
     </div>
+
+
+    <div class="toast" id="toastdiv">
+        <span id="toasttext">vdsvd</span>
+    </div>
+
 
 </body>
 </html>

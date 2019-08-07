@@ -327,6 +327,44 @@
             "baseBuildTime": 100
         }
         ]
+    },
+
+    {   "type": 14,
+        "name": "Tavern",
+        "quantityAllowed" : 1,
+        "levels" : [
+        {   "level": 1,
+            "requirements":    {   "resources" : {"food": 4000, "wood": 4000, "stone": 4000, "iron": 2000},
+                                    "buildings" : [{"type": 0, "level": 1}]
+                                },
+            "baseBuildTime": 10
+        },
+        {   "level": 2,
+            "requirements":    {   "resources" : {"food": 10000, "wood": 10000, "stone": 15000, "iron": 3500},
+                                    "buildings" : [{"type": 0, "level": 3}]
+                                },
+            "baseBuildTime": 100
+        }
+        ]
+    },
+
+    {   "type": 15,
+        "name": "Academy",
+        "quantityAllowed" : 1,
+        "levels" : [
+        {   "level": 1,
+            "requirements":    {   "resources" : {"food": 4000, "wood": 4000, "stone": 4000, "iron": 2000},
+                                    "buildings" : [{"type": 0, "level": 1}]
+                                },
+            "baseBuildTime": 10
+        },
+        {   "level": 2,
+            "requirements":    {   "resources" : {"food": 10000, "wood": 10000, "stone": 15000, "iron": 3500},
+                                    "buildings" : [{"type": 0, "level": 3}]
+                                },
+            "baseBuildTime": 100
+        }
+        ]
     }
 
 ]

@@ -5,12 +5,8 @@ class MarchManager {
         this.usedSlots = 0;
         this.queue = [];
 
-    }
+        this.marchSize = 100;
 
-    addMarch(tile, selectedTroops) {
-        console.log("adding a march in marchManager");
-        marches.push(new March(tile, selectedTroops));
-        this.usedSlots ++;
     }
 
     tick() {
@@ -19,6 +15,37 @@ class MarchManager {
         //this.drawMarches();
         this.displayMarchDetails();
     }
+
+    addMarch(tile, selectedTroops) {
+        //addMarch(marchData) {
+            console.log("adding a NEW march in marchManager");
+            let marchData = {"tile": tile, "troops": selectedTroops};
+            //marchData = JSON.parse(JSON.stringify(marchData));
+            marches.push(new NewMarch(marchData));
+            //marches.push(new March(marchData));
+            this.usedSlots ++;
+            saveGame2();
+        }
+    addMarch2(data) {
+        //addMarch(marchData) {
+            console.log("adding a NEW march in marchManager");
+            //let marchData = {"tile": tile, "troops": selectedTroops};
+            //marchData = JSON.parse(JSON.stringify(marchData));
+            marches.push(new NewMarch(data));
+            //marches.push(new March(marchData));
+            this.usedSlots ++;
+            saveGame2();
+        }
+            
+    deleteMarch(march) {
+        for(let x=marches.length-1; x>=0; x--) {
+            if(marches[x] == march) {
+                marches.splice(x, 1);
+            }
+        }
+
+    }
+
 
     updateMarches() {
         for(let x=0; x<marches.length; x++) {
@@ -59,9 +86,9 @@ class MarchManager {
         console.log(b);
 
         for(let x=0; x<marches.length; x++) {
-            if(marches[x] == b.march) {
+            if(marches[x].endCoords.x == self.coords.x && marches[x].endCoords.y == self.coords.y ) {
                 console.log("now were recalling");
-                marches[x].recallMarch();
+                marches[x].recallMarch(marches[x]);
             }
         }
     }

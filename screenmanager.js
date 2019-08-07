@@ -57,9 +57,10 @@ class ScreenView {
             //console.log("exiting - from a troop building");
             self.troopBuilding.trainingScreen = null;
         }
-
-        for(let x=0; x<self.inputs.length; x++) {
-            document.getElementById('maindiv').removeChild(self.inputs[x]);
+        if(self.inputs) {
+            for(let x=0; x<self.inputs.length; x++) {
+                document.getElementById('maindiv').removeChild(self.inputs[x]);
+            }
         }
     }
 

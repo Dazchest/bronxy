@@ -11,25 +11,27 @@ class MarchScreen extends ScreenView {
         this.selectedTroops = [];
         this.troopsAvailable = [];
         this.name = "Marching";
+        this.load = 0;
 
         // for(let x=0; x<Object.keys(troopBuilding).length; x++) {
         //     name = Object.keys(troopBuilding)[x];
         //     this[name] = troopBuilding[name];
         // }
 
-    //     this.troopBuilding = troopBuilding;
-    //     this.training = troopBuilding.training;
-    //    // troopBuilding.trainingScreen = this;
-    //     this.troopType = troopBuilding.troopType
-    //     this.troopName = troopBuilding.troopName
-    //     this.troops = troops[troopBuilding.troopType];
-    //     this.troopList = troopBuilding.troopList;
-    //     //this.tiers = this.troopList.tiers;
-    //     // if(this.troopList.length>0) {
-    //     // } else {
-    //     //     this.tiers = [];
-    //     // }
-    //     this.currentTier = 1;
+        // get the troops into a list we can use better
+        for(let x=0; x<troopList.length; x++) {
+            if(troopList[x]) {
+                for(let y=0; y<troopList[x].levels.length; y++) {
+                    if(troopList[x].levels[y] != null) {
+                        this.troopsAvailable.push(troopList[x].levels[y]);
+                        let troopType = troopList[x].type;
+                        let tier = troopList[x];
+                    }
+                }
+            }
+        }
+        console.log("troops " + this.troopsAvailable);
+
 
         console.log("this is March constructor");
 
@@ -40,34 +42,37 @@ class MarchScreen extends ScreenView {
         // this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "left", "name": "troopleft", "x": 75, "y": 200, "w": 128, "h": 128, "text": "Left", "screen": this, "action":  this.viewTiers}));
         // this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "right", "name": "troopright", "x": 420, "y": 200, "w": 128, "h": 128, "text": "Right", "screen": this, "action":  this.viewTiers}));
 
+        this.inputs = [];
         if(troopList) {
             let counter = 0;
             for(let x=0; x<troopList.length; x++) {
-                for(let y=0; y<troopList[x].levels.length; y++) {
-                    //this.troopsAvailable.push(troopList[x].levels[y]);
-                    if(troopList[x].levels[y] != null) {
-                        let availableQuantity = troopList[x].levels[y].quantity;
+                if(troopList[x]) {
+                    for(let y=0; y<troopList[x].levels.length; y++) {
+                        //this.troopsAvailable.push(troopList[x].levels[y]);
+                        if(troopList[x].levels[y] != null) {
+                            let availableQuantity = troopList[x].levels[y].quantity;
 
-                        let i = document.createElement('input');
-                        i.id = 'quantityInput';
-                        i.name = 'quantityInput[]';
-                        i.style.position = 'absolute';
-                        i.style.left = ((268 + this.x) * zoom.x) + 'px';
-                        i.style.top =  (265 + (counter * 25) * zoom.y) + 'px';
-                        i.style.width = '48px';
-                        i.type = 'number';  
-                        i.min = 0;
-                        i.max = availableQuantity;
-                        i.value = 0;
-                        //i.addEventListener('keydown', getInput);
-                        //i.addEventListener('change', checkInput); 
+                            let i = document.createElement('input');
+                            i.id = 'quantityInput';
+                            i.name = 'quantityInput[]';
+                            i.style.position = 'absolute';
+                            i.style.left = ((268 + this.x) * zoom.x) + 'px';
+                            i.style.top =  (265 + (counter * 25) * zoom.y) + 'px';
+                            i.style.width = '48px';
+                            i.type = 'number';  
+                            i.min = 0;
+                            i.max = availableQuantity;
+                            i.value = 0;
+                            //i.addEventListener('keydown', getInput);
+                            //i.addEventListener('change', checkInput); 
 
-                        counter ++;
-                        console.log(i);
-                        this.inputs.push(i);
-                        document.getElementById('maindiv').appendChild(i);
+                            counter ++;
+                            console.log(i);
+                            this.inputs.push(i);
+                            document.getElementById('maindiv').appendChild(i);
+                        }
+
                     }
-
                 }
             }
         }
@@ -75,6 +80,8 @@ class MarchScreen extends ScreenView {
         mapScreen.active = false;
         cities[currentCity].active = false;
         buildingHandler.highlightGrid = false;
+
+        this.setStartLoad();
     }
 
 
@@ -84,6 +91,9 @@ class MarchScreen extends ScreenView {
 
     draw() {
         if(this.active) {
+            this.calculateLoad();
+            this.setMaxInputLevels();
+
             ctx.save;
             ctx.scale(1,1);
 
@@ -94,7 +104,9 @@ class MarchScreen extends ScreenView {
             ctx.fillStyle = '#eeeeee';
             ctx.font = "20px Georgia";
             ctx.fillText(this.name, this.x, this.y + 20);
-    
+
+            this.displayTileInfo();
+
             if(troopList.length > 0) {
                 this.displayTroops();   
             } else {
@@ -115,119 +127,131 @@ class MarchScreen extends ScreenView {
         }
     }
 
+    displayTileInfo() {
+        if(this.tile.resources) {
+            ctx.fillStyle = '#ffff22';
+            ctx.font = "25px arial";
+            ctx.fillText("amount of resources = " + this.tile.availableAmount, this.x+5, this.y + 120);
+            ctx.fillText("current load = " + this.load, this.x+5, this.y + 150);
+        } else 
+        if(this.tile.monster) {
+            ctx.fillStyle = '#ffff22';
+            ctx.font = "25px arial";
+            ctx.fillText("Monster name = " + this.tile.monsterName, this.x+5, this.y + 120);
+        }
+
+    }
+
     displayTroops() {
 
         let counter = 0;
         for(let x=0; x<troopList.length; x++) {
-            for(let y=0; y<troopList[x].levels.length; y++) {
-                if(troopList[x].levels[y] != null) {
-                    this.troopsAvailable.push(troopList[x].levels[y]);
-                    let troopType = troopList[x].type;
-                    let tier = troopList[x]
-                    ctx.font = "16px Georgia";
-                    ctx.fillText(troopList[x].levels[y].quantity + " - " + troops[x].levels[y].name, this.x + 100, this.y + 180 + (counter * 25));
-                    counter++;
+            if(troopList[x]) {
+                for(let y=0; y<troopList[x].levels.length; y++) {
+                    if(troopList[x].levels[y] != null) {
+                        //this.troopsAvailable.push(troopList[x].levels[y]);
+                        let troopType = troopList[x].type;
+                        let tier = troopList[x]
+                        ctx.font = "16px Georgia";
+                        ctx.fillText(troopList[x].levels[y].quantity + " - " + troops[x].levels[y].name, this.x + 100, this.y + 180 + (counter * 25));
+                        counter++;
+                    }
                 }
             }
         }
-
-        return;
-
-        tier -= 1;
-        //TODO: this is just a quick show
-        ctx.fillStyle = '#eeeeee';
-        ctx.font = "20px Georgia";
-
-        if(troopList[this.troopType]) {
-            if(troopList[this.troopType].levels[tier]) {
-                ctx.fillText(troopList[this.troopType].levels[tier].quantity + " " + this.troops.levels[tier].name, this.x + 100, this.y + 350);
-            } else {
-                ctx.fillText("0 " + this.troops.levels[tier].name, this.x + 100, this.y + 350);
-            }
-        } else {
-            ctx.fillText("0 " + this.troops.levels[tier].name, this.x + 100, this.y + 350);
-        }
-
-        // draw left and right buttons
-        if(buttonImages[0].icon.complete) {
-            ctx.drawImage(buttonImages[0].icon, 75, 200, gridSize.x * 2, gridSize.y * 2);
-        }
-        if(buttonImages[1].icon.complete) {
-            ctx.drawImage(buttonImages[1].icon, 420, 200, gridSize.x * 2, gridSize.y * 2);
-        }
-
-        if(troops[this.troopType].levels[tier].image) { // check image is available
-            if(troops[this.troopType].levels[tier].image.complete) {
-                let troopimage = troops[this.troopType].levels[tier].image;
-                ctx.drawImage(troopimage, 236, 200, troopimage.width / 4, troopimage.height / 4  );
-            }
-        }
-
-        // check requirements
-        this.requirementsMet = true;
-        let r = this.troops.levels[tier].requirements;
-
-        let quantityInput = document.getElementById('quantityInput').value;
-        ctx.fillStyle = '#ffffff';
-
-        let resCheck = ['food', 'wood', 'stone', 'iron'];
-        for(let x=0; x<resCheck.length; x++) {
-            ctx.fillStyle = '#ffffff';
-            if(resources[resCheck[x]].amount < quantityInput * r.resources[resCheck[x]]) {
-                ctx.fillStyle = '#ff0000';
-                this.requirementsMet = false;
-            }
-            ctx.fillText(resources[resCheck[x]].text + ": " + quantityInput * r.resources[resCheck[x]], this.x + 25 + (x * 95), this.y + 420)    
-        }
-
-        ctx.fillStyle = '#ffffff';
-        ctx.fillText("Total Time: " + quantityInput * this.troops.levels[tier].baseTrainTime, this.x + 375, this.y + 380)
-
-        if(this.troopBuilding.training) { //this.troopBuilding.training
-            this.requirementsMet = false;
-        }
-
-
-        // check buildings required
-        let br = r.buildings;
-        //console.log(br);
-        for(let x=0; x<br.length; x++) {
-            let brName = buildings[br[x].type].name;
-            let brType = br[x].type;
-            var fontC = '#0000ff';
-
-            var typeFound = false;
-            var type;
-            for(let y=0; y<buildingList.length; y++) { // check if building required is even built yet 
-                if(buildingList[y].type == brType) { 
-                    typeFound = true;  // set typefound to the buildingList index found
-                    type = y;
-                }
-            }
-            if(typeFound) { //check if building found is at required level
-                if(buildingList[type].level < br[x].level) {
-                    this.requirementsMet = false;
-                    fontC = '#ff0000';
-                }
-            } else {
-                fontC = '#ff0000';
-                this.requirementsMet = false;
-            }
-
-            ctx.fillStyle = fontC;
-            ctx.fillText("build req: " + brName + " - " + brType + " - " + br[x].level, 100, 500 + (x * 25));
-            //ctx.fillText("build req: " + buildingList[brType].level, 50, 550 + (x * 25));
-        }
-
-        if(this.requirementsMet == false) {
-            setButtonState(this.buttons, "train", false);
-        } else {
-            setButtonState(this.buttons, "train", true);
-        }
+        ctx.font = "18px Georgia";
+        ctx.fillText("Select March Size = " + this.selectedMarchSize, this.x + 100, this.y + 180 + (counter * 25));
+        counter++;
+        ctx.fillText("Max March Size = " + marchManager.marchSize, this.x + 100, this.y + 180 + (counter * 25));
 
     }
     //---------------------------------------
+    setStartLoad() {
+        console.log("setting the start load");
+        this.load = 0;
+        this.selectedMarchSize = 0;
+        let troopType, troopLevel, troopLoad, troopsNeeded;
+        
+        for(let x=0; x<this.troopsAvailable.length; x++) {
+            if(this.troopsAvailable[x]) {
+                console.log(this.troopsAvailable[x]);
+                troopType = this.troopsAvailable[x].type;
+                troopLevel = this.troopsAvailable[x].level;
+                troopLoad = troops[troopType].levels[troopLevel].load;
 
+                if(this.tile.resources) {
+                    troopsNeeded = Math.ceil((this.tile.availableAmount - this.load) / troopLoad);
+                } else 
+                if(this.tile.monster) {
+                    troopsNeeded = marchManager.marchSize - this.selectedMarchSize;
+                }
+
+                if(troopsNeeded > this.troopsAvailable[x].quantity) {
+                    troopsNeeded = this.troopsAvailable[x].quantity;
+                }
+                this.inputs[x].value = troopsNeeded;
+
+                this.selectedMarchSize += troopsNeeded;
+                this.load += troopsNeeded * troopLoad;
+
+                if(this.tile.resources && this.load >= this.tile.availableAmount) {
+                    console.log("we have reached out target load");
+                    console.log("load so far is " + this.load + " and needs " + troopsNeeded + " troops");
+                    break;
+                } else {
+                    console.log("we need more troops???");
+                }
+                if(this.tile.monster && this.selectedMarchSize >= marchManager.marchSize) {
+                    console.log("we have reached out target troop count");
+                    console.log("count so far is " + this.selectedMarchSize + " and needs " + marchManager.marchSize + " troops");
+                    break;
+                } else {
+                    console.log("we need more troops???");
+                }
+            }
+        }
+            
+    }
+    //---------------------------------------
+    calculateLoad() {
+        this.load = 0;
+        this.selectedMarchSize = 0;
+        let troopType, troopLevel, troopLoad, troopsNeeded;
+        for(let x=0; x<this.inputs.length; x++) {
+            troopType = this.troopsAvailable[x].type;
+            troopLevel = this.troopsAvailable[x].level;
+            troopLoad = troops[troopType].levels[troopLevel].load;
+            
+            if(this.tile.resources) {
+                this.load += this.inputs[x].value * troopLoad;
+                this.selectedMarchSize += Number(this.inputs[x].value);
+            } else 
+            if(this.tile.monster) {
+                this.selectedMarchSize += Number(this.inputs[x].value);
+            }
+        }
+    }
+    //---------------------------------------
+    setMaxInputLevels() {
+        let inputQuantity, marchAvailable;
+
+        for(let x=0; x<this.inputs.length; x++) {
+            inputQuantity = Number(this.inputs[x].value);
+
+            marchAvailable = marchManager.marchSize - this.selectedMarchSize;
+            if(this.troopsAvailable[x].quantity > (inputQuantity + marchAvailable) ) {
+                this.inputs[x].max = inputQuantity + marchAvailable;
+            } else {
+                this.inputs[x].max = this.troopsAvailable[x].quantity;
+            }
+            
+            
+    }
+
+
+    }
+
+    //---------------------------------------
     march(self) {
         console.log("lets march some troops");
         let quantityInput = document.getElementById('quantityInput').value;
@@ -237,8 +261,10 @@ class MarchScreen extends ScreenView {
         }
         setButtonState(self.buttons, "march", false);
 
-        self.selectedTroops = new Troop({"type": 0, "tier": 1, "quantity": 50});
-        marchManager.addMarch(self.tile, self.selectedTroops);
+        self.selectedTroops = new Troop({"type": 0, "tier": 1, "quantity": 54});
+        //let marchData = 
+        //marchManager.addMarch(self.tile, self.selectedTroops);
+        marchManager.addMarch2(self);
         self.exitScreen(self);
     }
 

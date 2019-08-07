@@ -242,8 +242,6 @@ class Research {
                 researchManager.upgrading = false;
                 this.active = true;
 
-                saveGame2();
-
 
                 // update the buffs
                 // loop through each buff available
@@ -271,6 +269,9 @@ class Research {
                     console.log(buffAmount);
                 }
                 this.level ++;  // set this after all above... means level = correct index in the array
+
+                saveGame2();
+
             }
         }
     }

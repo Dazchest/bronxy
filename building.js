@@ -67,7 +67,7 @@ class Building {
             clicked = false;
             console.log(this.buttonClicked.text + " pressed");
             let callback = this.buttonClicked.action;
-            callback(this);
+            callback(this, b);
         }
     }
 
@@ -240,6 +240,7 @@ class Building {
 
     }
 
+
     upgradeBuilding() {
         if(this.newBuilding) {
             buildingList.push(this);
@@ -264,7 +265,7 @@ class troopTrainingBuilding extends Building {
         super(data);
 
         //this.training = false;
-        //this.trainingQueue = {};
+        this.trainingQueue = {};
 
         this.buttons.push(new Button({"active": false, "offset" : {"x": 0, "y": 80}, "w": 100, "h": 30, "text": "Train", "screen": this, "action": this.trainTroopsScreen}));
 
@@ -302,7 +303,7 @@ class troopTrainingBuilding extends Building {
                         console.log("adding to existing troops and existing tier");
                     } else {    // only insert the new tier/level data
                         let tierData = {};
-                        tierData.level = this.trainingQueue.tier + 1;
+                        tierData.level = this.trainingQueue.tier;
                         tierData.quantity = this.trainingQueue.quantity;
                         tierData.type = this.troopType;
                         tierData.name = troops[this.troopType].levels[this.trainingQueue.tier].name;
@@ -372,3 +373,47 @@ class troopTrainingBuilding extends Building {
 }
 
 
+//---------------------------------------------------------
+//---------------------------------------------------------
+//---------------------------------------------------------
+class TavernBuilding extends Building {
+
+    constructor(data) {
+
+        super(data);
+        this.type = 14;
+        this.name = "Tavern";
+
+        this.buttons.push(new Button({"active": false, "offset" : {"x": -100, "y": -30}, "w": 100, "h": 30, "text": "Enter", "screen": this, "action": this.enterScreen}));
+
+    }
+
+    enterScreen(self, b) {
+        console.log("Tavern screen please!!!");
+        tavernScreen = new TavernScreen();
+        screenManager.screen = tavernScreen;
+
+    }
+}
+//---------------------------------------------------------
+//---------------------------------------------------------
+//---------------------------------------------------------
+class AcademyBuilding extends Building {
+
+    constructor(data) {
+
+        super(data);
+        this.type = 15;
+        this.name = "Academy";
+
+        this.buttons.push(new Button({"active": false, "offset" : {"x": 0, "y": 70}, "w": 100, "h": 30, "text": "Enter", "screen": this, "action": this.enterScreen}));
+
+    }
+
+
+    enterScreen(self, b) {
+        console.log("going to Research screen");
+        researchScreen = new ResearchScreen();
+        screenManager.screen = researchScreen;
+    }
+}

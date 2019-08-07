@@ -9,7 +9,7 @@ class CityScreen extends ScreenView {
         //ScreenView.call(this);
         this.name = "City";
         this.inputs = [];
-        this.inputs.push(new newInput("f"));
+        //this.inputs.push(new newInput("f"));
 
         console.log("this is CityScreen constructor");
         this.buttons.push(new Button({"active": true, "x": 500, "y": 100, "w": 80, "h": 30, "text": "Items", "screen": this, "action":  this.itemScreen}));
@@ -62,7 +62,7 @@ class CityScreen extends ScreenView {
             buildingHandler.drawBuildings();
             Resource.drawAll();
 
-            this.inputs[0].draw();
+            //this.inputs[0].draw();
             }
     }
 

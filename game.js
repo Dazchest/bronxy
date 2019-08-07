@@ -1,20 +1,5 @@
 window.onload = init;
 
-// var map = [];
-// let grid_w = 1200;
-// let grid_h = 1200;
-// for(let x=0; x<grid_w; x++) {
-//     map[x] = new Array(grid_h);
-// }
-
-// // put Tile class into each mapTile array
-// for(let y=0; y<grid_h; y++) {
-//     for(let x=0; x<grid_w; x++) {
-//         map[x][y] = new Tile();
-//         map[x][y].coords = {"x": x, "y": y};
-//     }
-// }
-
 var game = {};
 var fps;
 var opsys = "unknown";
@@ -25,7 +10,9 @@ var camera = {"x": 0, "y": 0};
 var gridSize = {"x":64, "y": 64};
 
 var player;
+
 var resources = {};
+var resourceManager = new ResourceManager();
 
 var troopTrainingScreen = {"active": false};
 var troops = {};
@@ -51,7 +38,6 @@ var researchManager = new ResearchManager();
 var buffManager = new BuffManager();
 
 var currentCity = 0;
-//var cityCoords = new Vector3d(9, 8);
 var thisCity;
 var cities = [];
 var cityScreen;
@@ -60,11 +46,17 @@ var tick = Date.now();
 var screenManager;
 
 var mapScreen = {"active": false};
+var mapManager = new MapManager();
 var startOnMap = false;
 
 var marches = [];
 var marchScreen = {"active": false};
 var marchManager = new MarchManager();
+
+
+var generals = [];
+var generalImages = [];
+var tavernScreen = {"active": false};
 
 var itemScreen = {"active": false};
 var items;
@@ -73,6 +65,7 @@ var itemManager = new ItemManager();
 
 var buttonImages = [];
 var mapImages = [];
+var monsterImages = [];
 var assets;
 
 var promises = [];
@@ -93,12 +86,17 @@ var touchStart = {"x": 99999, "y": 0};
 var distX, distY;
 var elem;
 
+
+var load; 
+
 function init() {
     username = localStorage.getItem("username");
     if(username) {
+        load = new loader();
         login = true;
-    }
-    if(!login) {
+        //Toast("logged in");
+        load.start();
+    } else {
         console.log("not logged in");
         return;
     }
@@ -132,9 +130,8 @@ function init() {
         //}
     });
 
-   // mouseDownFired = false;
+    mouseDownFired = false;
     canvas.addEventListener('mousedown', function(e) {
-        mouseDownFired = false;
         canvas.addEventListener('mousemove', scrollCity);
         canvas.addEventListener(uptype, function() {
             canvas.removeEventListener('mousemove', scrollCity);
@@ -202,7 +199,7 @@ function init() {
         .then(parseJsonData)
         .then(function(mj) {
             buildings = mj;
-            console.log(buildings);
+            //console.log(buildings);
         })
     promises.push(promise2);
 
@@ -211,21 +208,22 @@ function init() {
         .then(parseJsonData)
         .then(function(mj) {
             items = mj;
-            console.log(items);
+            //console.log(items);
         })
         .catch(gotErr);
+    promises.push(promise5);
 
     let jsonfile9 = "troops.json";
     let promise9 = fetch(jsonfile9)
         .then(parseJsonData)
         .then(function(mj) {
             troops = mj;
-            a = new Assets();
-            a.loadTroopImages();
-
-            console.log(troops);
+            assets = new Assets();
+            assets.loadTroopImages();
+            //console.log(troops);
         })
         .catch(gotErr);
+    promises.push(promise9);
     
         jsonfile6 = "researchtree.json";
     let promise6 = fetch(jsonfile6)
@@ -233,9 +231,10 @@ function init() {
         .then(function(mj) {
             researchTree = mj;
             researchManager.initResearch();
-            console.log(researchTree);
+            //console.log(researchTree);
         })
         .catch(gotErr);
+    promises.push(promise6);
     
 
     let jsonfile = "city.json";
@@ -243,9 +242,12 @@ function init() {
         .then(parseJsonData)
         .then(initBuildingData)
         .catch(gotErr);
+    promises.push(promise);
+
+    
    
     function parseJsonData(response) {
-        console.log("responded");
+        //console.log("responded");
         return response.json();
     }
     function gotErr(err) {
@@ -255,48 +257,14 @@ function init() {
     function initBuildingData(myJson) {
         console.log(myJson[currentCity].buildings);
         cityData = myJson[currentCity] || "";
-        buildingData = cityData.buildings || "";
-        resourceData = cityData.resources || "";
-        troopData = cityData.troops || "";
-        let itemData = cityData.items || "";
-        console.log(resourceData);
-    
-        researchData = cityData.research;
-        //researchManager.initResearch();
-
         cities.push(new City(cityData.citydata));
 
-        for(var x=0; x<buildingData.length; x++) {
-            buildingList.push(new Building(buildingData[x]));
-        }
-
-        for(var x=0; x<itemData.length; x++) {
-            itemList.push(new Item(itemData[x]));
-        }
-
-        for(var x=0; x<troopData.length; x++) {
-            troopList.push(new Troop(troopData[x]));
-        }
-        //troops = new Troop(troopsData);
-
-
-        //for(var x=0; x<resourceData.length; x++) {
-            //store the Resource class in individual objects within resources
-            resources.food = new Resource(resourceData.food);
-            resources.wood = new Resource(resourceData.wood);
-            resources.stone = new Resource(resourceData.stone);
-            resources.iron = new Resource(resourceData.iron);
-            resources.gold = new Resource(resourceData.gold);
-            resources.gems = new Resource(resourceData.gems);
-            // resources.food.add = function() {
-            //     resources.food = resources.food.amount + Number(1000);
-            // }
-        //}
         buildingHandler.loadImages();
         assets = new Assets();
         assets.loadIcons();
-        assets.loadTroopImages();
-
+        assets.loadGeneralImages();
+        assets.loadMonsterImages();
+       
         // Your web app's Firebase configuration
         var firebaseConfig = {
             apiKey: "AIzaSyDyF4fVz_XN-R1fujOhFwEMmxNeufLlvM8",
@@ -385,6 +353,7 @@ function init() {
          elem = document.documentElement;
 
 
+        //generals.push(new General());
 
         // setTimeout(draw, 2000);
         //draw();
@@ -432,6 +401,7 @@ function errData() {
 }
 
 function saveGame() {
+    return;
     var ref = database.ref('users');
     let saveData = {};
     //saveData.id = document.getElementById('savename').value;
@@ -460,26 +430,39 @@ let getVarNameFromObject = (nameObject) => {
         return varName;
     }
     }
-
-function saveList(listToSave) {
-    var listName = Object.keys(listToSave)[0];
-    var listToSave = listToSave[listName];
-    console.log(listName);        //prints foo
-    console.log(listToSave);       //prints bar
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+//-------------------------------------------------------------------
+function saveList(listToSave, noStringy) {
+    
+    // var listName = Object.keys(listToSave)[0];
+    // var listToSave = listToSave[listName];
+    var listName = listToSave;
+    var listToSave = window[listToSave];
+    console.log(listName);        //
+    console.log(listToSave);       //
 
     console.log("saving to database???");
-    //userName = document.getElementById('savename').value;
-    saveData = JSON.stringify(listToSave);
+    if(noStringy) {   // some lists, like resources, do not need to be stringifief
+        saveData = JSON.parse(JSON.stringify(listToSave));
+    } else {
+        saveData = JSON.stringify(listToSave);
+    }
     firebase.database().ref(username + "/" + listName).set(saveData);
 }
 
 function saveGame2() {
-    game.city = city;
+    console.log("saving game");
+    //game.city = city;
     game.buildingList = buildingList;
-    game.researchList = researchList;
+    //game.researchList = researchList;
     game.itemList = itemList;
     game.troopList = troopList;
-    game.resources = resources;
+    //game.resources = resources;
+    game.marches = marches;
+    //game.generals = generals;
 
    // userName = document.getElementById('savename').value;
     //if(!userName) { userName = "Bronxy";}
@@ -488,8 +471,41 @@ function saveGame2() {
         listName = Object.keys(game)[x];
         data = game[listName];
         saveData = JSON.stringify(data);
+        //saveData = data;
         firebase.database().ref(username + "/" + listName).set(saveData);
     }
+    firebase.database().ref(username + "/" + "resources").set(resources);
+
+    firebase.database().ref(username + "/" + "city").set(city);
+
+    let g;
+    g = JSON.parse(JSON.stringify(researchList));   //TODO: this is great
+    console.log(g);
+    console.log(g.length);
+    for(let x=0; x<g.length; x++) {
+        g[x].buttons = "";
+        g[x].upgradebutton = "";
+    }
+    firebase.database().ref(username + "/" + "researchList").set(g);
+    
+    g = JSON.parse(JSON.stringify(marches));   //TODO: this is great
+    console.log(g);
+    console.log(g.length);
+    for(let x=0; x<g.length; x++) {
+        g[x].buttons = "";
+        //g[x].upgradebutton = "";
+    }
+    firebase.database().ref(username + "/" + "marches").set(g);
+
+    // save buildings
+    g = JSON.parse(JSON.stringify(buildingList));   //TODO: this is great
+    console.log(g);
+    console.log(g.length);
+    for(let x=0; x<g.length; x++) {
+        g[x].buttons = "";
+    }
+    firebase.database().ref(username + "/" + "buildingList").set(g);
+
 }
 
 function saveMap() {
@@ -631,7 +647,7 @@ function loadMap() {   // this uses firestore
 var md;
 function loadMap2() {
     let startSaveTime = Date.now()/1000;
-    console.clear();
+    //console.clear();
     console.log("start = " + startSaveTime);
 
     let retrieveQuantity = 40000;
@@ -640,44 +656,21 @@ function loadMap2() {
     var ref = firebase.database().ref('map');
 
     ref.once('value', function(data) {
-        //querySnapshot.forEach(function(doc)
-        //console.log(data.val());
         data.forEach(function(info){
             //console.log(info.val());
             md = info.val();
-             switch (md.type) {
-                case "food":
-                    mapScreen.mapTiles[md.coords.x][md.coords.y] = new FoodTile(md.level, md.coords.x, md.coords.y);
-                    mapScreen.mapTiles[md.coords.x][md.coords.y].availableAmount = md.availableAmount; 
-                    break;
-                case "wood":
-                    mapScreen.mapTiles[md.coords.x][md.coords.y] = new WoodTile(md.level, md.coords.x, md.coords.y);
-                    mapScreen.mapTiles[md.coords.x][md.coords.y].availableAmount = md.availableAmount; 
-                    break;
-                case "stone":
-                    mapScreen.mapTiles[md.coords.x][md.coords.y] = new StoneTile(md.level, md.coords.x, md.coords.y);
-                    mapScreen.mapTiles[md.coords.x][md.coords.y].availableAmount = md.availableAmount; 
-                    break;
-                case "iron":
-                    mapScreen.mapTiles[md.coords.x][md.coords.y] = new IronTile(md.level, md.coords.x, md.coords.y);
-                    mapScreen.mapTiles[md.coords.x][md.coords.y].availableAmount = md.availableAmount; 
-                    break;
-
-                default:
-                    mapScreen.mapTiles[md.coords.x][md.coords.y] = new Tile(md.coords.x, md.coords.y);
-                    break;
-
-             }
+            md.buttons = [];
+            mapManager.processTile(md);
         });
 
-        console.log("done loading map tiles" + (Date.now()/1000 - startSaveTime));
+        console.log("done loading map tiles in " + (Math.round(Date.now()/1000 - startSaveTime)) + " seconds");
         //console.log(Date.now()/1000 - startSaveTime);
         loadGame();
 
         elem = document.documentElement;
 
-
-        setTimeout(draw, 2000);
+        load.end();
+        setTimeout(draw, 100);
         console.log(Date.now()/1000 - startSaveTime);
 
         //---------------------------
@@ -685,12 +678,13 @@ function loadMap2() {
         var commentsRef = firebase.database().ref('map/');
         commentsRef.on('child_changed', function(data) {
             //console.log(data.key, data.val().id, data.val().type);
-            let c = data.val().coords;
-            if(data.val().type == "food") {
-                mapScreen.mapTiles[c.x][c.y] = new FoodTile(1, c.x, c.y);
-            } else {
-                mapScreen.mapTiles[c.x][c.y] = new Tile(c.x, c.y);
-            }
+            let c = data.val();
+            mapManager.loadTile(c);
+            // if(data.val().type == "food") {
+            //     mapScreen.mapTiles[c.coords.x][c.coords.y] = new FoodTile(c);
+            // } else {
+            //     mapScreen.mapTiles[c.coords.x][c.coords.y] = new Tile(c);
+            // }
             //console.log(data.val());
         });
         //------------------------
@@ -716,38 +710,70 @@ function loadGame() {
         gameData = data.val();
         let jb;
 
-        jb = JSON.parse(gameData.city);
+        //jb = JSON.parse(gameData.city);
+        jb = gameData.city;
         city = jb;
 
-        jb = JSON.parse(gameData.buildingList);
+        //jb = JSON.parse(gameData.buildingList);
+        jb = gameData.buildingList;
         for(let x=0; x<jb.length; x++) {
             if(jb[x].troopProduction) {
                 buildingList[x] = new troopTrainingBuilding(jb[x]);
+            } else if(jb[x].type == 14) {
+                buildingList[x] = new TavernBuilding(jb[x]);
+            } else if(jb[x].type == 15) {
+                buildingList[x] = new AcademyBuilding(jb[x]);
             } else {
                 buildingList[x] = new Building(jb[x]);
             }
         }
 
-        jb = JSON.parse(gameData.researchList);
+        //jb = JSON.parse(gameData.researchList);
+        jb = gameData.researchList;
+        //researchList = [];
         for(let x=0; x<jb.length; x++) {
              researchList[x] = new Research(jb[x]);
         }
 
-        jb = JSON.parse(gameData.troopList);
-        for(let x=0; x<jb.length; x++) {
-             if(jb[x]) {
-                troopList[x] = new Troop(jb[x]);
-             }
+        if(gameData.troopList) {
+            jb = JSON.parse(gameData.troopList);
+            for(let x=0; x<jb.length; x++) {
+                if(jb[x]) {
+                    troopList[x] = new Troop(jb[x]);
+                }
+            }
+        }
+
+        //console.log(gameData.generals);
+        //jb = JSON.parse(gameData.generals);
+        if(gameData.generals) {
+            jb = gameData.generals;
+            generals = [];  // clear it ready for any full new list
+            for(let x=0; x<jb.length; x++) {
+                //console.log(jb[x]);
+                if(jb[x]) {
+                    generals.push(new General(jb[x]));
+                }
+            }
         }
 
         //return;
+
+        jb = gameData.marches;
+        if(jb) {
+            marches = [];
+            for(let x=0; x<jb.length; x++) {
+                marches.push(new March(jb[x]));
+            }
+        }
 
         jb = JSON.parse(gameData.itemList);
         for(let x=0; x<jb.length; x++) {
             itemList[x] = new Item(jb[x]);
         }
 
-        jb = JSON.parse(gameData.resources);
+        //this doesnt need parsing
+        jb = gameData.resources;
         resources.food = new Resource(jb.food);
         resources.wood = new Resource(jb.wood);
         resources.stone = new Resource(jb.stone);
@@ -759,6 +785,7 @@ function loadGame() {
         //resources = jb;
 
 
+
     });
     //let keys = Object.keys(ref);
     //console.log(keys);
@@ -768,20 +795,41 @@ function loadGame() {
     // saveData.buildingList = buildingData;
     // ref.push(saveData); 
 
+    //---------------------------
+    // this works great - checking if resources have changed, and load new amounts
+    var resourceRef = firebase.database().ref(username + '/' + 'resources');
+    resourceRef.on('child_changed', function(data) {
+        console.log(data.key);
+        console.log(data.val().amount);
+        let rss = data.key;
+        resources[rss].amount = data.val().amount;
+        // let c = data.val().coords;
+        // if(data.val().type == "food") {
+        //     //mapScreen.mapTiles[c.x][c.y] = new FoodTile(1, c.x, c.y);
+        // } else {
+        //     //mapScreen.mapTiles[c.x][c.y] = new Tile(c.x, c.y);
+
+        // }
+        console.log(data.val());
+    });
+    //------------------------
+
   
 }
 
 function doClick() {
-    console.log("mouseDownFired = " + mouseDownFired);
+    //console.log("mouseDownFired = " + mouseDownFired);
     if(mouseDownFired) {
         clicked = false;
-        console.log("clicked = " + clicked);
+        //console.log("clicked = " + mouseDownFired);
+        mouseDownFired = false;
         return;
     }
 
+    mouseDownFired = false;
     clicked = true;
-    console.log("clicked = " + clicked);
-    console.log("clicked at " + mouse.x + " , " + mouse.y);
+    //console.log("clicked = " + clicked);
+    //console.log("clicked at " + mouse.x + " , " + mouse.y);
 }
 
 

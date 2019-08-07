@@ -17,10 +17,12 @@ class Troop {
     constructor(data) {
         console.log("this is the troops constructor");
 
-        for(let x=0; x<Object.keys(data).length; x++) {
-            name = Object.keys(data)[x];// (data[x]).value;
-            //console.log(data[name]);
-            this[name] = data[name];
+        if(data) {
+            for(let x=0; x<Object.keys(data).length; x++) {
+                name = Object.keys(data)[x];// (data[x]).value;
+                //console.log(data[name]);
+                this[name] = data[name];
+            }
         }
 
     }

@@ -74,6 +74,10 @@ class BuildingHandler {
             tempData.training = false;
             tempData.trainingQueue = {};
             tempBuild = new troopTrainingBuilding(tempData);
+        } else if(tempData.type == 14){
+            tempBuild = new TavernBuilding(tempData);
+        } else if(tempData.type == 15){
+            tempBuild = new AcademyBuilding(tempData);
         } else {
             tempBuild = new Building(tempData);
         }

@@ -45,6 +45,7 @@ class ResearchScreen extends ScreenView {
             // }
             this.checkResearchButtons();
 
+           
         }
     }
 

@@ -24,7 +24,6 @@ class Assets {
     }
 
     loadTroopImages() {
-        //console.log(troops[0].levels[0]);
         troops[0].levels[0].image = new Image;
         troops[0].levels[0].image.src = "images/troops/1/1_IDLE_000.png";
         troops[0].levels[1].image = new Image;
@@ -50,12 +49,6 @@ class Assets {
         troops[5].levels[1].image = new Image;
         troops[5].levels[1].image.src = "images/troops/settler/2_IDLE_000.png";
 
-
-        // for(let x=0; x<Object.keys(troops).length; x++) {
-        //     name = Object.keys(troopList)[x];
-        //     let imageSrc = "images/icons/" + name + ".png";
-        //     resources[name].icon.src = imageSrc;
-        // }
     }
 
     static loadMapImages() {
@@ -72,6 +65,21 @@ class Assets {
         mapImages[3].image  = new Image();
         mapImages[3].image.src = "images/map.png"
 
+    }
+
+    loadMonsterImages() {
+        //monsterImages[0] = {};
+        monsterImages[0] = new Image();
+        monsterImages[0].src = "images/monsters/0.png";
+        //monsterImages[0].onload = convertimage(monsterImages[0]);
+
+    }
+
+    loadGeneralImages() {
+        let i = new Image();
+        i.src = "images/generals/zod1.png";
+
+        generalImages.push(i);
     }
 
 }

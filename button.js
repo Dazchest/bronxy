@@ -13,17 +13,28 @@ class Button {
 
     draw() {
         if(this.drawButton) {
+            ctx.save();
             let color = this.color ? this.color : '#00ff55';
             if(this.active) {
                 ctx.fillStyle = color;
             } else {
                 ctx.fillStyle = "#ff4444";
             }
-            ctx.fillRect(this.x, this.y, this.w, this.h);
 
+            ctx.shadowBlur=4;//  shadow Blur
+            ctx.shadowColor="#009933"; // shadow color
+            ctx.shadowOffsetX=3; // offset along X axis
+            ctx.shadowOffsetY=-3;  // offset along Y axis
+
+            let textWidth = ctx.measureText(this.text).width;
+            ctx.fillRect(this.x, this.y, textWidth + 20, this.h);
+
+            ctx.shadowColor = "transparent";
             ctx.fillStyle = '#000000';
             ctx.font = "20px Georgia";
             ctx.fillText(this.text, this.x + 5, this.y + 20);
+
+            ctx.restore();
         }
     }
 

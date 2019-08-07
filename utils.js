@@ -6,10 +6,14 @@ function convertMouseXYtoGridXY() {
     return {"x": x, "y": y};
 }
 
-function getRandom(value) {
-
+/**
+ * Gets a whole random number, inclusive of start and end
+ * @param {int} start 
+ * @param {int} end 
+ */
+function getRandom(start, end) {
+    return Math.floor(Math.random() * (end) + start);
 }
-
 
 function setButtonActive(buttons, type) {
     for(let x=0; x< buttons.length; x++) {
@@ -128,6 +132,7 @@ function Vec2(x, y) {
     // inputs = [];
 
     constructor(id) {
+        return;
         this.i = document.createElement('input');
         this.i.id = 'input';
         this.i.style.position = 'absolute';
@@ -151,6 +156,7 @@ function Vec2(x, y) {
     }
 
         draw() {
+            return;
             let text = this.i.value;
             ctx.fillStyle = '#000000';
             ctx.fillText(text, 400, 200);
@@ -167,3 +173,153 @@ function Vec2(x, y) {
       ctx.fillText("fps: " + fps, 400, 300);
   
 }
+
+function addFoodtoBronxy() {
+    var adaNameRef = firebase.database().ref('Bronxy/resources/food');
+    // Modify the 'first' and 'last' properties, but leave other data at
+    // adaNameRef unchanged.
+    adaNameRef.update({ "amount": 85400});
+
+}
+
+/**
+ * DISPLAY A TOAST MESSAGE ON SCREEN
+ * @param {string} message 
+ * @param {number} delay in seconds - default 500ms
+ * @param {number} speed in seconds - default 2s
+ */
+function Toast(message, delay, speed) {
+    delay = delay || 500;
+    speed = speed || '2s';
+    //console.log(arguments);
+    toastdiv = document.getElementById('toast');
+    toasttext = document.getElementById('toasttext');
+
+    toasttext.innerHTML = message;
+    toastdiv.style.visibility = "visible";
+
+    toastdiv.style.transition = 'none';
+    toastdiv.style.opacity = '1';
+    setTimeout(function(){
+        toastdiv.style.transition = speed;
+        toastdiv.style.opacity = '0';
+    }, delay);
+    toastdiv.addEventListener("transitionend", function(){
+        //console.log("tran end");
+        if(toastdiv.style.transition == 'none') {
+            return;
+        } else {
+            toastdiv.style.visibility = 'hidden';
+        }
+    });
+}
+
+class loader {
+    constructor() {
+        this.loading = false;
+        this.bob;
+    }
+
+    start() {
+        return;
+        this.loading = true;
+        this.bob = setInterval(function() {
+            let toastdiv = document.getElementById('toastdiv');
+            let toasttext = document.getElementById('toasttext');
+            toastdiv.style.visibility = "visible";
+            toasttext.innerHTML = Date.now();
+            toastdiv.style.transition = 'none';
+            toastdiv.style.opacity = '1';
+                
+            //Toast(Date.now(), 100, 1);
+        }, 1000);
+    }
+
+    end() {
+        return;
+        clearInterval(this.bob);
+        this.loading = false;
+    }
+
+}
+
+function convertimage(img){
+    // return;
+
+    var buffer = document.createElement('canvas');
+    var bufferctx = buffer.getContext('2d');
+
+    buffer.width = img.width;
+    buffer.height = img.height;
+    console.log(img.width + " , " + img.height);
+
+    bufferctx.drawImage(img, 0, 0);
+    var imageData = bufferctx.getImageData(0,0,buffer.width, buffer.height);
+    var data = imageData.data;
+    for (var i = 0; i < data.length; i += 4) {
+            if(data[i]+ data[i + 1] + data[i + 2] == 45){  // find white
+                data[i + 3] = .5; // alpha
+            }
+        }
+
+    bufferctx.putImageData(imageData, 0, 0);
+    img.src = buffer.toDataURL('image/png');
+    monsterImages[0].src = buffer.toDataURL('image/png');
+    //console.log(img.width + " , " + img.height + " - " + img.src);
+    console.log("image converted???");
+
+}
+
+
+
+
+
+//---------------------------------------------------
+//console.clear();
+class test {
+    constructor() {
+        this.b = new b({"cat": "fish", "from": "list1", "action": "add"});
+    }
+
+    add() {
+        console.log("add called");
+
+    }
+}
+class b {
+    constructor(data) {
+        this.data = data;
+        this.cat = data.cat;
+        this.action = data.action;
+        this.from = data.from;
+        //this.my_possible_functions = {};
+        //this.my_possible_functions.add = this.add;
+        //this.my_possible_functions.add = data.from[this.action];
+        //data.from[this.action];
+        //console.log(this.my_possible_functions);
+        }
+
+
+    cal() {
+        
+        let c = this.action;
+        console.log(c);
+        //this.my_possible_functions[c]();
+        //this.from[this.action]();
+        //c();
+    }
+    add() {
+        console.log("b cal");
+    }
+}
+function add() {
+    console.log("function add");
+}
+var list1 = new test();
+console.log(list1.b);
+var cal = list1.b.cal();
+var s = JSON.stringify(list1);
+list1.add();
+//cal();
+
+console.log(s);

@@ -13,7 +13,7 @@
         "wood" : { "pph" : 545, "amount" : 50000, "text": "Wood"},
         "stone" : { "pph" : 545, "amount" : 50000, "text": "Stone"},
         "iron" : { "pph" : 545, "amount" : 50000, "text": "Iron"},
-        "gold": { "pph" : 0, "amount" : 500000, "text": "Gold", "name": "Gold"},
+        "gold": { "pph" : 0, "amount" : 50000000, "text": "Gold", "name": "Gold"},
         "gems": { "pph" : 0, "amount" : 5000, "text": "Gems"}
     },
     "buildings": [
