@@ -12,6 +12,9 @@ class Resource {
     }
 
     static drawAll() {
+        ctx.fillStyle = '#000000';
+        ctx.font = "20px Georgia";
+        //ctx.fillText(this.name, this.x, this.y + 20);
         for(let x=0; x<Object.keys(resources).length; x++) {
             t = Object.keys(resources)[x];
             if(t == "gold") {

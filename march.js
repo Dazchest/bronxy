@@ -187,11 +187,11 @@ class March {
 
         console.log(this.resources);
 
-        if(this.resources) {        // are there resources to return
+        if(this.tile.resources) {        // are there resources to return
             console.log(this.resources);
             resourceManager.add(this.resources.type, this.resources.quantity);
-            marchManager.deleteMarch(this);
         }
+        marchManager.deleteMarch(this);
 
         saveList("marches", true);
     }

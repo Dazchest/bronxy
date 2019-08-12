@@ -7,7 +7,7 @@ var opsys = "unknown";
 var canvas, ctx;
 var mouse = {"x": 0, "y": 0, "movement": {"x": 0, "y": 0}};
 var camera = {"x": 0, "y": 0};
-var gridSize = {"x":64, "y": 64};
+var gridSize = {"x":128, "y": 128};
 
 var player;
 
@@ -39,7 +39,7 @@ var buffManager = new BuffManager();
 
 var currentCity = 0;
 var thisCity;
-var cities = [];
+var cities = [{"name": "Bronx House", "coords": {"x": 9, "y": 8}, "active": true}];
 var cityScreen;
 var city = {"name": "Bronx House", "coords": {"x": 9, "y": 8}, "active": true};
 var tick = Date.now();
@@ -48,6 +48,7 @@ var screenManager;
 var mapScreen = {"active": false};
 var mapManager = new MapManager();
 var startOnMap = false;
+var worldMapScreen = {"active": false};
 
 var marches = [];
 var marchScreen = {"active": false};
@@ -85,6 +86,7 @@ var lastLoop = Date.now();
 var touchStart = {"x": 99999, "y": 0};
 var distX, distY;
 var elem;
+var moving;
 
 
 var load; 
@@ -100,6 +102,11 @@ function init() {
         console.log("not logged in");
         return;
     }
+
+    // if(!login) {
+    //     console.log("not logged in");
+    //     return;
+    // }
     //-------------------------------------------
     console.log("initialising game");
 
@@ -131,10 +138,26 @@ function init() {
     });
 
     mouseDownFired = false;
+    var pressTimer;
+    var ss;
     canvas.addEventListener('mousedown', function(e) {
-        canvas.addEventListener('mousemove', scrollCity);
+             pressTimer = window.setTimeout(function() {
+                mouseDownFired = true;
+                canvas.addEventListener('mousemove', scrollCity);
+                //     moving = true;
+        //     doClick();
+        //mouseDownFired = true;
+         },150);
+        canvas.addEventListener('mousemove', function(e) {
+            //mouseDownFired = true;
+            //scrollCity(e);
+        });
         canvas.addEventListener(uptype, function() {
             canvas.removeEventListener('mousemove', scrollCity);
+            //ss.removeEventListener();
+            clearTimeout(pressTimer);
+            moving = false;
+            //mouseDownFired = false;
         })
         canvas.addEventListener('mouseout', function() {
             canvas.removeEventListener('mousemove', scrollCity);
@@ -237,14 +260,8 @@ function init() {
     promises.push(promise6);
     
 
-    let jsonfile = "city.json";
-    let promise = fetch(jsonfile)
-        .then(parseJsonData)
-        .then(initBuildingData)
-        .catch(gotErr);
-    promises.push(promise);
 
-    
+    initStageTwo();
    
     function parseJsonData(response) {
         //console.log("responded");
@@ -254,10 +271,7 @@ function init() {
         console.log(err);
     }
     //TODO: put all promises in an array, and then check them all before proceeding
-    function initBuildingData(myJson) {
-        console.log(myJson[currentCity].buildings);
-        cityData = myJson[currentCity] || "";
-        cities.push(new City(cityData.citydata));
+    function initStageTwo(myJson) {
 
         buildingHandler.loadImages();
         assets = new Assets();
@@ -277,18 +291,9 @@ function init() {
         };
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
-        console.log(firebase);
         database = firebase.database();
-        console.log(database.ref('users'));
-        //return;
-        var ref = database.ref('users');
-        var data = {
-            ID: "3",
-            Name: "hello world"
-        }
-        //ref.push(data); 
+        //----------------------------------
 
-        ref.on('value', gotData, errData);
         //db = firebase.firestore();
         //---------------
 
@@ -345,8 +350,30 @@ function init() {
     //------------------------
 
         mapScreen = new MapScreen(3);
-
-        loadMap2();
+        let currentUser = database.ref(username);
+        
+       // console.log("userdata", currentUser.val());
+        currentUser.once('value', function(data) {
+            if (data.hasChild("city")) {
+                loadMap2();
+                
+                console.log('exists');
+                return;
+            } else {
+                let jsonfile = "city.json";
+                let promise = fetch(jsonfile)
+                    .then(parseJsonData)
+                    .then(startNewGame)
+                    .catch(gotErr);
+                promises.push(promise);
+            
+           
+                console.log("doesnt excist");
+                return;
+            }
+        });
+        return;
+        //loadMap2();
         
         // loadGame();
 
@@ -359,6 +386,43 @@ function init() {
         //draw();
         
     }
+}
+
+function startNewGame(myJson) {
+    console.log(myJson);
+    //return;
+    newCityData = myJson[0];
+    cities.push(new City(newCityData.citydata));
+
+    city = newCityData.citydata;
+    city.name = username;
+    let tileData = {};
+    let x = Math.floor(Math.random() * mapScreen.grid.width);
+    let y = Math.floor(Math.random() * mapScreen.grid.height);
+    tileData.coords = {"x": x, "y": y};
+    city.coords = {"x": x, "y": y};
+    tileData.type = "city";
+    tileData.user = username;
+    tileData.city = true;
+    tileData.name = username + " House";
+    tileData.buildon = false;
+    let id = Number(x + (y * mapScreen.grid.width));
+    firebase.database().ref("map" + "/" + id.toString()).set(tileData);
+
+    resources = newCityData.resources;
+    buildingList = newCityData.buildings;
+
+    let jb = newCityData.resources
+    for(let x=0; x<jb.length; x++) {
+        resources[x] = new Resource(jb[x]);
+    }
+
+    itemList = newCityData.items;
+
+    console.log("STARTING NEW GAME");
+    saveGame2();
+    location.reload();
+    //loadMap2();
 }
 
 function getMobileOperatingSystem() {
@@ -712,7 +776,9 @@ function loadGame() {
 
         //jb = JSON.parse(gameData.city);
         jb = gameData.city;
-        city = jb;
+        city = jb;    
+        cities.push(city);
+
 
         //jb = JSON.parse(gameData.buildingList);
         jb = gameData.buildingList;

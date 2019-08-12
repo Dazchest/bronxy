@@ -270,56 +270,76 @@ function convertimage(img){
 
 }
 
+function logout() {
+    localStorage.setItem("username", "");
+    location.reload();
+}
+
+function banner(text, x, y, size) {
+
+    ctx.font = size + 'px Arial';
+    let textWidth = ctx.measureText(text).width;
+
+    ctx.strokeStyle = '#000000';
+    ctx.fillStyle = '#ffffff';
+    ctx.lineWidth = 2;
+    ctx.fillRect(x - textWidth/2, y, textWidth + 2, size + 2);
+    ctx.strokeRect(x - textWidth/2, y, textWidth + 2, size + 2);
+
+    ctx.fillStyle = '#000000';
+    ctx.fillText(text, x - textWidth/2, y + size - 2, gridSize.x);
+
+}
 
 
 
 
 //---------------------------------------------------
 //console.clear();
-class test {
-    constructor() {
-        this.b = new b({"cat": "fish", "from": "list1", "action": "add"});
-    }
+// class test {
+//     constructor() {
+//         this.b = new b({"cat": "fish", "from": "list1", "action": "add"});
+//     }
 
-    add() {
-        console.log("add called");
+//     add() {
+//         console.log("add called");
 
-    }
-}
-class b {
-    constructor(data) {
-        this.data = data;
-        this.cat = data.cat;
-        this.action = data.action;
-        this.from = data.from;
-        //this.my_possible_functions = {};
-        //this.my_possible_functions.add = this.add;
-        //this.my_possible_functions.add = data.from[this.action];
-        //data.from[this.action];
-        //console.log(this.my_possible_functions);
-        }
+//     }
+// }
+// class b {
+//     constructor(data) {
+//         this.data = data;
+//         this.cat = data.cat;
+//         this.action = data.action;
+//         this.from = data.from;
+//         //this.my_possible_functions = {};
+//         //this.my_possible_functions.add = this.add;
+//         //this.my_possible_functions.add = data.from[this.action];
+//         //data.from[this.action];
+//         //console.log(this.my_possible_functions);
+//         }
 
 
-    cal() {
+//     cal() {
         
-        let c = this.action;
-        console.log(c);
-        //this.my_possible_functions[c]();
-        //this.from[this.action]();
-        //c();
-    }
-    add() {
-        console.log("b cal");
-    }
-}
-function add() {
-    console.log("function add");
-}
-var list1 = new test();
-console.log(list1.b);
-var cal = list1.b.cal();
-var s = JSON.stringify(list1);
-list1.add();
-//cal();
+//         let c = this.action;
+//         console.log(c);
+//         //this.my_possible_functions[c]();
+//         //this.from[this.action]();
+//         //c();
+//     }
+//     add() {
+//         console.log("b cal");
+//     }
+// }
+// function add() {
+//     console.log("function add");
+// }
+// var list1 = new test();
+// console.log(list1.b);
+// var cal = list1.b.cal();
+// var s = JSON.stringify(list1);
+// list1.add();
+// //cal();
 
-console.log(s);
+// console.log(s);

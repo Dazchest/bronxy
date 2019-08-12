@@ -57,9 +57,21 @@ class CityScreen extends ScreenView {
             ctx.font = "20px Georgia";
             ctx.fillText(this.name, this.x, this.y + 20);
     
+            buildingHandler.drawBuildings();
+
+            var grd = ctx.createLinearGradient(0, 0, 0, 100);
+            grd.addColorStop(0, "#cccc66");
+            grd.addColorStop(1, "#aaaaff");
+
+            ctx.fillStyle = grd;
+            //ctx.fillStyle = "#000000";
+            ctx.globalAlpha = .5;
+            ctx.fillRect(0, 0, canvas.width, 100);
+            ctx.globalAlpha = 1;
+
             this.drawButtons();
             this.checkButtons();
-            buildingHandler.drawBuildings();
+
             Resource.drawAll();
 
             //this.inputs[0].draw();

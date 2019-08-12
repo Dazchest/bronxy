@@ -68,6 +68,7 @@
             if(!user) {
                 return;
             }
+            login = true;
             location.reload();
             
             return;
@@ -125,9 +126,9 @@
     <script>
         if(!login) {
             document.writeln('<form>');
-            document.writeln('<label>enter username</label><input type="text" name="username">');
+            document.writeln('<label>enter username</label><input style="font-size:30px" type="text" name="username">');
             // document.writeln('<label>enter password</label><input type="password" name="password">');
-            document.writeln('<button onclick="checkLogin(this.form.username)" type="button" name="login">Login</button>');
+            document.writeln('<button onclick="checkLogin(this.form.username)" style="font-size:30px" type="button" name="login">Login</button>');
             document.writeln('</form>');
         }
 
@@ -155,7 +156,8 @@
     </div> -->
 
     <div id="" style="position:absolute; top:800px; left: 120px">
-        <button onclick="fullScreen()">full screen</button>
+        <button onclick="fullScreen()" style="font-size:30px">full screen</button>
+        <button onclick="logout()" style="font-size:30px">LogOut</button>
     </div>
 
 

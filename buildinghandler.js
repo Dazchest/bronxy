@@ -109,7 +109,7 @@ class BuildingHandler {
             ctx.beginPath();
             ctx.fillStyle = "#ff0000";
             ctx.strokeStyle = "#ff0000";
-            ctx.rect(this.newBuildingCoords.x * gridSize.x + camera.x, this.newBuildingCoords.y * gridSize.y + camera.y, 64, 64);
+            ctx.rect(this.newBuildingCoords.x * gridSize.x + camera.x, this.newBuildingCoords.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
             ctx.stroke();
         }
     }
@@ -157,8 +157,15 @@ class BuildingHandler {
                     console.log("found " + buildingList[x].name);
                     buildingHandler.currentBuilding = buildingList[x];
                     buildingHandler.highlightGrid = false;
-                    buildingList[x].click();
                     buildingClicked = true;
+                    if(moving) {
+                        buildingList[x].move();
+                    } else                     
+                    if(moving) {
+                        buildingList[x].move();
+                    } else {
+                        buildingList[x].click();
+                    }
                 }
             }
 

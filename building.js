@@ -73,15 +73,23 @@ class Building {
 
 
     draw() {
+        if(this.moving) {   // dont draw buttons if we are moving building
+            this.drag();
+            return;
+        }
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
 
         if(this.images.complete) {
-            ctx.drawImage(this.images, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
+            if(this.type == 0) {    //draw town hall bigger
+                ctx.drawImage(this.images, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x * 2, gridSize.y * 2);
+                banner(this.name, this.gridPos.x * gridSize.x + camera.x + gridSize.x, this.gridPos.y * gridSize.y + camera.y + 5, 25);
+            } else {
+                ctx.drawImage(this.images, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
+                banner(this.name, this.gridPos.x * gridSize.x + camera.x + gridSize.x/2, this.gridPos.y * gridSize.y + camera.y + 5, 25);
+            }
         }
-        ctx.fillStyle = '#000000';
-        ctx.font = "20px Georgia";
-        ctx.fillText(this.name, this.gridPos.x * gridSize.x + camera.x - 10, this.gridPos.y * gridSize.y + camera.y + 0);
+
         ctx.font = "15px Georgia";
         ctx.fillText("level: " + this.level, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + gridSize.y + 20);
         ctx.font = "15px Georgia";
@@ -94,7 +102,29 @@ class Building {
         this.drawButtons();
     }
 
-
+    move() {
+        if(this.dragging) {
+            this.drop()
+        }
+        this.moving = true;
+        console.log("attempting to move building");
+    }
+    drag() {
+        this.dragging = true;
+        if(this.images.complete) {
+            let gridCoord = convertMouseXYtoGridXY();
+            if(this.type == 0) {    //draw town hall bigger
+                ctx.drawImage(this.images, gridCoord.x * gridSize.x + camera.x, gridCoord.y * gridSize.y + camera.y, gridSize.x * 2, gridSize.y * 2);
+            } else {
+                ctx.drawImage(this.images, gridCoord.x * gridSize.x + camera.x, gridCoord.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
+            }
+        }
+    }
+    drop() {
+        this.moving = false;
+        this.dragging = false;
+        moving = false;
+    }
 
 
     upgrade() {

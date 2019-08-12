@@ -1,11 +1,8 @@
 [
 {
     "citydata" : {
-        "id": 1,
-        "name": "City 1",
         "world": 1,
-        "x": 25,
-        "y": 32,
+        "coords" :{"x": 25, "y": 32},
         "active": true
     },
     "resources": {
@@ -18,9 +15,6 @@
     },
     "buildings": [
         {"id": 1, "type": 0, "level": 1, "name": "Town Hall", "gridPos": {"x":4, "y":4}}
-    ],
-    "research": [
-        {"id": 1, "type": 1, "level": 1, "name": "Food Production", "buff": [{"food": 10}]}
     ],
     "items": [
         {"type": 50, "level": 0, "group": "resources", "action": "use", "name": "5 Gems", "quantity": 5, "contents": [{"gems": 5}]},
