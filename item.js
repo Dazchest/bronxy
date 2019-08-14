@@ -39,6 +39,9 @@ class Item {
             if(group == "chest") {
                 this.useChestItem();
             }
+            if(group == "speedup") {
+                this.useSpeedItem();
+            }
             // if zero quantity then need to then remove this item from the list if none left
         }
     }
@@ -51,6 +54,18 @@ class Item {
             let amount = c[rss];
             console.log("using " + amount + " " + rss);
             resources[rss].amount += amount;
+        }
+        saveGame2();
+    }
+
+    useSpeedItem() {
+        console.log("using " + this.group);
+        for(let x=0; x<this.contents.length; x++) {
+            let c = this.contents[x];
+            let s = Object.keys(c)[0];
+            let amount = c[s];
+            console.log("speeding " + amount + " " + s);
+            //resources[rss].amount += amount;
         }
         saveGame2();
     }

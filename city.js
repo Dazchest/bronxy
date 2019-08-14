@@ -12,10 +12,11 @@ class City {
 }
 
 function scrollCity(e) {
-   // mouseDownFired = true;    //TODO: this works, but makes clicks a bit harder
+    mouseDownFired = true;    //TODO: this works, but makes clicks a bit harder
     //console.log("mouse moving");
     if(e.touches) {
         var touch = e.touches[0];
+        //console.log(touch);
         if(touchStart.x == 99999) {
             touchStart.x = touch.clientX;   // reset current touch position
             touchStart.y = touch.clientY;

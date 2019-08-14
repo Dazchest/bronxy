@@ -180,7 +180,7 @@
                                 "buildings" : [{"type": 12, "level": 1}]
                             },
             "upkeep": 1,
-            "load": 10,
+            "load": 20,
             "attack": 10,
             "defence": 12,
             "health": 8,
@@ -193,7 +193,7 @@
                                 "buildings" : [{"type": 12, "level": 2}]
                             },
             "upkeep": 1,
-            "load": 20,
+            "load": 40,
             "attack": 20,
             "defence": 25,
             "health": 20,

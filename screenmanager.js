@@ -3,6 +3,8 @@ class ScreenManager {
     constructor(screen) {
         this.screen = screen;
         this.screen.active = true;
+
+        document.getElementById('buildingDiv').style.visibility = "hidden";
     }
 
     closeCurrentScreen() {
@@ -14,9 +16,9 @@ class ScreenManager {
 class ScreenView {
     
     constructor() {
-        this.margin = 10;
-        this.x = 10;
-        this.y = 100;
+        this.margin = 0;
+        this.x = 0;
+        this.y = 0;
         this.w = canvas.width - this.margin * 2;
         this.h = canvas.height - this.y - this.margin * 1;
 
@@ -26,7 +28,7 @@ class ScreenView {
         this.inputs = [];
 
         //console.log("this is ScreenView constructor");
-
+        document.getElementById('buildingDiv').style.visibility = "hidden";
     }
 
     ticktock() {
@@ -38,12 +40,15 @@ class ScreenView {
 
         // only reset the camera if exiing the map screen
         if(screenManager.screen == mapScreen) {   // TODO: need a better way to keepe track of previous screens
-            camera.x = 0;
-            camera.y = 0;
+            camera.x = -200;
+            camera.y = -200;
         }
-        if(screenManager.screen == marchScreen) {   // TODO: need a better way to keepe track of previous screens
+        if(screenManager.screen == marchScreen || screenManager.screen == worldMapScreen) {   // TODO: need a better way to keepe track of previous screens
             mapScreen.active = true;
+            screenManager.screen == mapScreen;
+            mapScreen.setup();
             screenManager = new ScreenManager(mapScreen);
+
         } else {
             cities[currentCity].active = true;
             screenManager = new ScreenManager(cityScreen);
@@ -74,7 +79,7 @@ class ScreenView {
     checkButtons() {
         for(let x=0; x<this.buttons.length; x++) {
             if(clicked) {   //mouse is clicked, check if it was on a button
-                
+                console.log("cliecked in checkbuttons");
                 let b = this.buttons[x];
                 if(mouse.x > b.x*zoom.x && mouse.x < b.x*zoom.x + b.w*zoom.x && mouse.y > b.y*zoom.y && mouse.y < b.y*zoom.y + b.h*zoom.y) {
                     if(b.action && b.active) {

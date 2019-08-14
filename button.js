@@ -26,13 +26,15 @@ class Button {
             ctx.shadowOffsetX=3; // offset along X axis
             ctx.shadowOffsetY=-3;  // offset along Y axis
 
+            let height = 40;
+            ctx.font = "40px Georgia";
             let textWidth = ctx.measureText(this.text).width;
-            ctx.fillRect(this.x, this.y, textWidth + 20, this.h);
-
+            ctx.fillRect(this.x, this.y, textWidth + 20, height + 10);
+            this.w = textWidth + 20;
+            this.h = height + 10;
             ctx.shadowColor = "transparent";
             ctx.fillStyle = '#000000';
-            ctx.font = "20px Georgia";
-            ctx.fillText(this.text, this.x + 5, this.y + 20);
+            ctx.fillText(this.text, this.x + 5, this.y + height);
 
             ctx.restore();
         }

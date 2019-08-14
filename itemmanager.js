@@ -61,5 +61,22 @@ class ItemManager {
         
     }
 
+    getSpeeds() {
+        let speedList = [];
+        for(let x=0; x<itemList.length; x++) {
+                if(itemList[x].type == 40) {
+                    console.log("speed found");
+                    speedList.push(itemList[x]);
+                }
+        }
+
+        return speedList;
+    }
+
+    displaySpeeds(fromScreen) {
+
+    }
+
+
 
 }

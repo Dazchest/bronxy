@@ -14,7 +14,7 @@ class MapScreen extends ScreenView {
         this.grid_x = 0;    // 
         this.grid_y = 0;    // 
 
-        this.whichMap = whichMap;
+        //this.whichMap = whichMap;
         this.tileClicked;
         clicked = false;
 
@@ -33,8 +33,8 @@ class MapScreen extends ScreenView {
        
 
         
-        this.buttons.push(new Button({"active": true, "x": 150, "y": 20, "w": 100, "h": 30, "text": "World Map", "screen": this, "action":  this.worldMapScreen}));
-        this.buttons.push(new Button({"active": true, "x": 300, "y": 20, "w": 100, "h": 30, "text": "Exit Map", "screen": this, "action":  this.exitScreen}));
+        this.buttons.push(new Button({"active": true, "x": 100, "y": 20, "w": 100, "h": 30, "text": "World Map", "screen": this, "action":  this.worldMapScreen}));
+        this.buttons.push(new Button({"active": true, "x": 320, "y": 20, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
         this.buttons.push(new Button({"active": true, "x": 450, "y": 20, "w": 100, "h": 30, "text": "Home", "screen": this, "action":  this.gotoCity}));
         
         this.buttons.push(new Button({"active": false, "drawButton": true, "x": 20, "y": 160, "w": 100, "h": 30, "text": "Save map", "color": '#aa2244', "screen": this, "action":  saveMap}));
@@ -42,8 +42,8 @@ class MapScreen extends ScreenView {
 
         this.buttons.push(new Button({"active": true, "drawButton": true, "x": 20, "y": 240, "w": 100, "h": 30, "text": "add food", "color": '#aa3355', "screen": this, "action":  addFood}));
 
-        camera.x = 0;
-        camera.y = 0;
+        //camera.x = 0;
+        //camera.y = 0;
 
         this.initMap();
         if(cities[currentCity]) {
@@ -89,9 +89,10 @@ class MapScreen extends ScreenView {
         this.grid_x = 0;    // 
         this.grid_y = 0;    // 
         this.tileClicked = null;
-
-        camera.x = 0;
-        camera.y = 0;
+        
+        document.getElementById('buildingDiv').style.visibility = "hidden";
+        //camera.x = 0;
+        //camera.y = 0;
 
         if(cities[currentCity]) {
             cities[currentCity].active = false;
@@ -107,8 +108,8 @@ class MapScreen extends ScreenView {
         this.grid_y = 0;    // 
         this.tileClicked = null;
 
-        camera.x = 0;
-        camera.y = 0;
+        //camera.x = 0;
+        //camera.y = 0;
 
         if(cities[currentCity]) {
             cities[currentCity].active = false;
@@ -133,7 +134,7 @@ class MapScreen extends ScreenView {
         let x = city.coords.x;
         let y = city.coords.y;
         let cw = Math.floor(canvas.width / mapScreen.tileDimensions.width);
-        let ch = Math.floor(canvas.height / mapScreen.tileDimensions.height) / 2;
+        let ch = Math.floor((canvas.height / mapScreen.tileDimensions.height) / 2);
         self.grid_x = x-cw;    
         self.grid_y = y-ch;    
         //camera.x = (y - x) * (mapScreen.tileDimensions . x / 2);
@@ -143,7 +144,7 @@ class MapScreen extends ScreenView {
 
     gotoCity2(x, y) {
         let cw = Math.floor(canvas.width / mapScreen.tileDimensions.width);
-        let ch = Math.floor(canvas.height / mapScreen.tileDimensions.height) / 2;
+        let ch = Math.floor((canvas.height / mapScreen.tileDimensions.height) / 2);
         this.grid_x = x-cw;    
         this.grid_y = y-ch;    
         //camera.x = (y - x) * (mapScreen.tileDimensions . x / 2);
@@ -186,8 +187,8 @@ class MapScreen extends ScreenView {
 
 
             ctx.strokeStyle = "#000000";
-            ctx.fillStyle = "#000000";
-            ctx.fillRect(this.x, this.y, this.w * 2, this.h * 2);
+            ctx.fillStyle = "#ffff00";
+            ctx.fillRect(this.x, this.y, this.w, this.h);
 
             ctx.fillStyle = '#ffffff';
             ctx.font = "20px Georgia";
@@ -231,6 +232,7 @@ class MapScreen extends ScreenView {
                     ctx.fill();
 
                     if(x >= 0 && x<this.grid.width && y >= 0 && y<this.grid.height) {
+                       // console.log("error here " + x + ", " + y);
                         this.mapTiles[x][y].points = points;
 
                         ctx.fillStyle = '#ffffff';
@@ -926,12 +928,9 @@ class WorldMapScreen extends ScreenView {
 
     draw() {
         if(this.active) {
-            this.drawButtons();
-            this.checkButtons();
-            this.checkClick();
 
             ctx.strokeStyle = "#000000";
-            ctx.fillStyle = "#000000";
+            ctx.fillStyle = "#7777ff";
             ctx.fillRect(this.x, this.y, this.w * 2, this.h * 2);
 
             ctx.fillStyle = '#ffffff';
@@ -939,24 +938,9 @@ class WorldMapScreen extends ScreenView {
             ctx.fillText(this.name, this.x, this.y + 20);
 
             var posX, posY;
-            var tileSize = 1;
-            var mapYoffset = 200;
-
-            ctx.save();
-            ctx.fillStyle = '#ff0000';
-            ctx.translate((canvas.width/2) + camera.x, 200 + camera.y + mapScreen.grid.height/2)
-            ctx.rotate(45 * Math.PI / 180);
-            ctx.translate(-((canvas.width/2) + camera.x), -(200 + camera.y + mapScreen.grid.height/2));
-
-            ctx.beginPath();
-            ctx.moveTo((canvas.width/2) + camera.x - mapScreen.grid.width/2, mapYoffset + camera.y);
-            ctx.lineTo((canvas.width/2) + camera.x + mapScreen.grid.width/2, mapYoffset + camera.y);
-            ctx.lineTo((canvas.width/2) + camera.x + mapScreen.grid.width/2, mapYoffset + camera.y + mapScreen.grid.height);
-            ctx.lineTo((canvas.width/2) + camera.x - mapScreen.grid.width/2, mapYoffset + camera.y + mapScreen.grid.height);
-            ctx.closePath();
-            ctx.fill();
-            ctx.stroke();
-            ctx.restore();
+            this.mapYoffset = 200;
+            var scale = 3;
+            var tileBlobSize = scale * 2;
 
             ctx.save();
 
@@ -964,11 +948,11 @@ class WorldMapScreen extends ScreenView {
             ctx.fillStyle = "#00bb00";
 
             //draw big map  
-            this.mapYoffset = 200;
-            ctx.translate((canvas.width/2) + camera.x, 200 + camera.y + mapScreen.grid.height/2)
-            //ctx.scale(2, 2);
+
+            ctx.translate((canvas.width/2) + camera.x, this.mapYoffset + camera.y + mapScreen.grid.height/2)
+            ctx.scale(scale, scale);
             ctx.rotate(45 * Math.PI / 180);
-            ctx.translate(-((canvas.width/2) + camera.x), -(200 + camera.y + mapScreen.grid.height/2));
+            ctx.translate(-((canvas.width/2) + camera.x), -(this.mapYoffset + camera.y + mapScreen.grid.height/2));
 
             ctx.beginPath();
             ctx.moveTo((canvas.width/2) + camera.x - mapScreen.grid.width/2, this.mapYoffset + camera.y);
@@ -982,92 +966,74 @@ class WorldMapScreen extends ScreenView {
             for(let y=0; y<mapScreen.grid.height; y++) {
                 for(let x=0; x<mapScreen.grid.width; x++) {
 
-                    posX = (x - y) * tileSize;
-                    posY = (y + x) * tileSize;
+                    posX = (x - y) * tileBlobSize;
+                    posY = (y + x) * tileBlobSize;
                     posX = x;
                     posY = y;
                     let tile = mapScreen.mapTiles[x][y];
                     if(tile.city) {
                         ctx.fillStyle = "#0000ff";
-    ctx.fillRect(posX + (canvas.width/2) + camera.x - mapScreen.grid.width/2, posY + this.mapYoffset + camera.y, 2, 2);
+                        ctx.fillRect(posX + (canvas.width/2) + camera.x - mapScreen.grid.width/2, posY + this.mapYoffset + camera.y, tileBlobSize, tileBlobSize);
                     }
                 }
             }
+
+            ctx.restore();
+
             //----------------------------
             function toDegrees (angle) {
                 return angle * (180 / Math.PI);
-              }
+            }
 
-            ctx.restore();
             let x, y, mx=0, my=0;
 
-            x = (mouse.x - (canvas.width/2) - camera.x + mapScreen.grid.width/2);
-            y = (mouse.y - this.mapYoffset - camera.y);
-            //x=100;
-            //y=-40;
-            //ctx.translate((canvas.width/2) + camera.x, 200 + camera.y + mapScreen.grid.height/2)
-            mx = x*Math.cos(toDegrees(45)) - y*Math.sin(toDegrees(45));
-            my = y*Math.cos(toDegrees(45)) + x*Math.sin(toDegrees(45));
-            mx = x*Math.cos(this.angle) - y*Math.sin(this.angle);
-            my = y*Math.cos(this.angle) + x*Math.sin(this.angle);
-
-            this.angle -= .005;
-            //mx = (mouse.x - (canvas.width/2) - camera.x + mapScreen.grid.width/2);
-            //my = (mouse.y - this.mapYoffset - camera.y);
-            ctx.fillText("map " + mx + ", " + my, 10, 80);
-            ctx.fillText("map " + x + ", " + y, 10, 180);
-
-            x = 100-(mouse.x - (canvas.width/2) - camera.x + mapScreen.grid.width/2);
-            y = 100-(mouse.y - this.mapYoffset - camera.y);
-
+            x = (100-(mouse.x - (canvas.width/2) - camera.x + mapScreen.grid.width/2));
+            y = (100-(mouse.y - this.mapYoffset - camera.y));
+            
             this.angle = -3.946;
-            //x = 100-(100);
-            //y = 100-(-40);
-            mx = x*Math.cos(this.angle) - y*Math.sin(this.angle) + 100;
-            my = y*Math.cos(this.angle) + x*Math.sin(this.angle) + 100;
-            //mx = x*Math.cos(22.5 * Math.PI / 180) - y*Math.sin(22.5 * Math.PI / 180) + 100;
-            //my = y*Math.cos(22.5 * Math.PI / 180) + x*Math.sin(22.5 * Math.PI / 180) + 100;
-           // mx = x;
-            //my = y;
+            //+200;
+            mx = x*Math.cos(this.angle) - y*Math.sin(this.angle) + (100 * scale);
+            my = y*Math.cos(this.angle) + x*Math.sin(this.angle) + (100 * scale);
+
+            mx = mx / scale;
+            my = my / scale;
+            this.mx = mx;
+            this.my = my;
+
             ctx.fillStyle = '#ffffff';
-            ctx.fillRect(mx + (canvas.width/2) + camera.x - mapScreen.grid.width/2, my + this.mapYoffset + camera.y, 6, 6);
-            ctx.fillText("map " + mx + ", " + my, 10, 280);
+            ctx.fillRect((mx + (canvas.width/2) + camera.x - mapScreen.grid.width/2), (my + this.mapYoffset + camera.y), 6, 6);
+            ctx.fillText("map xy " + x + ", " + y, 10, 230);
+            ctx.fillText("map mxmy " + mx + ", " + my, 10, 280);
             ctx.fillText("a " + this.angle, 10, 320);
+
+
+            this.drawButtons();
+            this.checkButtons();
+            this.checkClick();
+
         }
 
     }
 
     checkClick() {
-        let x, y, mx, my;
         if(clicked) {
-            x = 100-(mouse.x - (canvas.width/2) - camera.x + mapScreen.grid.width/2);
-            y = 100-(mouse.y - this.mapYoffset - camera.y);
-
-            this.angle = -3.946;
-            //x = 100-(100);
-            //y = 100-(-40);
-            mx = x*Math.cos(this.angle) - y*Math.sin(this.angle) + 100;
-            my = y*Math.cos(this.angle) + x*Math.sin(this.angle) + 100;
-            if(mx < 0) {
-                mx = 0;
+            if(this.mx < 0) {
+                this.mx = 0;
             }
-            if(mx > 200) {
-                mx = 200;
+            if(this.mx > 200) {
+                this.mx = 200;
             }
-            if(my < 0) {
-                my = 0;
+            if(this.my < 0) {
+                this.my = 0;
             }
-            if(my > 200) {
-                my = 200;
+            if(this.my > 200) {
+                this.my = 200;
             }
-            console.log(mx + ", " + my);
-           // mapScreen3() {
-                console.log("going to the map");
-                //mapScreen = new MapScreen(3);
+            console.log(this.mx + ", " + this.my);
+                console.log("going to a map location");
                 this.active = false;
                 screenManager.screen = mapScreen;
-                mapScreen.gotoFromWorldMap(Math.floor(mx), Math.floor(my));
-            //}
+                mapScreen.gotoFromWorldMap(Math.round(this.mx), Math.round(this.my));
         }
     }
 

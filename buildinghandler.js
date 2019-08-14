@@ -9,9 +9,9 @@ class BuildingHandler {
         this.queue = [];
     }
     update() {
-        if (cities[currentCity].active) {
-            this.checkBuildingClick();
-            this.highlightEmptyBuildSpot();
+        if(cities[currentCity]) {
+            if (cities[currentCity].active) {
+            }
         }
     }
     drawBuildings() {
@@ -22,6 +22,16 @@ class BuildingHandler {
         }
     }
     displayNewBuildings(gridCoord) {
+        //console.log("gridCoord = ", gridCoord);
+        //console.log("newBuildingCoords = ", this.newBuildingCoords);
+        if(this.highlightGrid){
+            if(this.newBuildingCoords.x == gridCoord.x && this.newBuildingCoords.y == gridCoord.y) {  // clicking on the same square, so unhighlight
+                this.highlightGrid = false;
+                this.newBuildingCoords = null;
+                document.getElementById('buildingDiv').style.visibility = "hidden";
+                return;
+            }
+        }
         this.currentBuilding = null;
         this.highlightGrid = true;
         this.newBuildingCoords = gridCoord;
@@ -39,6 +49,7 @@ class BuildingHandler {
             }
         }
     }
+
     getBuildingCount(type) {
         // check quantity of building allowed
         let buildingCount = 0;
@@ -49,8 +60,10 @@ class BuildingHandler {
         }
         return buildingCount;
     }
+
     buildSlots() {
     }
+
     selectNewBuilding(s) {
         console.log(this.newBuildingCoords);
         console.log(s.options[s.selectedIndex].value);
@@ -86,6 +99,7 @@ class BuildingHandler {
         screenManager.screen = buildingUpgradeScreen;
         this.buildingDiv.style.visibility = "hidden";
     }
+
     startNewBuilding() {
         return;
         this.highlightGrid = false;
@@ -103,6 +117,7 @@ class BuildingHandler {
         buildingList.push(newBuild);
         this.buildingDiv.style.visibility = "hidden";
     }
+
     highlightEmptyBuildSpot() {
         ctx.fillText(this.highlightGrid, 350, 450);
         if (this.highlightGrid) {
@@ -113,6 +128,7 @@ class BuildingHandler {
             ctx.stroke();
         }
     }
+    
     hideOuterButtons() {
         for (let x = 0; x < buildingList.length; x++) {
             buildingList[x].hideButtons();
@@ -141,51 +157,56 @@ class BuildingHandler {
 
     
     checkBuildingClick() {
-        buildingHandler.hideOuterButtons();
-        if(buildingHandler.currentBuilding) {
-            buildingHandler.currentBuilding.showButtons();
-            buildingHandler.currentBuilding.checkButtons();
-            document.getElementById('buildingDiv').style.visibility = 'hidden';
+        if(!cities[currentCity]) {
+            return;
         }
-        if(cities[currentCity].active == true && clicked) {
+        if(clicked) {
             buildingHandler.hideOuterButtons();
-            let gridCoord = convertMouseXYtoGridXY();
-            let buildingClicked = false;
+            if(buildingHandler.currentBuilding) {
+                buildingHandler.currentBuilding.showButtons();
+                buildingHandler.currentBuilding.checkButtons();
+                document.getElementById('buildingDiv').style.visibility = 'hidden';
+            }
+            if(cities[currentCity].active == true && clicked) {
+                buildingHandler.hideOuterButtons();
+                let gridCoord = convertMouseXYtoGridXY();
+                let buildingClicked = false;
 
-            for(let x=0; x<buildingList.length; x++) {
-                if(gridCoord.x == buildingList[x].gridPos.x && gridCoord.y == buildingList[x].gridPos.y) {
-                    console.log("found " + buildingList[x].name);
-                    buildingHandler.currentBuilding = buildingList[x];
-                    buildingHandler.highlightGrid = false;
-                    buildingClicked = true;
-                    if(moving) {
-                        buildingList[x].move();
-                    } else                     
-                    if(moving) {
-                        buildingList[x].move();
-                    } else {
-                        buildingList[x].click();
+                for(let x=0; x<buildingList.length; x++) {
+                    if(gridCoord.x == buildingList[x].gridPos.x && gridCoord.y == buildingList[x].gridPos.y) {
+                        console.log("found " + buildingList[x].name);
+                        buildingHandler.currentBuilding = buildingList[x];
+                        buildingHandler.highlightGrid = false;
+                        buildingClicked = true;
+                        if(moving) {
+                            buildingList[x].move();
+                        } else                     
+                        if(moving) {
+                            buildingList[x].move();
+                        } else {
+                            buildingList[x].click();
+                        }
                     }
                 }
+
+                // if(buildingHandler.currentBuilding) {
+                //     buildingHandler.currentBuilding.showButtons();
+                //     buildingHandler.currentBuilding.checkButtons();
+                // }
+
+                if(buildingClicked) {
+                    return;
+                }
+
+                //reset all buildings outerbuttons active to false
+                // for(let x=0; x<buildingList.length; x++) {
+                //     buildingList[x].hideButtons();
+                // }
+
+                console.log("blank square clicked " + gridCoord.x + ", " + gridCoord.y);
+
+                buildingHandler.displayNewBuildings(gridCoord);
             }
-
-            // if(buildingHandler.currentBuilding) {
-            //     buildingHandler.currentBuilding.showButtons();
-            //     buildingHandler.currentBuilding.checkButtons();
-            // }
-
-            if(buildingClicked) {
-                return;
-            }
-
-            //reset all buildings outerbuttons active to false
-            // for(let x=0; x<buildingList.length; x++) {
-            //     buildingList[x].hideButtons();
-            // }
-
-            console.log("blank square clicked " + gridCoord.x + ", " + gridCoord.y);
-
-            buildingHandler.displayNewBuildings(gridCoord);
         }
     }
 

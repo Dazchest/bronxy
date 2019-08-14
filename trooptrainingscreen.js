@@ -35,8 +35,10 @@ class TroopTrainingScreen extends ScreenView {
         this.buttons.push(new Button({"active": true, "x": 475, "y": 500, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
         this.buttons.push(new Button({"active": true, "name": "train", "x": 365, "y": 365, "w": 100, "h": 30, "text": "Train", "screen": this, "action":  this.train}));
         //this.buttons.push(new Button({"active": true, "x": 400, "y": 350, "w": 100, "h": 30, "text": "Details", "screen": this, "action":  this.detailsScreen}));
-        this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "left", "name": "troopleft", "x": 75, "y": 200, "w": 128, "h": 128, "text": "Left", "screen": this, "action":  this.viewTiers}));
-        this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "right", "name": "troopright", "x": 420, "y": 200, "w": 128, "h": 128, "text": "Right", "screen": this, "action":  this.viewTiers}));
+        this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "left", "name": "troopleft", "x": 75, "y": 200, "w": 64, "h": 64, "text": "Left", "screen": this, "action":  this.viewTiers}));
+        this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "right", "name": "troopright", "x": 420, "y": 200, "w": 64, "h": 64, "text": "Right", "screen": this, "action":  this.viewTiers}));
+
+        this.buttons.push(new Button({"active": true, "name": "speed", "x": 365, "y": 565, "w": 100, "h": 30, "text": "Speed", "screen": this, "action":  this.speed}));
 
         let i = document.createElement('input');
         i.id = 'quantityInput';
@@ -50,7 +52,7 @@ class TroopTrainingScreen extends ScreenView {
         //i.addEventListener('keydown', getInput);
         //i.addEventListener('change', checkInput); 
 
-        console.log(i);
+        //console.log(i);
         this.inputs.push(i);
         document.getElementById('maindiv').appendChild(i);
 
@@ -62,6 +64,8 @@ class TroopTrainingScreen extends ScreenView {
         
         cities[currentCity].active = false;
         buildingHandler.highlightGrid = false;
+
+        this.active = true;
     }
 
 
@@ -244,5 +248,25 @@ class TroopTrainingScreen extends ScreenView {
     //     }
     // }
 
+    speed(self) {
+
+        //self.closeScreen();
+        if(self.inputs) {
+            for(let x=0; x<self.inputs.length; x++) {
+                document.getElementById('maindiv').removeChild(self.inputs[x]);
+            }
+        }
+
+
+       // self.troopBuilding.train(self.currentTier, quantityInput);
+        //self.troopBuilding.trainingQueue.endTime -= 60;
+
+        self.active = false;
+        speedScreen = new SpeedScreen(self.troopBuilding);
+
+        console.log("going to speed screen");
+        screenManager.screen = speedScreen;
+        //ItemManager.displaySpeeds(self);
+    }
 
 }

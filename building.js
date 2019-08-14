@@ -46,15 +46,12 @@ class Building {
     }
 
     checkButtons() {
-        //console.log("checking buttons???");
         this.buttonClicked = false;
         var b;
         for(let x=0; x<this.buttons.length; x++) {
             if(clicked) {   //mouse is clicked, check if it was on a button
                 console.log(this.buttons.length);
                 b = this.buttons[x];
-                //console.log("action = " + b.action);
-                //console.log("active = " + b.active);
                 if(mouse.x > b.x*zoom.x && mouse.x < b.x*zoom.x + b.w*zoom.x && mouse.y > b.y*zoom.y && mouse.y < b.y*zoom.y + b.h*zoom.y) {
                     console.log("presssssss " + x);
                     if(b.action && b.active) {
@@ -77,8 +74,8 @@ class Building {
             this.drag();
             return;
         }
-        ctx.fillStyle = "#ffffff";
-        ctx.fillRect(this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
+        // ctx.fillStyle = "#ffffff";
+        // ctx.fillRect(this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
 
         if(this.images.complete) {
             if(this.type == 0) {    //draw town hall bigger

@@ -7,6 +7,7 @@ var opsys = "unknown";
 var canvas, ctx;
 var mouse = {"x": 0, "y": 0, "movement": {"x": 0, "y": 0}};
 var camera = {"x": 0, "y": 0};
+var cityCameraStart = {"x": 200, "y": 30};
 var gridSize = {"x":128, "y": 128};
 
 var player;
@@ -39,7 +40,8 @@ var buffManager = new BuffManager();
 
 var currentCity = 0;
 var thisCity;
-var cities = [{"name": "Bronx House", "coords": {"x": 9, "y": 8}, "active": true}];
+//var cities = [{"name": "Bronx House", "coords": {"x": 9, "y": 8}, "active": true}];
+var cities = [];
 var cityScreen;
 var city = {"name": "Bronx House", "coords": {"x": 9, "y": 8}, "active": true};
 var tick = Date.now();
@@ -63,6 +65,8 @@ var itemScreen = {"active": false};
 var items;
 var itemList = [];
 var itemManager = new ItemManager();
+
+var speedScreen = {"active": false};
 
 var buttonImages = [];
 var mapImages = [];
@@ -120,6 +124,10 @@ function init() {
     //init cavnas
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
+    //resixe the canvas
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
 
     ctx.fillStyle = "#ff0000";
     ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -139,24 +147,20 @@ function init() {
 
     mouseDownFired = false;
     var pressTimer;
-    var ss;
+    
     canvas.addEventListener('mousedown', function(e) {
-             pressTimer = window.setTimeout(function() {
-                mouseDownFired = true;
-                canvas.addEventListener('mousemove', scrollCity);
-                //     moving = true;
-        //     doClick();
-        //mouseDownFired = true;
-         },150);
-        canvas.addEventListener('mousemove', function(e) {
-            //mouseDownFired = true;
-            //scrollCity(e);
-        });
-        canvas.addEventListener(uptype, function() {
+        //      pressTimer = window.setTimeout(function() {
+                 // mouseDownFired = true;
+        //         canvas.addEventListener('mousemove', scrollCity);
+        //         //moving = true;
+        //         // doClick();
+        //  },250);
+        canvas.addEventListener('mousemove', scrollCity);
+
+        canvas.addEventListener('mouseup', function() {
             canvas.removeEventListener('mousemove', scrollCity);
-            //ss.removeEventListener();
-            clearTimeout(pressTimer);
-            moving = false;
+            // clearTimeout(pressTimer);
+            // moving = false;
             //mouseDownFired = false;
         })
         canvas.addEventListener('mouseout', function() {
@@ -165,6 +169,15 @@ function init() {
     }); 
 
     canvas.addEventListener("touchmove", scrollCity);
+    // canvas.addEventListener('touchleave', function() {
+    //     canvas.removeEventListener('touchmove', scrollCity);
+    //     // clearTimeout(pressTimer);
+    //     // moving = false;
+    //     mouseDownFired = false;
+    // })
+    // canvas.addEventListener('mouseout', function() {
+    //     canvas.removeEventListener('mousemove', scrollCity);
+    // })
 
 
 
@@ -198,8 +211,12 @@ function init() {
     });
 
 
-    canvas.addEventListener("click", doClick); 
 
+
+    canvas.addEventListener("click",  function(e) {
+        console.log("click");
+        doClick(e);
+    });
 
 
 
@@ -392,7 +409,8 @@ function startNewGame(myJson) {
     console.log(myJson);
     //return;
     newCityData = myJson[0];
-    cities.push(new City(newCityData.citydata));
+    //cities.push(new City(newCityData.citydata));
+    cities[0] = new City(newCityData.citydata);
 
     city = newCityData.citydata;
     city.name = username;
@@ -777,7 +795,9 @@ function loadGame() {
         //jb = JSON.parse(gameData.city);
         jb = gameData.city;
         city = jb;    
-        cities.push(city);
+        //cities.push(city);
+        cities[0] = city;
+        cities[0].active = true;
 
 
         //jb = JSON.parse(gameData.buildingList);
@@ -891,7 +911,7 @@ function doClick() {
         mouseDownFired = false;
         return;
     }
-
+    console.log("doclick clicked");
     mouseDownFired = false;
     clicked = true;
     //console.log("clicked = " + clicked);
@@ -923,11 +943,11 @@ function draw() {
     let gridCoord = convertMouseXYtoGridXY();
     popup(gridCoord.x + ", " + gridCoord.y, 10, 50);
 
+    buildingHandler.checkBuildingUpgrades();
+    buildingHandler.update();
 
     screenManager.screen.draw();
 
-    buildingHandler.checkBuildingUpgrades();
-    buildingHandler.update();
 
     researchManager.checkResearchUpgrades();
 
@@ -947,6 +967,7 @@ function draw() {
 
     ctx.fillStyle = '#000000';
     popup(mouse.x + ", " + mouse.y, 10, 20);
+    popup(camera.x + ", " + camera.y, 100, 20);
     popup(distX + ", " + distY, 10, 200)
 
     requestAnimationFrame(draw);    
