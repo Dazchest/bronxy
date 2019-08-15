@@ -37,10 +37,10 @@ class MapScreen extends ScreenView {
         this.buttons.push(new Button({"active": true, "x": 320, "y": 20, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
         this.buttons.push(new Button({"active": true, "x": 450, "y": 20, "w": 100, "h": 30, "text": "Home", "screen": this, "action":  this.gotoCity}));
         
-        this.buttons.push(new Button({"active": false, "drawButton": true, "x": 20, "y": 160, "w": 100, "h": 30, "text": "Save map", "color": '#aa2244', "screen": this, "action":  saveMap}));
-        this.buttons.push(new Button({"active": false, "drawButton": true, "x": 20, "y": 200, "w": 100, "h": 30, "text": "Load map", "color": '#aa3355', "screen": this, "action":  loadMap2}));
+        // this.buttons.push(new Button({"active": false, "drawButton": true, "x": 20, "y": 160, "w": 100, "h": 30, "text": "Save map", "color": '#aa2244', "screen": this, "action":  saveMap}));
+        // this.buttons.push(new Button({"active": false, "drawButton": true, "x": 20, "y": 200, "w": 100, "h": 30, "text": "Load map", "color": '#aa3355', "screen": this, "action":  loadMap2}));
 
-        this.buttons.push(new Button({"active": true, "drawButton": true, "x": 20, "y": 240, "w": 100, "h": 30, "text": "add food", "color": '#aa3355', "screen": this, "action":  addFood}));
+        // this.buttons.push(new Button({"active": true, "drawButton": true, "x": 20, "y": 240, "w": 100, "h": 30, "text": "add food", "color": '#aa3355', "screen": this, "action":  addFood}));
 
         //camera.x = 0;
         //camera.y = 0;
@@ -206,20 +206,32 @@ class MapScreen extends ScreenView {
             // this.grid_x = Math.floor(camera.x / 200);    // 200 is tile width
             // this.grid_y = Math.floor(camera.y / 100);    // 100 is tile height
 
+            this.tileCount = 0;;
+
             for(let y=-5+this.grid_y; y<this.gridDisplay.height+this.grid_y-5; y++) {
                 for(let x=-5+this.grid_x; x<this.gridDisplay.width+this.grid_x-5; x++) {
                     //add points for the tiles we want to view first
     
                     let points = createPoints(x, y);
-                    //-----------
-
-                    ctx.beginPath();
-                    //points[0] = points[0].addCamera(this.mapOffset);
                     points[0] = points[0].addCamera(camera);
+                    points[1] = points[1].addCamera(camera);
+                    points[2] = points[2].addCamera(camera);
+                    points[3] = points[3].addCamera(camera);
+                    //-----------
+                    // only set the points if they are on screen as well
+                    if(x >= 0 && x<this.grid.width && y >= 0 && y<this.grid.height) {
+                        this.mapTiles[x][y].points = points;
+                        if(this.mapTiles[x][y].isOnScreen() == false) {
+                            continue;
+                        }
+                    }
+                    this.tileCount++;
+                    //-----------
+                    ctx.beginPath();
+                    //points[0] = points[0].addCamera(camera);
                     ctx.moveTo(points[0].x, points[0].y);
                     for(let j=1; j<4; j++) {
-                        //points[j] = points[j].addCamera(this.mapOffset);
-                        points[j] = points[j].addCamera(camera);
+                        //points[j] = points[j].addCamera(camera);
                         ctx.lineTo(points[j].x, points[j].y);
                     }
                     ctx.lineTo(points[0].x, points[0].y);
@@ -233,7 +245,7 @@ class MapScreen extends ScreenView {
 
                     if(x >= 0 && x<this.grid.width && y >= 0 && y<this.grid.height) {
                        // console.log("error here " + x + ", " + y);
-                        this.mapTiles[x][y].points = points;
+                        //this.mapTiles[x][y].points = points;
 
                         ctx.fillStyle = '#ffffff';
                         //console.log(x + " , " + y);
@@ -252,7 +264,7 @@ class MapScreen extends ScreenView {
                         }
                         if(tile.monster) {
                             //console.log("monsteer");
-                            ctx.drawImage(monsterImages[0], points[0].x-15, points[0].y - 105, 195, 150);
+                            ctx.drawImage(monsterImages[1], points[0].x+35, points[0].y - 50, 100, 76);
                             //ctx.fillStyle = '#ffee44';
                             //ctx.fillText(tile.name, points[0].x + 20, points[0].y);
                         }
@@ -398,6 +410,7 @@ class Tile {
 
     }
 
+
     getCenter() {
         let point;
         let x = this.coords.x;
@@ -408,6 +421,21 @@ class Tile {
         point = new Vector3d((x*tileW/2) - (y*tileW/2) + canvas.width/2, (y*tileH/2) + (x*tileH/2));
     
         return point;
+    }
+
+    isOnScreen() {
+        if(this.points[2].x < 0) {
+            return false;
+        }
+        if(this.points[0].x > canvas.width) {
+            return false;
+        }
+        if(this.points[3].y < 0) {
+            return false;
+        }
+        if(this.points[1].y > canvas.heigth) {
+            return false;
+        }
     }
 
     draw() {
@@ -539,9 +567,11 @@ class MonsterTile extends Tile{
         this.monster = true;
         this.monsterName = "Zuko";
         this.power = 5000;
+        this.level = 1;
+
+        this.contents = [{"type" : 40, "level": 2, "quantity": 1}]
 
         this.buttons.push(new Button({"active": false, "drawButton": true, "offset" : {"x": 0, "y": 40}, "w": 75, "h": 30, "text": "ATTACK", "screen": this, "action": this.attack}));
-        
     }
 
     drawMonster() {
@@ -580,6 +610,7 @@ class FoodTile extends ResourceTile {
 
         this.startAmount = 0;
         this.baseGatheringSpeed = 0;    // gph - gathering per hour
+        this.availableAmount = 0        //will be overridden by date.availableAmount below
         this.gatheredAmount = 0;
         this.food = true;
         this.type = "food";
@@ -609,7 +640,9 @@ class FoodTile extends ResourceTile {
             default:
                 break;
         }
-        this.availableAmount = this.startAmount - this.gatheredAmount;
+        if(this.availableAmount == 0) {
+            this.availableAmount = this.startAmount - this.gatheredAmount;
+        }
 
         this.buttons.push(new Button({"active": false, "drawButton": true, "offset" : {"x": 0, "y": 40}, "w": 75, "h": 30, "text": "Gather", "screen": this, "action": this.gather}));
 
@@ -620,7 +653,6 @@ class FoodTile extends ResourceTile {
         console.log("gathering");
         marchScreen = new MarchScreen(self);
         screenManager.screen = marchScreen;
-
     }
 }
 
@@ -631,6 +663,7 @@ class WoodTile extends ResourceTile {
 
         this.startAmount = 0;
         this.baseGatheringSpeed = 0;    // gph - gathering per hour
+        this.availableAmount = 0        //will be overridden by date.availableAmount below
         this.gatheredAmount = 0;
         this.wood = true;
         this.type = "wood";
@@ -660,7 +693,9 @@ class WoodTile extends ResourceTile {
             default:
                 break;
         }
-        this.availableAmount = this.startAmount - this.gatheredAmount;
+        if(this.availableAmount == 0) {
+            this.availableAmount = this.startAmount - this.gatheredAmount;
+        }
 
         this.buttons.push(new Button({"active": false, "drawButton": true, "offset" : {"x": 0, "y": 40}, "w": 75, "h": 30, "text": "Gather", "screen": this, "action": this.gather}));
 
@@ -682,6 +717,7 @@ class StoneTile extends ResourceTile {
 
         this.startAmount = 0;
         this.baseGatheringSpeed = 0;    // gph - gathering per hour
+        this.availableAmount = 0        //will be overridden by date.availableAmount below
         this.gatheredAmount = 0;
         this.stone = true;
         this.type = "stone";
@@ -711,7 +747,9 @@ class StoneTile extends ResourceTile {
             default:
                 break;
         }
-        this.availableAmount = this.startAmount - this.gatheredAmount;
+        if(this.availableAmount == 0) {
+            this.availableAmount = this.startAmount - this.gatheredAmount;
+        }
 
         this.buttons.push(new Button({"active": false, "drawButton": true, "offset" : {"x": 0, "y": 40}, "w": 75, "h": 30, "text": "Gather", "screen": this, "action": this.gather}));
 
@@ -732,6 +770,7 @@ class IronTile extends ResourceTile {
 
         this.startAmount = 0;
         this.baseGatheringSpeed = 0;    // gph - gathering per hour
+        this.availableAmount = 0        //will be overridden by date.availableAmount below
         this.gatheredAmount = 0;
         this.iron = true;
         this.type = "iron";
@@ -761,7 +800,9 @@ class IronTile extends ResourceTile {
             default:
                 break;
         }
-        this.availableAmount = this.startAmount - this.gatheredAmount;
+        if(this.availableAmount == 0) {
+            this.availableAmount = this.startAmount - this.gatheredAmount;
+        }
 
         this.buttons.push(new Button({"active": false, "name": "gather", "offset" : {"x": 0, "y": 40}, "w": 75, "h": 30, "text": "Gather", "screen": this, "action": this.gather}));
 
@@ -775,93 +816,6 @@ class IronTile extends ResourceTile {
 
     }
 }
-
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-//------------------------------------------------------------------------------
-class MapManager {
-    
-    constructor() {
-
-    }
-
-    saveTile(tile) {
-        let id = Number(tile.coords.x+(tile.coords.y*mapScreen.grid.width));
-        let tileData = JSON.parse(JSON.stringify(tile));
-        tileData.buttons = [];
-        firebase.database().ref("map" + "/" + id.toString()).set(tileData);
-    }
-
-    updateTile(tile) {
-        let id = Number(tile.coords.x+(tile.coords.y*mapScreen.grid.width));
-        let tileData = JSON.parse(JSON.stringify(tile));
-        tileData.buttons = [];
-        tileData = {};
-        tileData.user = username;
-        tileData.fish = "salmon";
-        firebase.database().ref("map" + "/" + id.toString()).update(tileData);
-        console.log(tileData);
-    }
-
-    loadTile(tileData) {
-        console.log("tile",tileData);
-        for(let x=0; x<Object.keys(tileData).length; x++) {
-            name = Object.keys(tileData)[x];// (data[x]).value;
-            console.log(tileData[name]);
-            mapScreen.mapTiles[tileData.coords.x][tileData.coords.y][name] = tileData[name];
-        }
-    }
-
-    processTile(data) {
-        let tileData = JSON.parse(JSON.stringify(data));
-        tileData.buttons = [];
-        switch (tileData.type) {
-            case "food":
-                mapScreen.mapTiles[tileData.coords.x][tileData.coords.y] = new FoodTile(tileData); 
-                break;
-            case "wood":
-                mapScreen.mapTiles[tileData.coords.x][tileData.coords.y] = new WoodTile(tileData);
-                break;
-            case "stone":
-                mapScreen.mapTiles[tileData.coords.x][tileData.coords.y] = new StoneTile(tileData);
-                break;
-            case "iron":
-                mapScreen.mapTiles[tileData.coords.x][tileData.coords.y] = new IronTile(tileData); 
-                break;
-
-            case "city":
-                mapScreen.mapTiles[tileData.coords.x][tileData.coords.y] = new CityTile(tileData); 
-                break;
-
-            case "monster":
-                mapScreen.mapTiles[tileData.coords.x][tileData.coords.y] = new MonsterTile(tileData); 
-                break;
-    
-            default:
-                //mapScreen.mapTiles[tileData.coords.x][tileData.coords.y] = new Tile(tileData);
-                break;
-         }
-    }
-
-    addRssTile(type, level, x, y) {
-        let tileData = {};
-        tileData.type = type,
-        tileData.level = level;
-        tileData.addednew = "newww tileee";
-        tileData.coords = new Vector3d(x, y);
-        let id = Number(x + (y * mapScreen.grid.width));
-        this.processTile(tileData);
-        firebase.database().ref("map" + "/" + id.toString()).set(tileData);
-    }
-
-    updateTileData(x, y, data) {
-        let id = Number(x + (y * mapScreen.grid.width));
-        firebase.database().ref("map" + "/" + id.toString()).update(data);
-    }
-}
-
-
-
 
 //------------------------------------------------------------------------------
 //------------------------------------------------------------------------------
@@ -941,6 +895,7 @@ class WorldMapScreen extends ScreenView {
             this.mapYoffset = 200;
             var scale = 3;
             var tileBlobSize = scale * 2;
+            var monsterBlobSize = scale;
 
             ctx.save();
 
@@ -972,8 +927,16 @@ class WorldMapScreen extends ScreenView {
                     posY = y;
                     let tile = mapScreen.mapTiles[x][y];
                     if(tile.city) {
-                        ctx.fillStyle = "#0000ff";
+                        if(tile.user == username) {
+                            ctx.fillStyle = "#ddcc00";
+                        } else {
+                            ctx.fillStyle = "#0000ff";
+                        }
                         ctx.fillRect(posX + (canvas.width/2) + camera.x - mapScreen.grid.width/2, posY + this.mapYoffset + camera.y, tileBlobSize, tileBlobSize);
+                    } else
+                    if(tile.monster) {
+                        ctx.fillStyle = "#ff0000";
+                        ctx.fillRect(posX + (canvas.width/2) + camera.x - mapScreen.grid.width/2, posY + this.mapYoffset + camera.y, monsterBlobSize, monsterBlobSize);
                     }
                 }
             }

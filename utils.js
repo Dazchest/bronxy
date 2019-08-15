@@ -343,3 +343,30 @@ function banner(text, x, y, size) {
 // //cal();
 
 // console.log(s);
+
+/**
+ * 
+ * @param {float} value the value you want to map
+ * @param {float} a start range
+ * @param {float} b end range
+ * @param {float} c start map
+ * @param {float} d end map
+ * @param return float
+ */
+function mapRange(value, a, b, c, d) {
+    value = (value - a) / (b - a);
+    return c + value * (d - c);
+}
+let startAmount = 4;
+let baseGatheringSpeed = 100000;
+
+let seconds = 60;
+let newval = mapRange(startAmount, 1, 14, 50000, 1000000);
+console.log(newval);
+
+    let f = false;
+    while(f==false) {   
+        console.log(f);        
+        f = true;
+    }
+    console.log(f);

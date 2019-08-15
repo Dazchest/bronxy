@@ -71,6 +71,8 @@ class Assets {
         //monsterImages[0] = {};
         monsterImages[0] = new Image();
         monsterImages[0].src = "images/monsters/0.png";
+        monsterImages[1] = new Image();
+        monsterImages[1].src = "images/monsters/1.png";
         //monsterImages[0].onload = convertimage(monsterImages[0]);
 
     }

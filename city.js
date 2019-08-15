@@ -11,8 +11,11 @@ class City {
     }
 }
 
+var scrollMovement = {x:0, y:0};
+
 function scrollCity(e) {
-    mouseDownFired = true;    //TODO: this works, but makes clicks a bit harder
+    //mouseDownFired = true;    //TODO: this works, but makes clicks a bit harder
+    scrolling = false;
     //console.log("mouse moving");
     if(e.touches) {
         var touch = e.touches[0];
@@ -43,15 +46,17 @@ function scrollCity(e) {
 
     //mouseDownFired = true;
     if(cities[currentCity].active) {
-        scrolling = true;
         //if(camera.x + e.movementX >= 0) {
             camera.x += e.movementX;
         //}
         camera.y += e.movementY;
+
+        scrollMovement.x = e.movementX;
+        scrollMovement.y = e.movementY;
     }
 
     if(worldMapScreen.active) {
-        scrolling = true;
+        //scrolling = true;
         camera.x += e.movementX;
         camera.y += e.movementY;
 
@@ -64,9 +69,12 @@ function scrollCity(e) {
             //return;
         }
 
-        scrolling = true;
+        //scrolling = true;
         camera.x += e.movementX;
         camera.y += e.movementY;
+
+        scrollMovement.x = e.movementX;
+        scrollMovement.y = e.movementY;
 
         // if(e.movementX > 0 && mapScreen.grid_x == 0 && mapScreen.mapOffset.x >= 0) {   // stop movement to the left
         //     mapScreen.mapOffset.x = 0;
@@ -148,5 +156,32 @@ function scrollCity(e) {
         // }
 
     }
+
+}
+
+function continueScroll() {
+    return;
+    //console.log("scrollmovement = " + scrollMovement.x + ", " + scrollMovement.y);
+    if(scrolling) {
+        if(scrollMovement.x < 0) {
+            scrollMovement.dirx = "left"
+            camera.x += scrollMovement.x;
+            //camera.x += 1;
+            scrollMovement.x += 1;
+            //console.log("scrolling left")
+        }
+        if(scrollMovement.x > 0) {
+            //scrollMovement.dirx = "right"
+            //camera.x -= scrollMovement.x;
+            //scrollMovement.x -= .2;
+            //console.log("scrolling right")
+        }
+
+    }
+
+    if(scrollMovement.dirx=="left" && scrollMovement.x >= 0) {
+        scrolling = false;
+    }
+
 
 }

@@ -149,6 +149,7 @@ function init() {
     var pressTimer;
     
     canvas.addEventListener('mousedown', function(e) {
+        scrolling = false;
         //      pressTimer = window.setTimeout(function() {
                  // mouseDownFired = true;
         //         canvas.addEventListener('mousemove', scrollCity);
@@ -159,6 +160,9 @@ function init() {
 
         canvas.addEventListener('mouseup', function() {
             canvas.removeEventListener('mousemove', scrollCity);
+            scrolling = true;
+            //continueScroll();
+
             // clearTimeout(pressTimer);
             // moving = false;
             //mouseDownFired = false;
@@ -214,8 +218,9 @@ function init() {
 
 
     canvas.addEventListener("click",  function(e) {
-        console.log("click");
-        doClick(e);
+        console.log("clickeee");
+        doClick();
+        console.log("clclclclclclclc");
     });
 
 
@@ -638,41 +643,7 @@ function saveMap() {
     let endSaveTime = Date.now()/1000 - startSaveTime;
     console.log(endSaveTime);
 }
-function addFood() {
-            //lets create random res tiles
-        // for(let t=0; t<500; t++){
-        //     let x = Math.floor(Math.random() * this.grid.width);
-        //     let y = Math.floor(Math.random() * this.grid.height);
-        //     let level = Math.floor(Math.random() * 3 + 1);
-        //     this.mapTiles[x][y] = new FoodTile(level, x, y);
 
-        //     x = Math.floor(Math.random() * this.grid.width);
-        //     y = Math.floor(Math.random() * this.grid.height);
-        //     level = Math.floor(Math.random() * 3 + 1);
-        //     this.mapTiles[x][y] = new WoodTile(level, x, y);
-
-        //     x = Math.floor(Math.random() * this.grid.width);
-        //     y = Math.floor(Math.random() * this.grid.height);
-        //     level = Math.floor(Math.random() * 3 + 1);
-        //     this.mapTiles[x][y] = new StoneTile(level, x, y);
-
-        //     x = Math.floor(Math.random() * this.grid.width);
-        //     y = Math.floor(Math.random() * this.grid.height);
-        //     level = Math.floor(Math.random() * 3 + 1);
-        //     this.mapTiles[x][y] = new IronTile(level, x, y);
-        // }
-
-        for(let t=0; t<100; t++){
-            let tileData = {};
-            let x = Math.floor(Math.random() * mapScreen.grid.width);
-            let y = Math.floor(Math.random() * mapScreen.grid.height);
-            tileData.coords = {"x": x, "y":y};
-            tileData.type = "food";
-            tileData.level = Math.floor(Math.random() * 3 + 1);
-            let id = Number(x + (y * mapScreen.grid.width));
-            firebase.database().ref("map" + "/" + id.toString()).set(tileData);
-        }
-}
 
 function saveMap2() {
     return;
@@ -904,7 +875,7 @@ function loadGame() {
 }
 
 function doClick() {
-    //console.log("mouseDownFired = " + mouseDownFired);
+    console.log("mouseDownFired = " + mouseDownFired);
     if(mouseDownFired) {
         clicked = false;
         //console.log("clicked = " + mouseDownFired);
@@ -956,6 +927,7 @@ function draw() {
     marchManager.tick();
 
 
+    continueScroll();
 
     clicked = false;
 

@@ -82,6 +82,14 @@
         {   "level": 0,
             "name": "1 Minute Training Speed",
             "contents": [{"minutes": 1}]
+        },
+        {   "level": 1,
+            "name": "10 Minute Training Speed",
+            "contents": [{"minutes": 10}]
+        },
+        {   "level": 2,
+            "name": "1 Hour Training Speed",
+            "contents": [{"minutes": 60}]
         }
         ]
     }
