@@ -65,6 +65,9 @@ var itemScreen = {"active": false};
 var items;
 var itemList = [];
 var itemManager = new ItemManager();
+var itemListImages = [];
+
+var listBox, listCanvas, listCtx;
 
 var speedScreen = {"active": false};
 
@@ -106,12 +109,7 @@ function init() {
         console.log("not logged in");
         return;
     }
-
-    // if(!login) {
-    //     console.log("not logged in");
-    //     return;
-    // }
-    //-------------------------------------------
+    //--------
     console.log("initialising game");
 
     // get operating system - mobile etc
@@ -230,6 +228,8 @@ function init() {
 
     //initilaiase the player
     player = new Player;
+
+
 
     if(startOnMap) {
         mapScreen = new MapScreen();
@@ -937,8 +937,8 @@ function draw() {
     ctx.fillStyle = '#ffffff';
     ctx.fillText("fps: " + Math.floor(fps), 400, 70);
 
-    ctx.fillStyle = '#000000';
-    popup(mouse.x + ", " + mouse.y, 10, 20);
+    ctx.fillStyle = '#ffffff';
+    popup(mouse.x + ", " + mouse.y, 10, 50);
     popup(camera.x + ", " + camera.y, 100, 20);
     popup(distX + ", " + distY, 10, 200)
 

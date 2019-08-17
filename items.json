@@ -12,7 +12,7 @@
         ]
     },
 
-    {   "id": 0,
+    {   "id": 2,
         "type": 2,
         "group": "resources",
         "name": "rssbox",
@@ -27,7 +27,7 @@
         }
         ]
     },
-    {   "id": 0,
+    {   "id": 3,
         "type": 3,
         "group": "resources",
         "name": "rssbox",
@@ -38,7 +38,7 @@
         }
         ]
     },
-    {   "id": 0,
+    {   "id": 4,
         "type": 4,
         "group": "resources",
         "name": "rssbox",
@@ -49,7 +49,7 @@
         }
         ]
     },
-    {   "id": 0,
+    {   "id": 5,
         "type": 5,
         "group": "resources",
         "name": "rssbox",
@@ -61,10 +61,11 @@
         ]
     },
 
-    {   "id": 1,
+    {   "id": 30,
         "type": 30,
         "group": "chest",
         "name": "SummerChest",
+        "method": "open",
         "levels" : [
         {   "level": 0,
             "name": "Medium Summer Chest",
@@ -73,7 +74,7 @@
         ]
     },
 
-    {   "id": 2,
+    {   "id": 40,
         "type": 40,
         "group": "speedup",
         "name": "speed",
@@ -90,6 +91,27 @@
         {   "level": 2,
             "name": "1 Hour Training Speed",
             "contents": [{"minutes": 60}]
+        }
+        ]
+    },
+
+    {   "id": 100,
+        "type": 100,
+        "group": "bosschest",
+        "name": "bosschest",
+        "method": "open",
+        "levels" : [
+        {   "level": 0,
+            "name": "Level 0 Boss Chest",
+            "contents": []
+        },
+        {   "level": 1,
+            "name": "Level 1 Boss Chest",
+            "contents": [{"type" : 40, "level": 1, "quantity": 3}, {"type" : 0, "level": 0, "quantity": 1}, {"type" : 2, "level": 1, "quantity": 1}]
+        },
+        {   "level": 2,
+            "name": "Level 2 Boss Chest",
+            "contents": [{"type" : 40, "level": 1, "quantity": 6}, {"type" : 0, "level": 0, "quantity": 2}, {"type" : 2, "level": 1, "quantity": 2}, {"type" : 3, "level": 0, "quantity": 2}]
         }
         ]
     }

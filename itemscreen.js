@@ -8,16 +8,24 @@ class ItemScreen extends ScreenView {
         this.buttons = [];
         this.name = "Items";
 
-        this.buttons.push(new Button({"active": true, "x": 400, "y": 300, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
+        this.buttons.push(new Button({"style": "circle", "active": true, "x": 750, "y": 50, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
         //this.buttons.push(new Button({"active": true, "x": 400, "y": 350, "w": 100, "h": 30, "text": "Details", "screen": this, "action":  this.detailsScreen}));
 
         for(let x=0; x<itemList.length; x++) {
-            let b = new Button({"active": true, "drawButton": false, "x": 50, "y": 300 + (x * 35), "w": 100, "h": 30, "text": "", "action":  this.showItem});
+            let itemWidth = itemList[x].w;
+            let itemHeight = itemList[x].h;
+            let b = new Button({"active": true, "drawButton": false, "x": 0, "y": 0, "w": itemWidth, "h": itemHeight, "text": "", "action":  this.showItem});
             itemList[x].button = b;
         }
         
+        camera.x = 0;
+        camera.y = 0;
         cities[currentCity].active = false;
         buildingHandler.highlightGrid = false;
+
+        this.listBox = new ListBox(100, 150, 500, 400, canvas, ctx);
+
+
     }
 
 
@@ -34,7 +42,27 @@ class ItemScreen extends ScreenView {
             ctx.fillStyle = '#000000';
             ctx.font = "20px Georgia";
             ctx.fillText(this.name, this.x, this.y + 20);
-    
+
+            // DRAW TH PANEL
+            let borderPanelStartX = this.listBox.x - itemListImages[7].width + 26;
+            let borderPanelStartY = this.listBox.y - itemListImages[1].height;
+            let borderPanelWidth = this.listBox.w - 52;
+            let borderPanelHeight = this.listBox.h - 26;
+            // ctx.drawImage(itemListImages[0], borderPanelStartX , borderPanelStartY);
+            // ctx.drawImage(itemListImages[1], borderPanelStartX  + 32, borderPanelStartY, borderPanelWidth, itemListImages[1].height);
+            // ctx.drawImage(itemListImages[2], borderPanelStartX + borderPanelWidth + 32, borderPanelStartY);
+
+            // ctx.drawImage(itemListImages[3], borderPanelStartX + borderPanelWidth + 32, borderPanelStartY + 32, itemListImages[3].width, borderPanelHeight);
+
+            // ctx.drawImage(itemListImages[4], borderPanelStartX + borderPanelWidth + 32, borderPanelStartY + 32 + borderPanelHeight);
+            // ctx.drawImage(itemListImages[5], borderPanelStartX + 32, borderPanelStartY + 32 + borderPanelHeight, borderPanelWidth, itemListImages[5].height);
+            // ctx.drawImage(itemListImages[6], borderPanelStartX, borderPanelStartY + 32 + borderPanelHeight);
+
+            // ctx.drawImage(itemListImages[7], borderPanelStartX, borderPanelStartY + 32, itemListImages[7].width, borderPanelHeight);
+            //--
+            ctx.drawImage(itemListImages[10], this.listBox.x-10, this.listBox.y-7, this.listBox.w+20, this.listBox.h+15);
+            //--
+
             this.displayItems();
             this.drawButtons();
             this.checkButtons();
@@ -45,11 +73,19 @@ class ItemScreen extends ScreenView {
     }
 
     displayItems() {
+        this.listBox.clear();
         for(let x=0; x<itemList.length; x++) {
-            itemList[x].draw(50, 200 + (x * 35));
+            let itemWidth = itemList[x].w;
+            let itemHeight = itemList[x].h;
+            //this.listBox.draw(itemList[x], 5, 5 + (x * (itemHeight + 5)) + camera.y)
+            itemList[x].draw(this.listBox.listCtx, 5, 5 + (x * (itemHeight + 5)) + camera.y);
+            this.listBox.bottom = 5 + (itemList.length * (itemHeight + 5));    // - (itemList[x].h * 2)
+            //this.listBox.bottom = 5; //+ (itemList.length * (itemHeight + 5)) - this.listBox.listCanvas.height;
             // go through the buttons, and change x,y to match the item x,y
             itemList[x].button.x = itemList[x].x;
             itemList[x].button.y = itemList[x].y;
+            itemList[x].button.w = itemWidth;
+            itemList[x].button.h = itemHeight;
         }
     }
 

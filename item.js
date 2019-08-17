@@ -6,6 +6,14 @@ class Item {
             //console.log(data[name]);
             this[name] = data[name];
         }
+
+        if(this.group == "chest") {
+            this.method = "open";
+        }
+
+        this.w = 300;
+        this.h = 50;
+
     }
 
 
@@ -14,7 +22,7 @@ class Item {
         if(this.quantity > 0) {
             let group = this.group;
             this.quantity --;
-            if(this.quantity == 0) {
+            if(this.quantity == 0) {    //all gone, remove from the list, and remove button
                 for(let x=itemList.length-1; x>=0; x--) {
                     if(itemList[x] == this) {
                         console.log("found one to delete");
@@ -29,6 +37,7 @@ class Item {
                             }
                         }
                         //todo: remove button as well
+                        //TODO: button needs to be on the item???
                     }
                 }
             }
@@ -36,7 +45,7 @@ class Item {
             if(group == "resources") {
                 this.useResourceItem();
             }
-            if(group == "chest") {
+            if(this.method == "open") {
                 this.useChestItem();
             }
             if(group == "speedup") {
@@ -59,7 +68,7 @@ class Item {
     }
 
     useSpeedItem() {
-        console.log("using " + this.group);
+        console.log("using " + this.name);
         for(let x=0; x<this.contents.length; x++) {
             let c = this.contents[x];
             let s = Object.keys(c)[0];
@@ -71,14 +80,13 @@ class Item {
     }
 
     useChestItem() {
-        console.log("using " + this.group);
-        console.log(this.contents.length);
+        console.log("open chest");
         for(let x=0; x<this.contents.length; x++) {
             let itemData = this.contents[x];
             let type = itemData.type;
             let level = itemData.level;
             let quantity = itemData.quantity;
-            console.log("using type " + type + " - Level " + level + " - qty " + quantity);
+            console.log("using " + this.name + " - type " + type + " - Level " + level + " - qty " + quantity);
             itemManager.addItem(itemData);
         }
         saveGame2();
@@ -90,20 +98,21 @@ class Item {
      * @param {int} y 
      * @param {int} size 
      */
-    draw(x, y, size) {
+    draw(ctx, x, y, size) {
         this.x = x;
         this.y = y;
+        let textOffsetY = Math.round(this.h / 2);
         ctx.fillStyle = '#448833';
-        ctx.fillRect(x, y, 100, 30);
+        ctx.fillRect(x, y, this.w, this.h);
         ctx.fillStyle = '#442233';
-        ctx.fillRect(x + 100, y, 40, 30);
+        ctx.fillRect(x + this.w, y, 50, this.h);
 
-        ctx.fillStyle = '#000000';
-        ctx.font = "15px Georgia";
-        ctx.fillText(this.name, x + 5, y + 20);
+        ctx.textBaseline = "middle";
+        ctx.fillStyle = '#eeeeee';
+        ctx.font = this.h/2 + "px Georgia";
+        ctx.fillText(this.name, x + 5, y + textOffsetY);
         ctx.fillStyle = '#ffffff';
-        ctx.fillText(this.quantity, x + 5 + 100, y +20);
-
+        ctx.fillText(this.quantity, x + 5 + this.w, y + textOffsetY);
     }
     
 }

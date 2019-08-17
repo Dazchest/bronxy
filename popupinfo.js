@@ -11,10 +11,10 @@ class Popupinfo {
 
 
 function popup(t, x, y) {
-    ctx.strokeStyle = '#000000';
+    ctx.strokeStyle = '#';
     ctx.rect(10,10,10,10);
 
-    ctx.fillStyle = '#000000';
+    ctx.fillStyle = '#ffffff';
     ctx.font = "20px Georgia";
     ctx.fillText(t, x, y);
 

@@ -82,6 +82,28 @@ class Assets {
         i.src = "images/generals/zod1.png";
 
         generalImages.push(i);
+
+
+        itemListImages[0] = new Image();
+        itemListImages[0].src = "images/panels/panel_top_left.png";
+        itemListImages[1] = new Image();
+        itemListImages[1].src = "images/panels/panel_top_middle.png";
+        itemListImages[2] = new Image();
+        itemListImages[2].src = "images/panels/panel_top_right.png";
+        itemListImages[3] = new Image();
+        itemListImages[3].src = "images/panels/panel_right_middle.png";
+        itemListImages[4] = new Image();
+        itemListImages[4].src = "images/panels/panel_bottom_right.png";
+        itemListImages[5] = new Image();
+        itemListImages[5].src = "images/panels/panel_bottom_middle.png";
+        itemListImages[6] = new Image();
+        itemListImages[6].src = "images/panels/panel_bottom_left.png";
+        itemListImages[7] = new Image();
+        itemListImages[7].src = "images/panels/panel_left_middle.png";
+
+        itemListImages[10] = new Image();
+        itemListImages[10].src = "images/panels/panel_full_1.png";
+
     }
 
 }

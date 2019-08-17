@@ -227,16 +227,8 @@ class March {
             console.log(this.monster);
             console.log("returned from monster kill");
             
-            let contents = [{"type" : 40, "level": 2, "quantity": 1}];
+            let contents = [{"type" : 100, "level": 1, "quantity": 1}];
             itemManager.addItems(contents);
-            // for(let x=0; x<contents.length; x++) {
-            //     let itemData = contents[x];
-            //     let type = itemData.type;
-            //     let level = itemData.level;
-            //     let quantity = itemData.quantity;
-            //     console.log("adding type " + type + " - Level " + level + " - qty " + quantity);
-            //     itemManager.addItem(itemData);
-            // }
         }
         marchManager.deleteMarch(this);
 

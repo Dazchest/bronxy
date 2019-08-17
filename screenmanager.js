@@ -67,6 +67,10 @@ class ScreenView {
                 document.getElementById('maindiv').removeChild(self.inputs[x]);
             }
         }
+        if(self.listBox) {
+            console.log("closing listbox");
+            self.listBox.close();
+        }
     }
 
     drawButtons() {
@@ -78,15 +82,31 @@ class ScreenView {
 
     checkButtons() {
         for(let x=0; x<this.buttons.length; x++) {
+            let b = this.buttons[x];
             if(clicked) {   //mouse is clicked, check if it was on a button
-                console.log("cliecked in checkbuttons");
-                let b = this.buttons[x];
-                if(mouse.x > b.x*zoom.x && mouse.x < b.x*zoom.x + b.w*zoom.x && mouse.y > b.y*zoom.y && mouse.y < b.y*zoom.y + b.h*zoom.y) {
-                    if(b.action && b.active) {
-                        clicked = false;
-                        console.log(b.text + " pressed");
-                        let callback = b.action;
-                        callback(this, b);
+                if(b.style != "circle") {
+                    console.log("cliecked in checkbuttons");
+                    if(mouse.x > b.x*zoom.x && mouse.x < b.x*zoom.x + b.w*zoom.x && mouse.y > b.y*zoom.y && mouse.y < b.y*zoom.y + b.h*zoom.y) {
+                        if(b.action && b.active) {
+                            clicked = false;
+                            console.log(b.text + " pressed");
+                            let callback = b.action;
+                            callback(this, b);
+                        }
+                    }
+                } else
+                if(b.style == "circle") {
+                    let dx = mouse.x - b.x;
+                    let dy = mouse.y - b.y;
+                    let dist = Math.sqrt(dx * dx + dy * dy);
+                    console.log("circle dist = ", dist);
+                    if(dist < b.h) {
+                        if(b.action && b.active) {
+                            clicked = false;
+                            console.log(b.text + " pressed");
+                            let callback = b.action;
+                            callback(this, b);
+                        }
                     }
                 }
             }

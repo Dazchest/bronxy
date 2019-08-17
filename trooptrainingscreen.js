@@ -35,8 +35,8 @@ class TroopTrainingScreen extends ScreenView {
         this.buttons.push(new Button({"active": true, "x": 475, "y": 500, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
         this.buttons.push(new Button({"active": true, "name": "train", "x": 365, "y": 365, "w": 100, "h": 30, "text": "Train", "screen": this, "action":  this.train}));
         //this.buttons.push(new Button({"active": true, "x": 400, "y": 350, "w": 100, "h": 30, "text": "Details", "screen": this, "action":  this.detailsScreen}));
-        this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "left", "name": "troopleft", "x": 75, "y": 200, "w": 64, "h": 64, "text": "Left", "screen": this, "action":  this.viewTiers}));
-        this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "right", "name": "troopright", "x": 420, "y": 200, "w": 64, "h": 64, "text": "Right", "screen": this, "action":  this.viewTiers}));
+        this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "left", "name": "troopleft", "x": 75, "y": 200, "w": 128, "h": 128, "text": "Left", "screen": this, "action":  this.viewTiers}));
+        this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "right", "name": "troopright", "x": 420, "y": 200, "w": 128, "h": 128, "text": "Right", "screen": this, "action":  this.viewTiers}));
 
         this.buttons.push(new Button({"active": true, "name": "speed", "x": 365, "y": 565, "w": 100, "h": 30, "text": "Speed", "screen": this, "action":  this.speed}));
 
@@ -119,10 +119,10 @@ class TroopTrainingScreen extends ScreenView {
 
         // draw left and right buttons
         if(buttonImages[0].icon.complete) {
-            ctx.drawImage(buttonImages[0].icon, 75, 200, gridSize.x * 2, gridSize.y * 2);
+            ctx.drawImage(buttonImages[0].icon, 75, 200, gridSize.x, gridSize.y);
         }
         if(buttonImages[1].icon.complete) {
-            ctx.drawImage(buttonImages[1].icon, 420, 200, gridSize.x * 2, gridSize.y * 2);
+            ctx.drawImage(buttonImages[1].icon, 420, 200, gridSize.x, gridSize.y);
         }
 
         if(troops[this.troopType].levels[tier].image) { // check image is available

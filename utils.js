@@ -357,16 +357,29 @@ function mapRange(value, a, b, c, d) {
     value = (value - a) / (b - a);
     return c + value * (d - c);
 }
-let startAmount = 4;
-let baseGatheringSpeed = 100000;
+// let startAmount = 4;
+// let baseGatheringSpeed = 100000;
 
-let seconds = 60;
-let newval = mapRange(startAmount, 1, 14, 50000, 1000000);
-console.log(newval);
+// let seconds = 60;
+// let newval = mapRange(startAmount, 1, 14, 50000, 1000000);
+// console.log(newval);
 
-    let f = false;
-    while(f==false) {   
-        console.log(f);        
-        f = true;
+//     let f = false;
+//     while(f==false) {   
+//         console.log(f);        
+//         f = true;
+//     }
+//     console.log(f);
+
+function bob() {
+    this.cat = "chedder";
+    this.dog = "rush";
+
+    function jack() {
+        return this.cat + " " + this.dog;
     }
-    console.log(f);
+}
+bob.prototype.jack2 = function() {return "hello";}
+
+let fido = new bob();
+console.log(fido.jack2());
