@@ -23,6 +23,9 @@ for(let x=0; x<10; x++) {
 }
 var troopManager = new TroopManager();
 
+var monsterManager = new MonsterManager();
+var monsterImages = [];
+
 var buildings;
 var buildingList = [];
 var buildingHandler = new BuildingHandler();
@@ -50,6 +53,7 @@ var screenManager;
 var mapScreen = {"active": false};
 var mapManager = new MapManager();
 var startOnMap = false;
+var mapTileImages = [];
 var worldMapScreen = {"active": false};
 
 var marches = [];
@@ -66,6 +70,7 @@ var items;
 var itemList = [];
 var itemManager = new ItemManager();
 var itemListImages = [];
+var itemHolderImages = [];
 
 var listBox, listCanvas, listCtx;
 
@@ -73,7 +78,6 @@ var speedScreen = {"active": false};
 
 var buttonImages = [];
 var mapImages = [];
-var monsterImages = [];
 var assets;
 
 var promises = [];
@@ -299,7 +303,7 @@ function init() {
         assets = new Assets();
         assets.loadIcons();
         assets.loadGeneralImages();
-        assets.loadMonsterImages();
+        monsterManager.loadMonsterImages();
        
         // Your web app's Firebase configuration
         var firebaseConfig = {
@@ -713,6 +717,12 @@ function loadMap2() {
             //console.log(info.val());
             md = info.val();
             md.buttons = [];
+            let ground = "grass1";
+            let i = getRandom(0, 50);
+            if(i == 20){
+                ground = "water1";
+            }
+            md.ground = ground;
             mapManager.processTile(md);
         });
 

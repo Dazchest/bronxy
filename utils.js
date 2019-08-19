@@ -243,31 +243,27 @@ class loader {
 
 }
 
-function convertimage(img){
-    // return;
-
+function convertImage() {
     var buffer = document.createElement('canvas');
     var bufferctx = buffer.getContext('2d');
-
+ 
+    var img = this;
     buffer.width = img.width;
-    buffer.height = img.height;
-    console.log(img.width + " , " + img.height);
+    buffer.height = img.height;;
 
     bufferctx.drawImage(img, 0, 0);
-    var imageData = bufferctx.getImageData(0,0,buffer.width, buffer.height);
+    
+    var imageData = bufferctx.getImageData(0, 0, buffer.width, buffer.height);
     var data = imageData.data;
+
     for (var i = 0; i < data.length; i += 4) {
-            if(data[i]+ data[i + 1] + data[i + 2] == 45){  // find white
-                data[i + 3] = .5; // alpha
+            if(data[i] == 255 && data[i + 1] == 0 && data[i + 2] == 255) {  // find magenta
+                data[i + 3] = 0; // alpha
             }
         }
-
+    img.onload = null;          // remove the onload event so it doesnt loop
     bufferctx.putImageData(imageData, 0, 0);
-    img.src = buffer.toDataURL('image/png');
-    monsterImages[0].src = buffer.toDataURL('image/png');
-    //console.log(img.width + " , " + img.height + " - " + img.src);
-    console.log("image converted???");
-
+    img.src = buffer.toDataURL();
 }
 
 function logout() {
@@ -371,15 +367,36 @@ function mapRange(value, a, b, c, d) {
 //     }
 //     console.log(f);
 
-function bob() {
-    this.cat = "chedder";
-    this.dog = "rush";
+// function bob() {
+//     this.cat = "chedder";
+//     this.dog = "rush";
 
-    function jack() {
-        return this.cat + " " + this.dog;
-    }
-}
-bob.prototype.jack2 = function() {return "hello";}
+//     function jack() {
+//         return this.cat + " " + this.dog;
+//     }
+// }
+// bob.prototype.jack2 = function() {return "hello";}
 
-let fido = new bob();
-console.log(fido.jack2());
+// let fido = new bob();
+// console.log(fido.jack2());
+
+// function b() {
+//     console.log(this.id);
+// }
+// var t;
+
+// t[0] = new Image();
+// t[0].id = "hello world";
+// t[0].onload = b;
+// t[0].src = "images/panels/item_holder_left.png";
+
+
+// let t = 1;
+// let b = 0;
+// for(let x=0; x<10; x++) {
+//     b += 1;
+//     b = b % 5;
+//     console.log(b);
+// }
+
+

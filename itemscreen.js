@@ -24,8 +24,6 @@ class ItemScreen extends ScreenView {
         buildingHandler.highlightGrid = false;
 
         this.listBox = new ListBox(100, 150, 500, 400, canvas, ctx);
-
-
     }
 
 
@@ -89,10 +87,12 @@ class ItemScreen extends ScreenView {
         }
     }
 
-    showItem(a, itemButton) {
+    showItem(qty, itemClicked) {
         //console.log("item clicked");
         //console.log(itemButton);
-        itemButton.useItem(1, itemButton);
+        if(itemClicked.group != "speedup") {
+            itemClicked.useItem(1, itemClicked);
+        }
     }
 
     checkItemButtons(listToCheck) {
@@ -111,8 +111,8 @@ class ItemScreen extends ScreenView {
                             //console.log(b.text + " pressed");
                             let callback = b.action;
                             //console.log(callback);
-                            let a=1;  
-                            callback(a, itemList[x]);
+                            let qty = 1;  
+                            callback(qty, itemList[x]);
                         }
                     }
                 }

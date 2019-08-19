@@ -102,17 +102,22 @@ class Item {
         this.x = x;
         this.y = y;
         let textOffsetY = Math.round(this.h / 2);
-        ctx.fillStyle = '#448833';
-        ctx.fillRect(x, y, this.w, this.h);
-        ctx.fillStyle = '#442233';
-        ctx.fillRect(x + this.w, y, 50, this.h);
+
+        ctx.drawImage(itemHolderImages[0], x, y, itemHolderImages[0].width, this.h);       //left
+        ctx.drawImage(itemHolderImages[2], x + itemHolderImages[0].width, y, this.w, this.h);       //middle
+        ctx.drawImage(itemHolderImages[1], x + this.w + itemHolderImages[0].width, y, itemHolderImages[1].width, this.h);       //right
+
+        // ctx.fillStyle = '#448833';
+        // ctx.fillRect(x, y, this.w, this.h);
+        // ctx.fillStyle = '#442233';
+        // ctx.fillRect(x + this.w, y, 50, this.h);
 
         ctx.textBaseline = "middle";
         ctx.fillStyle = '#eeeeee';
         ctx.font = this.h/2 + "px Georgia";
-        ctx.fillText(this.name, x + 5, y + textOffsetY);
+        ctx.fillText(this.name, x + 10, y + textOffsetY);
         ctx.fillStyle = '#ffffff';
-        ctx.fillText(this.quantity, x + 5 + this.w, y + textOffsetY);
+        ctx.fillText(this.quantity, x + 10 + this.w, y + textOffsetY);
     }
     
 }

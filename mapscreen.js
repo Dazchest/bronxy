@@ -166,12 +166,12 @@ class MapScreen extends ScreenView {
         points.push(new Vector3d(t + 250 + (x*100) - (y*100), p + 100 +(y*50) + (x*50)));
         points.push(new Vector3d(t + 150 + (x*100) - (y*100), p + 150 +(y*50) + (x*50)));
         this.mapTiles[x][y].points = points;
-        let pointsOrigin = [];
-        pointsOrigin.push(new Vector3d(t + 50 + (x*100) - (y*100), p + 100 +(y*50) + (x*50)));
-        pointsOrigin.push(new Vector3d(t + 150 + (x*100) - (y*100), p + 50 +(y*50) + (x*50)));
-        pointsOrigin.push(new Vector3d(t + 250 + (x*100) - (y*100), p + 100 +(y*50) + (x*50)));
-        pointsOrigin.push(new Vector3d(t + 150 + (x*100) - (y*100), p + 150 +(y*50) + (x*50)));
-        this.mapTiles[x][y].pointsOrigin = pointsOrigin;
+        // let pointsOrigin = [];
+        // pointsOrigin.push(new Vector3d(t + 50 + (x*100) - (y*100), p + 100 +(y*50) + (x*50)));
+        // pointsOrigin.push(new Vector3d(t + 150 + (x*100) - (y*100), p + 50 +(y*50) + (x*50)));
+        // pointsOrigin.push(new Vector3d(t + 250 + (x*100) - (y*100), p + 100 +(y*50) + (x*50)));
+        // pointsOrigin.push(new Vector3d(t + 150 + (x*100) - (y*100), p + 150 +(y*50) + (x*50)));
+        // this.mapTiles[x][y].pointsOrigin = pointsOrigin;
 
     }
 
@@ -227,21 +227,22 @@ class MapScreen extends ScreenView {
                     }
                     this.tileCount++;
                     //-----------
-                    ctx.beginPath();
-                    //points[0] = points[0].addCamera(camera);
-                    ctx.moveTo(points[0].x, points[0].y);
-                    for(let j=1; j<4; j++) {
-                        //points[j] = points[j].addCamera(camera);
-                        ctx.lineTo(points[j].x, points[j].y);
+                    let drawPoints = false;
+                    if(drawPoints) {
+                        ctx.beginPath();
+                        ctx.moveTo(points[0].x, points[0].y);
+                        for(let j=1; j<4; j++) {
+                            ctx.lineTo(points[j].x, points[j].y);
+                        }
+                        ctx.lineTo(points[0].x, points[0].y);
+                        ctx.stroke();
+                        if(x < 1 || x > this.grid.width-1 || y < 1 || y > this.grid.height-1) {
+                            ctx.fillStyle = '#7777ff';
+                        } else {
+                            ctx.fillStyle = '#44dd44';
+                        }
+                        ctx.fill();
                     }
-                    ctx.lineTo(points[0].x, points[0].y);
-                    ctx.stroke();
-                    if(x < 1 || x > this.grid.width-1 || y < 1 || y > this.grid.height-1) {
-                        ctx.fillStyle = '#7777ff';
-                    } else {
-                        ctx.fillStyle = '#44dd44';
-                    }
-                    ctx.fill();
 
                     if(x >= 0 && x<this.grid.width && y >= 0 && y<this.grid.height) {
                        // console.log("error here " + x + ", " + y);
@@ -250,7 +251,9 @@ class MapScreen extends ScreenView {
                         ctx.fillStyle = '#ffffff';
                         //console.log(x + " , " + y);
                         let tile = this.mapTiles[x][y];
-                        ctx.fillText(tile.coords.x + ", " + tile.coords.y, points[0].x + 70, points[0].y + 0);
+                        tile.drawTile();
+                        //ctx.drawImage(mapTileImages[0], points[0].x, points[0].y - this.tileDimensions.height/2, 161, 81)
+                        //ctx.fillText(tile.coords.x + ", " + tile.coords.y, points[0].x + 70, points[0].y + 0);
                         //ctx.fillText(t.coords.x + ", " + t.coords.y,  70 + 200,  0 -100);
                         if(tile.resources) {
                             ctx.fillStyle = '#0000ff';
@@ -263,10 +266,11 @@ class MapScreen extends ScreenView {
                             ctx.fillText(tile.name, points[0].x + 20, points[0].y);
                         }
                         if(tile.monster) {
-                            //console.log("monsteer");
-                            ctx.drawImage(monsterImages[1], points[0].x+35, points[0].y - 50, 100, 76);
-                            //ctx.fillStyle = '#ffee44';
-                            //ctx.fillText(tile.name, points[0].x + 20, points[0].y);
+                            if(tile.level == 2) {
+                                tile.drawMonster(0, points[0].x+35, points[0].y - 50, 100, 76);
+                            } else {
+                                ctx.drawImage(monsterImages[tile.level], points[0].x+35, points[0].y - 50, 100, 76);
+                            }
                         }
                     }
                 }
@@ -381,6 +385,7 @@ class Tile {
         this.user = ""; // enter user name here
 
         this.type = "grass1";
+        this.ground = "grass1";
         this.points;
 
         this.level = 0;
@@ -440,8 +445,18 @@ class Tile {
 
     draw() {
         //this.showButtons();
+    
+
         this.drawButtons();
         this.checkButtons();
+    }
+    drawTile() {
+        let x = 0;
+        if(this.ground == "water1") {
+            x = 1;
+        }
+        ctx.drawImage(mapTileImages[x], this.points[0].x, this.points[0].y - mapScreen.tileDimensions.height/2, 161, 81);
+
     }
 
     drawButtons() {
@@ -565,16 +580,31 @@ class MonsterTile extends Tile{
         super(data);
 
         this.monster = true;
-        this.monsterName = "Zuko";
-        this.power = 5000;
-        this.level = 1;
+        this.monsterName = monsters[this.level].name;
+        this.power = monsters[this.level].power;
 
-        this.contents = [{"type" : 40, "level": 2, "quantity": 1}]
+        this.lastFrameTime = Date.now();
+        this.currentFrame = 0;
+
+        this.contents = monsters[this.level].contents;
 
         this.buttons.push(new Button({"active": false, "drawButton": true, "offset" : {"x": 0, "y": 40}, "w": 75, "h": 30, "text": "ATTACK", "screen": this, "action": this.attack}));
     }
 
-    drawMonster() {
+    drawMonster(action, x, y, w, h) {
+        //style[action] = idel, walking, fightingt etc
+        let currentImage = monsters[this.level].animation.style[action].images[this.currentFrame];
+        let frameCount = monsters[this.level].animation.style[action].frameCount;
+        let animationSpeed = monsters[this.level].animation.style[action].speed;
+
+        ctx.drawImage(currentImage, x, y, w, h);
+
+        if(Date.now() >= this.lastFrameTime + animationSpeed) {
+            this.currentFrame += 1;
+            this.currentFrame =  this.currentFrame % frameCount;
+            this.lastFrameTime = Date.now();
+        }
+
 
     }
 

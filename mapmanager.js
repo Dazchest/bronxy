@@ -105,6 +105,7 @@ class MapManager {
         let id = Number(x + (y * mapScreen.grid.width));
         firebase.database().ref("map" + "/" + id.toString()).update(data);
     }
+    
     addMonsters(level, quantity) {
         //lets add some random res tiles
         console.log("adding some monsters");
