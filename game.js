@@ -23,8 +23,8 @@ for(let x=0; x<10; x++) {
 }
 var troopManager = new TroopManager();
 
+var monsters = [];
 var monsterManager = new MonsterManager();
-var monsterImages = [];
 
 var buildings;
 var buildingList = [];

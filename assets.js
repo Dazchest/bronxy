@@ -125,94 +125,27 @@ class Assets {
         mapTileImages[1] = new Image();
         mapTileImages[1].onload = convertImage;
         mapTileImages[1].src = "images/maptiles/water1.png";
+        mapTileImages[2] = new Image();
+        mapTileImages[2].onload = convertImage;
+        mapTileImages[2].src = "images/maptiles/water2.png";
+
+        mapTileImages[3] = new Image();
+        mapTileImages[3].onload = convertImage;
+        mapTileImages[3].src = "images/maptiles/farm.png";
+        mapTileImages[4] = new Image();
+        mapTileImages[4].onload = convertImage;
+        mapTileImages[4].src = "images/maptiles/sawmill.png";
+        mapTileImages[5] = new Image();
+        mapTileImages[5].onload = convertImage;
+        mapTileImages[5].src = "images/maptiles/gemmine.png";
+        mapTileImages[6] = new Image();
+        mapTileImages[6].onload = convertImage;
+        mapTileImages[6].src = "images/maptiles/ironoremine.png";
 
     }
 
 }
 
-class Monster {
-
-    constructor(data) {
-        for(let x=0; x<Object.keys(data).length; x++) {
-            name = Object.keys(data)[x];
-            this[name] = data[name];
-        }
-
-    }
-}
-let a, c, m;
-var monsters = [];
-//level 0
-a = {animate: true, style: [{frameCount: 5, speed:200, images:[]}]};
-c = [{"type" : 40, "level": 2, "quantity": 1}];
-m = {type: 0, level:0, power: 5000, name: "Zappy", animation: a, contents: c};
-monsters.push(new Monster(m));
-
-//level 1
-a = {animate: true, style: [{frameCount: 5, speed:200, images:[]}]};
-c = [{"type" : 40, "level": 2, "quantity": 1}];
-m = {type: 1, level:1, power: 10000, name: "Zuko", animation: a, contents: c};
-monsters.push(new Monster(m));
-
-//level 2
-a = {animate: true, style: [{frameCount: 5, speed:200, images:[]}]};
-c = [{"type" : 40, "level": 2, "quantity": 1}];
-m = {type: 2, level:2, power: 15000, name: "Fairy", animation: a, contents: c};
-monsters.push(new Monster(m));
-
-class MonsterManager {
-
-    constructor() {
-
-    }
-
-    clearLevel0() {
-
-    }
-
-    loadMonsterImages() {
-        let animData;
-
-        //------ level 2 monster setup
-        monsters[2].animation.style = [];
-
-        //action 0 - fly
-        animData = {frameCount: 5, speed:200, images:[]}
-        monsters[2].animation.style.push(animData);
-        
-        for(let x=0; x<monsters[2].animation.style[0].frameCount; x++) {
-            monsters[2].animation.style[0].images[x] = new Image();
-            monsters[2].animation.style[0].images[x].src = "images/monsters/2_" + x + ".png";
-            //monsters[2].animation.style[0].images[x].onload = convertImage;
-        }
-        //action 1 - idle
-        animData = {frameCount: 5, speed:200, images:[]}
-        monsters[2].animation.style.push(animData);
-        
-        for(let x=0; x<monsters[2].animation.style[1].frameCount; x++) {
-            monsters[2].animation.style[1].images[x] = new Image();
-            monsters[2].animation.style[1].images[x].src = "images/monsters/2_IDLE_" + x + ".png";
-            //monsters[2].animation.style[0].images[x].onload = convertImage;
-        }
-        //----------------------
-    
-        monsterImages[0] = new Image();
-        monsterImages[0].onload = convertImage;
-        monsterImages[0].src = "images/monsters/0.png";
-    
-        monsterImages[1] = new Image();
-        monsterImages[1].src = "images/monsters/1.png";
-    
-        monsterImages[2] = [];
-        monsterImages[2].frameCount = 5;
-        for(let x=0; x<monsterImages[2].frameCount; x++) {
-            monsterImages[2][x] = new Image();
-            monsterImages[2][x].src = "images/monsters/2_" + x + ".png";
-        }
-        
-    
-    }
-}
 
 
 

@@ -273,18 +273,74 @@ function logout() {
 
 function banner(text, x, y, size) {
 
+    ctx.save();
     ctx.font = size + 'px Arial';
     let textWidth = ctx.measureText(text).width;
 
     ctx.strokeStyle = '#000000';
     ctx.fillStyle = '#ffffff';
     ctx.lineWidth = 2;
+    ctx.globalAlpha = .7;
     ctx.fillRect(x - textWidth/2, y, textWidth + 2, size + 2);
+    ctx.globalAlpha = 1;
     ctx.strokeRect(x - textWidth/2, y, textWidth + 2, size + 2);
 
     ctx.fillStyle = '#000000';
     ctx.fillText(text, x - textWidth/2, y + size - 2, gridSize.x);
 
+    ctx.restore();
+}
+// class Classes {
+    
+//     constructor() {
+
+//     }
+// }
+
+
+var classes = {};
+classes.city_text = {font_size: 20, color: '#ff0000'};
+classes.resource_tile_text = {font_family: "Arial", font_size: 20, color: '#ffffff', background: '#ff0000', opacity:.7, padding: 3};
+//TODO: can i load and parse a standard scss file ????
+
+class Banner {
+    
+    constructor(_class) {
+        this.class = _class;
+    }
+    static setup(data) {
+        for (let x = 0; x < Object.keys(data).length; x++) {
+            name = Object.keys(data)[x];
+            this[name] = data[name];
+        }
+    }
+    static draw(_class, text, x, y, w, h, fitText) {
+        ctx.save();
+        this.setup(classes[_class])
+        if(this.font_size > h - this.padding*2) {
+            this.font_size = h - this.padding*2;
+        }
+        ctx.font = this.font_size + 'px ' + this.font_family + ' ' + 'bold';
+        // 'italic bold 14px Arial'
+        
+        ctx.strokeStyle = '#000000';
+        ctx.fillStyle = this.background;
+        ctx.lineWidth = 2;
+
+        //ctx.translate(x - w/2, y - h/2)
+        ctx.globalAlpha = this.opacity;
+        ctx.fillRect(x - w/2, y - h/2, w, h);
+        ctx.globalAlpha = 1;
+        ctx.strokeRect(x - w/2, y - h/2, w, h);
+
+        //let textWidth = ctx.measureText(text).width;
+        ctx.fillStyle = this.color;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(text, x, y + this.padding, w - this.padding*2);
+
+        ctx.restore();
+    }
 }
 
 

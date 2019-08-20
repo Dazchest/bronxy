@@ -139,9 +139,10 @@ class MarchScreen extends ScreenView {
             ctx.font = "25px arial";
             ctx.fillText("Monster name = " + this.tile.monsterName, this.x+5, this.y + 120);
 
-            if(this.tile.level == 2) {
-                this.tile.drawMonster(1, 450, 150, 200, 150);
-            }
+           // if(this.tile.level == 2) {
+               let lev = this.tile.level;
+                monsters[lev].drawM(0, 450, 150, 200, 150);
+           // }
         }
 
     }

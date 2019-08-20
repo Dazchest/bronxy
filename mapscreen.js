@@ -251,26 +251,34 @@ class MapScreen extends ScreenView {
                         ctx.fillStyle = '#ffffff';
                         //console.log(x + " , " + y);
                         let tile = this.mapTiles[x][y];
-                        tile.drawTile();
+                        if(x == 0 || y == 0) {
+                            tile.ground = "water2";
+                        }
+                            tile.drawTile();
                         //ctx.drawImage(mapTileImages[0], points[0].x, points[0].y - this.tileDimensions.height/2, 161, 81)
                         //ctx.fillText(tile.coords.x + ", " + tile.coords.y, points[0].x + 70, points[0].y + 0);
                         //ctx.fillText(t.coords.x + ", " + t.coords.y,  70 + 200,  0 -100);
                         if(tile.resources) {
                             ctx.fillStyle = '#0000ff';
-                            ctx.fillText(tile.text, points[0].x + 70, points[0].y - 20);
-                            ctx.fillText("Level: " + tile.level, points[0].x + 65, points[0].y + 20);
+                            // ctx.fillText(tile.text, points[0].x + 60, points[0].y - 20);
+                            // ctx.fillText("Level: " + tile.level, points[0].x + 55, points[0].y + 20);
+                            //TODO: BANNER NEEDS A WIDTH AND HEIGHT, CENTER TEXT ETC, ALPHA
+                            //TODO: SETUP A 'CLASS' CLASS - banner.class = "City_Text" - banner(cityname)
+                            //let banner=new Banner(class=City_Text);
+                           // banner(tile.text, points[0].x + 80, points[0].y - 30, 20);
+                            banner(tile.level, points[0].x + 80, points[0].y + 10, 20);
+                            Banner.draw("resource_tile_text", tile.text, points[0].x + 80, points[0].y - 20, 100, 20);
+                            //ctx.drawImage(mapImages[4].image, points[0].x-15, points[0].y - 105, 195, 150);
                         } else 
                         if(tile.city) {
                             ctx.drawImage(mapImages[0].image, points[0].x-15, points[0].y - 105, 195, 150);
                             ctx.fillStyle = '#ffee44';
-                            ctx.fillText(tile.name, points[0].x + 20, points[0].y);
+                            banner(tile.name, points[0].x + 80, points[0].y - 50, 20);
                         }
                         if(tile.monster) {
-                            if(tile.level == 2) {
-                                tile.drawMonster(0, points[0].x+35, points[0].y - 50, 100, 76);
-                            } else {
-                                ctx.drawImage(monsterImages[tile.level], points[0].x+35, points[0].y - 50, 100, 76);
-                            }
+                            let lev = tile.level;
+                            //monsters[lev].drawM(0, points[0].x+35, points[0].y - 50, 100, 76);
+                            tile.monster.drawM(0, points[0].x+35, points[0].y - 50, 100, 76);
                         }
                     }
                 }
@@ -450,13 +458,31 @@ class Tile {
         this.drawButtons();
         this.checkButtons();
     }
-    drawTile() {
+    drawTile() {            // TODO: NNEDS TO BE REDONE AND OPTIMISED
         let x = 0;
         if(this.ground == "water1") {
             x = 1;
+        } else
+        if(this.ground == "water2") {
+            x = 2;
         }
         ctx.drawImage(mapTileImages[x], this.points[0].x, this.points[0].y - mapScreen.tileDimensions.height/2, 161, 81);
 
+        if(this.resources) {
+            if(this.type == "food") {
+                x = 3;
+            } else
+            if(this.type == "wood") {
+                x = 4;
+            } else
+            if(this.type == "stone") {
+                x = 5;
+            } else
+            if(this.type == "iron") {
+                x = 6;
+            }
+            ctx.drawImage(mapTileImages[x], this.points[0].x, this.points[0].y - mapScreen.tileDimensions.height/2, 161, 81);
+        }
     }
 
     drawButtons() {
@@ -588,25 +614,26 @@ class MonsterTile extends Tile{
 
         this.contents = monsters[this.level].contents;
 
+        this.monster = new Monster(monsters[this.level]);   
+
         this.buttons.push(new Button({"active": false, "drawButton": true, "offset" : {"x": 0, "y": 40}, "w": 75, "h": 30, "text": "ATTACK", "screen": this, "action": this.attack}));
     }
 
-    drawMonster(action, x, y, w, h) {
-        //style[action] = idel, walking, fightingt etc
-        let currentImage = monsters[this.level].animation.style[action].images[this.currentFrame];
-        let frameCount = monsters[this.level].animation.style[action].frameCount;
-        let animationSpeed = monsters[this.level].animation.style[action].speed;
+    // drawMonster(action, x, y, w, h) {
+    //     return;
+    //     //style[action] = idel, walking, fightingt etc
+    //     let currentImage = monsters[this.level].animation.style[action].images[this.currentFrame];
+    //     let frameCount = monsters[this.level].animation.style[action].frameCount;
+    //     let animationSpeed = monsters[this.level].animation.style[action].speed;
 
-        ctx.drawImage(currentImage, x, y, w, h);
+    //     ctx.drawImage(currentImage, x, y, w, h);
 
-        if(Date.now() >= this.lastFrameTime + animationSpeed) {
-            this.currentFrame += 1;
-            this.currentFrame =  this.currentFrame % frameCount;
-            this.lastFrameTime = Date.now();
-        }
-
-
-    }
+    //     if(Date.now() >= this.lastFrameTime + animationSpeed) {
+    //         this.currentFrame += 1;
+    //         this.currentFrame =  this.currentFrame % frameCount;
+    //         this.lastFrameTime = Date.now();
+    //     }
+    // }
 
     attack(self) {
         mapScreen.tileClicked = false;

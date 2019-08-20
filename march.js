@@ -116,6 +116,10 @@ class March {
             //TODO: what to do here?????
             console.log(this);
         }
+        //check close to a monster, so starting monster attack action etc
+        if(this.tile.monster && this.tile.monster.level == 2 && this.elasped < 3000) {
+            this.tile.monster.action = 2;
+        }
     }
 
     processArrived() {
