@@ -158,30 +158,55 @@ function scrollCity(e) {
     }
 
 }
-
+linearTween = function (t, b, c, d) {
+	return c*t/d + b;
+};
+function easeInOutQuad(t, b, c, d) {
+    t /= d/2;
+    if (t < 1) return c/2*t*t + b;
+    t--;
+    return -c/2 * (t*(t-2) - 1) + b;
+};
+easeOutQuad = function (t, b, c, d) {
+	t /= d;
+	return -c * t*(t-2) + b;
+};
 function continueScroll() {
     return;
     //console.log("scrollmovement = " + scrollMovement.x + ", " + scrollMovement.y);
     if(scrolling) {
-        if(scrollMovement.x < 0) {
-            scrollMovement.dirx = "left"
-            camera.x += scrollMovement.x;
-            //camera.x += 1;
-            scrollMovement.x += 1;
-            //console.log("scrolling left")
+        let duration = 2;
+        if(scrollMovement.y != 0) {
+            let l;
+            let t = scrollMovement.t;
+            let start = scrollMovement.start.y;
+            let endY = scrollMovement.endY
+            let change = endY - start;
+            
+            scrollMovement.diry = "up";
+            //camera.y += scrollMovement.y;
+            camera.y = easeOutQuad(t, start, change, duration);
+
+
         }
-        if(scrollMovement.x > 0) {
-            //scrollMovement.dirx = "right"
-            //camera.x -= scrollMovement.x;
-            //scrollMovement.x -= .2;
-            //console.log("scrolling right")
+        if(scrollMovement.x != 0) {
+            let l;
+            let t = scrollMovement.t;
+            let start = scrollMovement.start.x;
+            let endX = scrollMovement.endX
+            let change = endX - start;
+                        
+            scrollMovement.dirx = "up";
+            //camera.y += scrollMovement.y;
+            camera.x = easeOutQuad(t, start, change, duration);
         }
 
-    }
+        scrollMovement.t += .1;
+        if(scrollMovement.t >= duration) {
+            scrolling = false;
+        }
+        }
 
-    if(scrollMovement.dirx=="left" && scrollMovement.x >= 0) {
-        scrolling = false;
-    }
 
 
 }

@@ -68,7 +68,7 @@ class MarchManager {
     displayMarchDetails() {
         for(let x=0; x<marches.length; x++) {
             ctx.fillStyle = '#000000'
-            ctx.fillText(marches[x].elasped, 10, 160 + (x*25));
+            ctx.fillText(marches[x].elasped, 10, 450 + (x*25));
         }
     }
 

@@ -123,7 +123,18 @@ function Vec2(x, y) {
   }
   //----------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------
-  
+var progress = 0;
+function progressBar() {
+    console.log("progress");
+    ctx.save()
+
+    ctx.fillStyle = '#ffffff';
+    
+    ctx.fillRect(canvas.width / 2 - 25, canvas.height / 2 - (50 + progress*10)/2, 50, 50 + progress*10);
+    //ctx.arc(100,100, 100, Math.PI, Math.PI * 1.2);
+    progress++;
+    ctx.restore();
+}
 
 
 
@@ -248,6 +259,7 @@ function convertImage() {
     var bufferctx = buffer.getContext('2d');
  
     var img = this;
+    //console.log("converting image = ", img.src);
     buffer.width = img.width;
     buffer.height = img.height;;
 

@@ -8,7 +8,7 @@ var canvas, ctx;
 var mouse = {"x": 0, "y": 0, "movement": {"x": 0, "y": 0}};
 var camera = {"x": 0, "y": 0};
 var cityCameraStart = {"x": 200, "y": 30};
-var gridSize = {"x":100, "y": 100};
+var gridSize = {"x":128, "y": 128};
 
 var player;
 
@@ -102,12 +102,6 @@ var moving;
 var prog;
 var load; 
 
-var originalCanvas = {width: 0, height: 0};
-var screenZoom = new Vector3d(.5, .5);
-var ratioW = 1;
-var ratioH = 1;
-
-
 function init() {
     username = localStorage.getItem("username");
     if(username) {
@@ -133,41 +127,9 @@ function init() {
     //init cavnas
     canvas = document.getElementById('canvas');
     ctx = canvas.getContext('2d');
-    console.log("canvas width at the start = ", canvas.width);
-    console.log("window outer width at the start = ", window.outerWidth);
-    console.log("window inner width at the start = ", window.innerWidth);
-    originalCanvas.width = 600;
-    originalCanvas.height = 900;
-
-    //resixe the canva
-    if(window.innerWidth<600) {
-        //set screenZoom
-        ratioW = window.innerWidth / originalCanvas.width;
-        ratioW = ratioW.toFixed(2);
-        console.log("ratio = ", ratioW , " by ", ratioH);
-        //-------------
-        canvas.width = window.innerWidth;
-    }  else {
-        canvas.width = originalCanvas.width;
-    }
-    if(window.innerHeight<900) {
-        //set screenZoom
-        ratioH = window.innerHeight / originalCanvas.height;
-        ratioH = ratioH.toFixed(2);
-        console.log("ratio = ", ratioW , " by ", ratioH);
-        //-------------
-        canvas.height = window.innerHeight;
-    }  else {
-        canvas.height = originalCanvas.height;
-    }
-    console.log("ratio = ", ratioW , " by ", ratioH);
-
-    //screenZoom.x = .67;
-    screenZoom.x = ratioW;
-    screenZoom.y = ratioH;
-    //------------------------------------------------
-    //-----------------------------------------
-
+    //resixe the canvas
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     ctx.fillStyle = "#ff0000";
     ctx.fillRect(0,0,canvas.width,canvas.height);
@@ -179,8 +141,8 @@ function init() {
 
     canvas.addEventListener('mousemove', function(e) {
         //if (opsys=="unknown") {
-            mouse.x = Math.floor(e.offsetX / screenZoom.x);
-            mouse.y = Math.floor(e.offsetY / screenZoom.y);
+            mouse.x = e.offsetX;
+            mouse.y = e.offsetY;
             mouse.movement.x = e.movementX;
             mouse.movement.y = e.movementY;
         //} else {
@@ -432,15 +394,10 @@ function init() {
                 //loadMap2();
 
                 console.log("Waiting for map");
-                let p = [];
-                let p1 = loadMap2();
-                p.push(p1);
-                let p2 = loadGame();
-                p.push(p2);
-
-                Promise.all(p).then( result => {
-                    clearInterval(prog);
-                    setTimeout(draw, 100);
+                let lm = loadMap2();
+                lm.then(() => {
+                    console.log("map promise done");
+                    loadGame();
                 });
 
                 console.log('exists');
@@ -833,7 +790,6 @@ function loadMap2() {
 function loadGame() {   
     //userName = document.getElementById('savename').value;
     //if(!userName) { userName = "Bronxy";}
-    return new Promise(resolve => {
 
     var ref = firebase.database().ref(username);
 
@@ -938,12 +894,9 @@ function loadGame() {
     });
     //------------------------
 
-    // clearInterval(prog);
-    // setTimeout(draw, 100);
+    clearInterval(prog);
+    setTimeout(draw, 100);
 
-    resolve(true);
-
-    });
 
     });
     //let keys = Object.keys(ref);
@@ -981,7 +934,6 @@ function d2() {
 var zoom = {"x": 1, "y": 1};
 
 
-
 // ----------------------------------------------------------
 // --- MAIN GAME LOOP ---
 function draw() {
@@ -991,13 +943,11 @@ function draw() {
 
     ctx.save();
     
-    ctx.scale(screenZoom.x, screenZoom.y);
+    //ctx.scale(zoom.x, zoom.y);
 
-    ctx.fillStyle = "#cccc00";
-    ctx.fillRect(0, 0, canvas.width / screenZoom.x, canvas.height / screenZoom.y);
-    //ctx.restore();
-    // requestAnimationFrame(draw);    
-    // return;
+    ctx.fillStyle = "#cccc66";
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+
     let gridCoord = convertMouseXYtoGridXY();
     popup(gridCoord.x + ", " + gridCoord.y, 10, 50);
 

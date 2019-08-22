@@ -39,14 +39,13 @@ class Button {
                 ctx.fillText(this.text, this.x + 5, this.y + height);
             } else
             if(this.style == "circle") {
+                height = this.h;
                 ctx.font = "25px Georgia";
                 let textWidth = ctx.measureText(this.text).width;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, height, 0, 2 * Math.PI);
                 ctx.fill();
                 ctx.stroke();
-                this.w = textWidth + 20;
-                this.h = height + 10;
                 ctx.shadowColor = "transparent";
                 ctx.fillStyle = '#000000';
                 ctx.fillText(this.text, this.x - textWidth/2, this.y + 12);

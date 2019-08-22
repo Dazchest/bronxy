@@ -14,10 +14,10 @@ class CityScreen extends ScreenView {
         //this.inputs.push(new newInput("f"));
 
         console.log("this is CityScreen constructor");
-        this.buttons.push(new Button({"active": true, "style": "circle", "x": 500, "y": 100, "w": 80, "h": 40, "text": "Items", "screen": this, "action":  this.itemScreen}));
-        this.buttons.push(new Button({"active": true, "x": 500, "y": 160, "w": 80, "h": 30, "text": "Research", "screen": this, "action":  this.researchScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 150, "w": 70, "h": 50, "text": "Map", "screen": this, "action":  this.mapScreen3}));
+        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 260, "w": 80, "h": 50, "text": "Items", "screen": this, "action":  this.itemScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 370, "w": 80, "h": 50, "text": "Research", "screen": this, "action":  this.researchScreen}));
 
-        this.buttons.push(new Button({"active": true, "x": 500, "y": 20, "w": 70, "h": 30, "text": "Map 3", "screen": this, "action":  this.mapScreen3}));
 
         
         // cities[currentCity].active = false;
@@ -33,8 +33,8 @@ class CityScreen extends ScreenView {
         //return;
         if(this.active) {
             ctx.strokeStyle = "#000000";
-            ctx.fillStyle = "#aaaaff";
-            ctx.fillRect(this.x, this.y, this.w, this.h);
+            ctx.fillStyle = "#ffffff";
+            ctx.fillRect(this.x, this.y, canvas.w / .5, canvas.h / .5);
 
             ctx.fillStyle = '#000000';
             ctx.font = "20px Georgia";

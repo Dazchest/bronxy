@@ -119,9 +119,31 @@ class Assets {
         itemHolderImages[1].src = "images/panels/item_holder_right.png";
         itemHolderImages[2].src = "images/panels/item_holder_middle.png";
 
-        mapTileImages[0] = new Image();
-        mapTileImages[0].onload = convertImage;
-        mapTileImages[0].src = "images/maptiles/grass1.png";
+        function dop() {
+            //this.resolve(true);
+            return;
+        }
+        function processImage(imageArray, imageFile) {
+            return new Promise(function(resolve, reject) {
+                let i = new Image();
+                i.onload = () => {
+                    resolve(i); 
+                    convertImage.call(i);
+                    console.log("should go and convert");
+                };
+                i.src = imageFile;
+                imageArray.push(i);
+                //resolve(true);
+            });
+        }
+        processImage(mapTileImages, "images/maptiles/grass1.png").then(function(response) {
+            //convertImage(response);
+            console.log("Map Grass LOADED " + response);
+        });
+
+        //mapTileImages[0] = new Image();
+        //mapTileImages[0].onload = convertImage;
+        //mapTileImages[0].src = "images/maptiles/grass1.png";
         mapTileImages[1] = new Image();
         mapTileImages[1].onload = convertImage;
         mapTileImages[1].src = "images/maptiles/water1.png";
@@ -146,6 +168,7 @@ class Assets {
 
 }
 
+var il = [];
 
 
 

@@ -3,8 +3,10 @@ class ListBox {
     constructor(x, y, w, h, canvas, ctx, vertical, horizontal) {
         console.log("Creating the ListBox");
 
-        this.x = x;
-        this.y = y;
+        this.x = x * screenZoom.x;
+        this.y = y * screenZoom.y;
+        this.x2 = x;
+        this.y2 = y;
         this.w = w;
         this.h = h;
         this.horizontal = false;
@@ -21,10 +23,10 @@ class ListBox {
         this.listCtx = this.listCanvas.getContext("2d");
 
         this.listCanvas.style.position = "absolute"; 
-        this.listCanvas.style.left = x + "px";
-        this.listCanvas.style.top = y + "px";
-        this.listCanvas.width = w;
-        this.listCanvas.height = h;
+        this.listCanvas.style.left = Math.round(this.x2 * screenZoom.x) + "px";
+        this.listCanvas.style.top = Math.round(this.y2 * screenZoom.x) + "px";
+        this.listCanvas.width = this.w * screenZoom.x;
+        this.listCanvas.height = this.h * screenZoom.x;
 
         this.listCtx.fillStyle = "#000000";
         this.listCtx.fillRect(0, 0, this.listCanvas.width, this.listCanvas.height);
@@ -49,10 +51,10 @@ class ListBox {
         // });
 
         this.listCanvas.addEventListener('mousemove', function(e) {
-                mouse.x = e.offsetX;
-                mouse.y = e.offsetY;
-                mouse.movement.x = e.movementX;
-                mouse.movement.y = e.movementY;
+            mouse.x = Math.floor(e.offsetX / screenZoom.x);
+            mouse.y = Math.floor(e.offsetY / screenZoom.y);
+            mouse.movement.x = e.movementX;
+            mouse.movement.y = e.movementY;
         });
     
         this.listCanvas.addEventListener("touchmove", this.eventHandler);
@@ -127,6 +129,13 @@ class ListBox {
 
     }
 
+    init() {
+        this.listCtx.save();
+        this.listCtx.scale(screenZoom.x, screenZoom.y);
+    }
+    rest() {
+        this.listCtx.restore();
+    }
 
     clear() {
         this.listCtx.clearRect(0, 0, this.listCanvas.width, this.listCanvas.height);

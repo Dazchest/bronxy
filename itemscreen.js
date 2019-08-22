@@ -8,7 +8,7 @@ class ItemScreen extends ScreenView {
         this.buttons = [];
         this.name = "Items";
 
-        this.buttons.push(new Button({"style": "circle", "active": true, "x": 750, "y": 50, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
+        this.buttons.push(new Button({"style": "circle", "active": true, "x": 450, "y": 50, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
         //this.buttons.push(new Button({"active": true, "x": 400, "y": 350, "w": 100, "h": 30, "text": "Details", "screen": this, "action":  this.detailsScreen}));
 
         for(let x=0; x<itemList.length; x++) {
@@ -23,7 +23,7 @@ class ItemScreen extends ScreenView {
         cities[currentCity].active = false;
         buildingHandler.highlightGrid = false;
 
-        this.listBox = new ListBox(100, 150, 500, 400, canvas, ctx);
+        this.listBox = new ListBox(80, 150, 400, 400, canvas, ctx);
     }
 
 
@@ -58,7 +58,7 @@ class ItemScreen extends ScreenView {
 
             // ctx.drawImage(itemListImages[7], borderPanelStartX, borderPanelStartY + 32, itemListImages[7].width, borderPanelHeight);
             //--
-            ctx.drawImage(itemListImages[10], this.listBox.x-10, this.listBox.y-7, this.listBox.w+20, this.listBox.h+15);
+            ctx.drawImage(itemListImages[10], this.listBox.x2-10, this.listBox.y2-7, this.listBox.w+20, this.listBox.h+15);
             //--
 
             this.displayItems();
@@ -71,6 +71,7 @@ class ItemScreen extends ScreenView {
     }
 
     displayItems() {
+        this.listBox.init();    // always call rest() later
         this.listBox.clear();
         for(let x=0; x<itemList.length; x++) {
             let itemWidth = itemList[x].w;
@@ -85,6 +86,7 @@ class ItemScreen extends ScreenView {
             itemList[x].button.w = itemWidth;
             itemList[x].button.h = itemHeight;
         }
+        this.listBox.rest();
     }
 
     showItem(qty, itemClicked) {

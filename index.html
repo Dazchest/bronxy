@@ -139,13 +139,13 @@
     </script>
 
     <div id="maindiv" style="position:relative;">
-        <canvas id="canvas" width="800" height="800"></canvas>
+        <canvas id="canvas" ></canvas>
         <!-- <input type="text" style="position:absolute;left:100px;top:300px;width:100px;" /> -->
     </div>
 
-    <div id="buildingDiv" style="visibility: hidden; position:absolute; top:100px; left: 80%">
+    <div id="buildingDiv" style="visibility: hidden; position:absolute; top:50px; left: 50px">
         select building
-        <select style="font-size: 48px" onchange="buildingHandler.selectNewBuilding(this)" name="buildingSelect" id="buildingSelect">
+        <select style="font-size: 30px" onchange="buildingHandler.selectNewBuilding(this)" name="buildingSelect" id="buildingSelect">
             <option value="">Select Building</option>
             <option value="2">Farm</option>
             <option value="3">Sawmill</option>
@@ -159,9 +159,9 @@
         <button onclick="zoomScreen('out')">zoom out</button>
     </div> -->
 
-    <div id="" style="position:absolute; top:800px; left: 120px">
-        <button onclick="fullScreen()" style="font-size:30px">full screen</button>
-        <button onclick="logout()" style="font-size:30px">LogOut</button>
+    <div id="" style="position:absolute; top:500px; left: 20px; display:flex">
+        <button onclick="fullScreen()" style="font-size:20px">full screen</button>
+        <button onclick="logout()" style="font-size:20px">LogOut</button>
     </div>
 
 
