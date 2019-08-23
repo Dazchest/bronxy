@@ -116,7 +116,7 @@ class ItemScreen extends ScreenView {
             }
             //mainScreenData[x+0] = listBufferData[x+0];
         }
-        ctx.putImageData(mainBuffer, 100, 150, 0, 0, 300, 300);
+        ctx.putImageData(listBuffer, 100, 150, 0, 0, 300, 300);
         //debugger;
         //this.listBox.rest();
     }
