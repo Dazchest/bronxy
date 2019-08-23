@@ -15,6 +15,7 @@ var scrollMovement = {x:0, y:0};
 
 function scrollCity(e) {
     //mouseDownFired = true;    //TODO: this works, but makes clicks a bit harder
+    listScroll = true;
     scrolling = false;
     //console.log("mouse moving");
     if(e.touches) {
@@ -43,11 +44,15 @@ function scrollCity(e) {
         // });
     }
 
+    if(itemScreen.active) {
+        camera.x += e.movementX;
+        camera.y += e.movementY;
+    };
 
     //mouseDownFired = true;
     if(cities[currentCity].active) {
         //if(camera.x + e.movementX >= 0) {
-            camera.x += e.movementX;
+        camera.x += e.movementX;
         //}
         camera.y += e.movementY;
 

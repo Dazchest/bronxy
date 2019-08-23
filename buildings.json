@@ -17,6 +17,12 @@
                                     "buildings" : [{"type": 2, "level": 2}]
                                 },
             "baseBuildTime" : 15
+        },
+        {   "level": 4,
+            "requirements" :    {   "resources" : {"food": 30000, "wood": 20000, "stone": 20000, "iron": 10000},
+                                    "buildings" : [{"type": 1, "level": 3}]
+                                },
+            "baseBuildTime" : 600
         }
         ]
     },
@@ -72,6 +78,13 @@
                                 },
             "baseBuildTime": 25,
             "pph": 16000
+        },
+        {   "level": 4,
+            "requirements":    {   "resources" : {"food": 0, "wood": 20000, "stone": 20000, "iron": 20000},
+                                    "buildings" : [{"type": 0, "level": 3}, {"type": 1, "level": 2}]
+                                },
+            "baseBuildTime": 250,
+            "pph": 160000
         }
         ]
     },
@@ -101,6 +114,13 @@
                                 },
             "baseBuildTime": 25,
             "pph": 16000
+        },
+        {   "level": 4,
+            "requirements":    {   "resources" : {"food": 30000, "wood": 0, "stone": 30000, "iron": 30000},
+                                    "buildings" : [{"type": 0, "level": 3}, {"type": 1, "level": 2}]
+                                },
+            "baseBuildTime": 1000,
+            "pph": 160000
         }
         ]
     }
@@ -131,6 +151,13 @@
                                 },
             "baseBuildTime": 25,
             "pph": 16000
+        },
+        {   "level": 4,
+            "requirements":    {   "resources" : {"food": 40000, "wood": 40000, "stone": 0, "iron": 40000},
+                                    "buildings" : [{"type": 0, "level": 3}, {"type": 6, "level": 2}]
+                                },
+            "baseBuildTime": 25,
+            "pph": 160000
         }
         ]
     },
@@ -159,6 +186,13 @@
                                     "buildings" : [{"type": 0, "level": 3}, {"type": 1, "level": 3}, {"type": 6, "level": 2}]
                                 },
             "baseBuildTime": 25,
+            "pph": 12000
+        },
+        {   "level": 4,
+            "requirements":    {   "resources" : {"food": 50000, "wood": 50000, "stone": 50000, "iron": 0},
+                                    "buildings" : [{"type": 0, "level": 3}, {"type": 1, "level": 3}, {"type": 6, "level": 2}]
+                                },
+            "baseBuildTime": 2225,
             "pph": 12000
         }
         ]

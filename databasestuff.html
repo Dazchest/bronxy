@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+
+    <script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-firestore.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-database.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDyF4fVz_XN-R1fujOhFwEMmxNeufLlvM8",
+            authDomain: "bronxcraft-54554.firebaseapp.com",
+            databaseURL: "https://bronxcraft-54554.firebaseio.com",
+            projectId: "bronxcraft-54554",
+            storageBucket: "",
+            messagingSenderId: "1086695219970",
+            appId: "1:1086695219970:web:03bf35a0e8983a58"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        database = firebase.database();
+        //----------------------------------
+
+
+        var buildings = [];
+        //var ref = firebase.database().ref(username);
+
+        // let jsonfile2 = "buildings.json";
+        // let promise2 = fetch(jsonfile2)
+        // .then(parseJsonData)
+        // .then(function(mj) {
+        //     buildings = mj;
+        //     console.log(buildings);
+        // })
+
+        function parseJsonData(response) {
+        //console.log("responded");
+        return response.json();
+        }
+        function gotErr(err) {
+            console.log(err);
+        }
+
+        var ref = firebase.database().ref("gamedata");
+
+        ref.once('value', function(data) {
+            gameData = data.val();
+
+            jb = gameData.buildings;
+            for(let x=0; x<jb.length; x++) {
+                buildings[x] = jb[x];
+            }
+            console.log(buildings);
+
+            displayBuildings();
+        });
+
+        function saveList(listToSave, noStringy) {
+    
+            // var listName = Object.keys(listToSave)[0];
+            // var listToSave = listToSave[listName];
+            var listName = listToSave;
+            var listToSave = window[listToSave];
+            console.log(listName);        //
+            console.log(listToSave);       //
+
+            console.log("saving to database???");
+            if(noStringy) {   // some lists, like resources, do not need to be stringifief
+                saveData = JSON.parse(JSON.stringify(listToSave));
+            } else {
+                saveData = JSON.stringify(listToSave);
+            }
+            firebase.database().ref("gamedata" + "/" + listName).set(saveData);
+        }
+            //console.log(database);
+
+
+        function displayBuildings() {
+            let buildingDiv = document.getElementById("buildinglist");
+
+            for(let x=0; x<buildings.length; x++) {
+                let br = document.createElement('br');
+                let i = document.createElement('span');
+                i.innerText = buildings[x].type + " - " + buildings[x].name;
+                i.setAttribute("onclick", "displayBuildingInfo("+buildings[x].type+")");
+
+                buildingDiv.appendChild(i);
+                buildingDiv.appendChild(br);
+            } 
+        }
+
+        function displayBuildingInfo(type) {
+            console.log("displaying " + buildings[type].name);
+            let buildingInfoDiv = document.getElementById("buildinginfo");
+            buildingInfoDiv.innerHTML = "<br><br>" + buildings[type].name + "<br><br>";
+
+            let buildingLevels = buildings[type].levels
+            for(let x=0; x<buildingLevels.length; x++) {    
+                let br = document.createElement('br');
+                let i = document.createElement('span');
+                i.innerHTML = "level - <input type=text value=" + x + " style=\"width:30px\"> needs ";
+
+                buildingInfoDiv.appendChild(i);
+
+                console.log(buildingLevels[x].requirements.buildings);
+                requireBuldings = buildingLevels[x].requirements.buildings
+                for(r=0; r<requireBuldings.length; r++) {
+                    
+                    let selectList = document.createElement('select');
+                    buildingInfoDiv.appendChild(selectList);
+                    
+                    for(o=0; o<buildings.length; o++) {
+                        let option = document.createElement("option");
+                        //option.value = array[i];
+                        option.text = buildings[o].name;
+                        if(requireBuldings[r].type == buildings[o].type) {
+                            option.selected = true;
+                        }
+                        selectList.appendChild(option);  
+                    }
+
+                    selectList = document.createElement('select');
+                    buildingInfoDiv.appendChild(selectList);
+
+                    console.log(requireBuldings.length)
+                    for(o=0; o<buildings[requireBuldings[r].type].levels.length; o++) {
+                        var option = document.createElement("option");
+                        //option.value = array[i];
+                        option.text = buildings[requireBuldings[r].type].levels[o].level;
+                        if(buildings[requireBuldings[r].type].levels[o].level == requireBuldings[r].level) {
+                            option.selected = true;
+                        }
+                        selectList.appendChild(option);  
+                    }
+                    //i.appendChild(selectList);
+
+                    //buildingInfoDiv.appendChild(selectList);
+                buildingInfoDiv.appendChild(br);
+                }
+
+
+
+
+
+                // let requireRes = buildingLevels[x].requirements.resources
+                // console.log(requireRes);
+                // requireResources = Object.keys(requireRes);
+                // console.log("rss length " + requireResources);
+                // for(r=0; r<requireResources.length; r++) {
+                //     let i = document.createElement('span');
+                //     let t = requireResources[r];
+                //     console.log("need " + t + requireRes[t]);
+                    // i.innerText = "level - " + x + " needs - " + requireResources.name + " - qty = " + requireResources.
+
+                    // buildingInfoDiv.appendChild(i);
+                    // buildingInfoDiv.appendChild(br);
+                //
+
+            }
+
+
+        }
+
+
+
+        </script>
+
+
+
+
+</head>
+<body>
+    <div id="buildinglist"></div>
+    <div id="buildinginfo"></div>
+
+    <button onclick="saveList('buildings', true)">save</button>
+
+    <select name="" id="">
+        <option value=""></option>
+    </select>
+</body>
+</html>
+

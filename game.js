@@ -18,9 +18,6 @@ var resourceManager = new ResourceManager();
 var troopTrainingScreen = {"active": false};
 var troops = {};
 var troopList = [];
-for(let x=0; x<10; x++) {
-    //troopList[x] = {};
-}
 var troopManager = new TroopManager();
 
 var monsters = [];
@@ -73,6 +70,7 @@ var itemListImages = [];
 var itemHolderImages = [];
 
 var listBox, listCanvas, listCtx;
+var listScroll;
 
 var speedScreen = {"active": false};
 
@@ -205,6 +203,7 @@ function init() {
 
         canvas.addEventListener('mouseup', function() {
             canvas.removeEventListener('mousemove', scrollCity);
+            listScroll = false;
             scrolling = true;
             scrollMovement.startTime = Date.now();
             scrollMovement.start = camera;

@@ -270,7 +270,7 @@ function convertImage() {
 
     for (var i = 0; i < data.length; i += 4) {
             if(data[i] == 255 && data[i + 1] == 0 && data[i + 2] == 255) {  // find magenta
-                data[i + 3] = 0; // alpha
+                data[i + 3] = 255; // alpha
             }
         }
     img.onload = null;          // remove the onload event so it doesnt loop

@@ -186,9 +186,9 @@ class MapScreen extends ScreenView {
             ctx.scale(1, 1);
 
 
-            ctx.strokeStyle = "#000000";
-            ctx.fillStyle = "#ffff00";
-            ctx.fillRect(this.x, this.y, this.w, this.h);
+            // ctx.strokeStyle = "#000000";
+            // ctx.fillStyle = "#ffff00";
+            // ctx.fillRect(this.x, this.y, this.w, this.h);
 
             ctx.fillStyle = '#ffffff';
             ctx.font = "20px Georgia";
@@ -203,10 +203,7 @@ class MapScreen extends ScreenView {
             this.gridOffset = new Vector3d(this.grid_x, this.grid_y);
             this.gridDisplay = {"width": 22, "height": 22};
 
-            // this.grid_x = Math.floor(camera.x / 200);    // 200 is tile width
-            // this.grid_y = Math.floor(camera.y / 100);    // 100 is tile height
-
-            this.tileCount = 0;;
+            this.tileCount = 0;
 
             for(let y=-5+this.grid_y; y<this.gridDisplay.height+this.grid_y-5; y++) {
                 for(let x=-5+this.grid_x; x<this.gridDisplay.width+this.grid_x-5; x++) {
