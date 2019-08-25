@@ -18,10 +18,10 @@ class Resource {
         for(let x=0; x<Object.keys(resources).length; x++) {
             t = Object.keys(resources)[x];
             if(t == "gold") {
-                ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 470, 30);
+                ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 400, 30);
             } else 
             if(t == "gems") {
-                ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 470, 55);
+                ctx.fillText(resources[t].text + ": " + resources[t].amount.toString(), 400, 55);
             } else {
                 if(resources[t].icon.complete) {
                 ctx.drawImage(resources[t].icon, 10 + (x*110), 80-16, 32, 32);

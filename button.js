@@ -39,12 +39,13 @@ class Button {
                 ctx.fillText(this.text, this.x + 5, this.y + height);
             } else
             if(this.style == "circle") {
-                height = this.h;
+                height = this.radius ? this.radius : this.h;
                 ctx.font = "25px Georgia";
                 let textWidth = ctx.measureText(this.text).width;
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, height, 0, 2 * Math.PI);
                 ctx.fill();
+                ctx.closePath();
                 ctx.stroke();
                 ctx.shadowColor = "transparent";
                 ctx.fillStyle = '#000000';
@@ -78,9 +79,9 @@ class Button {
             if(this.style == "circle") {
                 let dx = mouse.x - this.x;
                 let dy = mouse.y - this.y;
-                dist = Math.sqrt(dx * dx + dy * dy);
+                let dist = Math.sqrt(dx * dx + dy * dy);
                 console.log("circle dist = ", dist);
-                if(mouse.x > this.x*zoom.x && mouse.x < this.x*zoom.x + this.w*zoom.x && mouse.y > this.y*zoom.y && mouse.y < this.y*zoom.y + this.h*zoom.y) {
+                if(dist < this.h) {
                     if(this.action && this.active) {
                         clicked = false;
                         console.log(this.text + " pressed");

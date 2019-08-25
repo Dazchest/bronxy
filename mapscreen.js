@@ -437,7 +437,7 @@ class Tile {
         if(this.points[2].x < 0) {
             return false;
         }
-        if(this.points[0].x > canvas.width) {
+        if(this.points[0].x > canvas.width) {       //TODO: 1000, works fine... but this give glitchy
             return false;
         }
         if(this.points[3].y < 0) {
@@ -910,11 +910,11 @@ class Point {
 
     draw(ctx, color)
     {
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, 3, 0, 2 * Math.PI, false);
-        ctx.fillStyle = color;
-        ctx.fill();
-        ctx.closePath();
+        // ctx.beginPath();
+        // ctx.arc(this.x, this.y, 3, 0, 2 * Math.PI, false);
+        // ctx.fillStyle = color;
+        // ctx.fill();
+        // ctx.closePath();
     }
 }
 

@@ -11,7 +11,7 @@ class Item {
             this.method = "open";
         }
 
-        this.w = 300;
+        this.w = 320;
         this.h = 50;
 
     }
@@ -98,7 +98,7 @@ class Item {
      * @param {int} y 
      * @param {int} size 
      */
-    draw(ctx, x, y, size) {
+    draw(x, y, size) {
         this.x = x;
         this.y = y;
         let textOffsetY = Math.round(this.h / 2);
@@ -107,17 +107,12 @@ class Item {
         ctx.drawImage(itemHolderImages[2], x + itemHolderImages[0].width, y, this.w, this.h);       //middle
         ctx.drawImage(itemHolderImages[1], x + this.w + itemHolderImages[0].width, y, itemHolderImages[1].width, this.h);       //right
 
-        // ctx.fillStyle = '#448833';
-        // ctx.fillRect(x, y, this.w, this.h);
-        // ctx.fillStyle = '#442233';
-        // ctx.fillRect(x + this.w, y, 50, this.h);
-
         ctx.textBaseline = "middle";
         ctx.fillStyle = '#eeeeee';
         ctx.font = this.h/2 + "px Georgia";
         ctx.fillText(this.name, x + 10, y + textOffsetY);
         ctx.fillStyle = '#ffffff';
-        ctx.fillText(this.quantity, x + 10 + this.w, y + textOffsetY);
+        ctx.fillText(this.quantity, x + this.w, y + textOffsetY);
     }
     
 }

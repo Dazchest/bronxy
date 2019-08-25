@@ -17,6 +17,8 @@ class CityScreen extends ScreenView {
         this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 150, "w": 70, "h": 50, "text": "Map", "screen": this, "action":  this.mapScreen3}));
         this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 260, "w": 80, "h": 50, "text": "Items", "screen": this, "action":  this.itemScreen}));
         this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 370, "w": 80, "h": 50, "text": "Research", "screen": this, "action":  this.researchScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 500, "w": 80, "h": 50, "text": "Buildings", "screen": this, "action":  this.buildingScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 610, "w": 80, "h": 50, "text": "Equipment", "screen": this, "action":  this.equipmentScreen}));
 
 
         
@@ -76,6 +78,18 @@ class CityScreen extends ScreenView {
         console.log("going to Research screen");
         researchScreen = new ResearchScreen();
         screenManager.screen = researchScreen;
+    }
+
+    buildingScreen() {
+        console.log("going to Buildings screen");
+        buildingScreen = new BuildingScreen();
+        screenManager.screen = buildingScreen;
+    }
+
+    equipmentScreen() {
+        console.log("going to equipment screen");
+        equipmentScreen = new EquipmentScreen();
+        screenManager.screen = equipmentScreen;
     }
 
     // mapScreen() {

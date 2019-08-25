@@ -124,18 +124,44 @@ function Vec2(x, y) {
   //----------------------------------------------------------------------------------------
   //----------------------------------------------------------------------------------------
 var progress = 0;
+var progcoords = {};
 function progressBar() {
-    console.log("progress");
+    //console.log("progress");
+    progcoords.x = canvas.width / 2 - 25;
+    progcoords.y = canvas.height / 2 - (50 + progress*5)/2;
+    progcoords.w = 50;
+    progcoords.h = 50 + progress*5;
+
     ctx.save()
 
     ctx.fillStyle = '#ffffff';
     
-    ctx.fillRect(canvas.width / 2 - 25, canvas.height / 2 - (50 + progress*10)/2, 50, 50 + progress*10);
+    ctx.fillRect(canvas.width / 2 - 25, canvas.height / 2 - (50 + progress*5)/2, 50, 50 + progress*5);
     //ctx.arc(100,100, 100, Math.PI, Math.PI * 1.2);
     progress++;
     ctx.restore();
 }
 
+function expandIntro() {
+    //ctx.save();
+    
+    ctx.fillRect(progcoords.x, progcoords.y, progcoords.w, progcoords.h);
+    if(progcoords.x >= 0) {
+        progcoords.x--;
+    }
+    if(progcoords.y >= 0) {
+        progcoords.y--;
+    }
+    if(progcoords.w <= canvas.width) {
+        progcoords.w++;
+    }
+    if(progcoords.h <= canvas.height) {
+        progcoords.h++;
+    }
+    ctx.clip();
+    //ctx.restore();
+    //clearTimeout(expand);
+}
 
 
   class newInput {
@@ -270,7 +296,7 @@ function convertImage() {
 
     for (var i = 0; i < data.length; i += 4) {
             if(data[i] == 255 && data[i + 1] == 0 && data[i + 2] == 255) {  // find magenta
-                data[i + 3] = 255; // alpha
+                data[i + 3] = 0; // alpha
             }
         }
     img.onload = null;          // remove the onload event so it doesnt loop

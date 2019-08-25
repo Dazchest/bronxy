@@ -12,6 +12,9 @@ var gridSize = {"x":100, "y": 100};
 
 var player;
 
+var equipmentScreen = {"active": false};
+var equipmentList = [];
+
 var resources = {};
 var resourceManager = new ResourceManager();
 
@@ -30,6 +33,7 @@ var tempBuild;
 var buildingInfoScreen = {"active": false};
 var buildingDetailsScreen = {"active": false};
 var buildingUpgradeScreen = {"active": false};
+var buildingScreen = {"active": false};
 
 var researchScreen = {"active": false};
 var researchTree;
@@ -98,6 +102,7 @@ var elem;
 var moving;
 
 var prog;
+var expand;
 var load; 
 
 var originalCanvas = {width: 0, height: 0};
@@ -119,7 +124,6 @@ function init() {
     }
     //--------
     console.log("initialising game");
-
 
     // get operating system - mobile etc
     opsys = getMobileOperatingSystem();
@@ -335,6 +339,10 @@ function init() {
     })
 
     //initStageTwo();
+    let te = new ThroneStatue();
+    equipmentList.push(te);
+
+    //---------------------------
    
     function parseJsonData(response) {
         //console.log("responded");
@@ -439,6 +447,10 @@ function init() {
 
                 Promise.all(p).then( result => {
                     clearInterval(prog);
+                    //  ctx.rect(progcoords.x, progcoords.y, progcoords.w, progcoords.h);
+                    //  ctx.clip();
+
+                    // expand = setInterval(expandIntro, 100);
                     setTimeout(draw, 100);
                 });
 
@@ -799,18 +811,13 @@ function loadMap2() {
         console.log(Date.now()/1000 - startSaveTime);
 
         //---------------------------
-        // this works great
+        // this works great //TODO: needs to be async
         var commentsRef = firebase.database().ref('map/');
         commentsRef.on('child_changed', function(data) {
+            console.log("time = ", Date.now());
             //console.log(data.key, data.val().id, data.val().type);
             let c = data.val();
             mapManager.loadTile(c);
-            // if(data.val().type == "food") {
-            //     mapScreen.mapTiles[c.coords.x][c.coords.y] = new FoodTile(c);
-            // } else {
-            //     mapScreen.mapTiles[c.coords.x][c.coords.y] = new Tile(c);
-            // }
-            //console.log(data.val());
         });
         //------------------------
         resolve("done");

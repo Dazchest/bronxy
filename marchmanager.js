@@ -1,7 +1,7 @@
 class MarchManager {
 
     constructor() {
-        this.slots = 3;
+        this.slots = 5;
         this.usedSlots = 0;
         this.queue = [];
 

@@ -69,7 +69,7 @@ class Building {
     }
 
 
-    draw() {
+    draw(x, y) {
         if(this.moving) {   // dont draw buttons if we are moving building
             this.drag();
             return;
@@ -79,13 +79,26 @@ class Building {
 
         if(this.images.complete) {
             if(this.type == 0) {    //draw town hall bigger
-                ctx.drawImage(this.images, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x * 2, gridSize.y * 2);
-                banner(this.name, this.gridPos.x * gridSize.x + camera.x + gridSize.x, this.gridPos.y * gridSize.y + camera.y + 5, 25);
+                this.w = gridSize.x * 2;
+                this.h = gridSize.x * 2;
+                ctx.drawImage(this.images, x, y, this.w, this.h);
+                banner(this.name, x + gridSize.x, y + 5, 25);
             } else {
-                ctx.drawImage(this.images, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
-                banner(this.name, this.gridPos.x * gridSize.x + camera.x + gridSize.x/2, this.gridPos.y * gridSize.y + camera.y + 5, 25);
+                this.w = gridSize.x;
+                this.h = gridSize.x;
+                ctx.drawImage(this.images, x, y, this.w, this.h);
+                banner(this.name, x + gridSize.x/2, y + 5, 25);
             }
         }
+        // if(this.images.complete) {
+        //     if(this.type == 0) {    //draw town hall bigger
+        //         ctx.drawImage(this.images, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x * 2, gridSize.y * 2);
+        //         banner(this.name,          this.gridPos.x * gridSize.x + camera.x + gridSize.x, this.gridPos.y * gridSize.y + camera.y + 5, 25);
+        //     } else {
+        //         ctx.drawImage(this.images, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y, gridSize.x, gridSize.y);
+        //         banner(this.name, this.gridPos.x * gridSize.x + camera.x + gridSize.x/2, this.gridPos.y * gridSize.y + camera.y + 5, 25);
+        //     }
+        // }
 
         ctx.font = "15px Georgia";
         ctx.fillText("level: " + this.level, this.gridPos.x * gridSize.x + camera.x, this.gridPos.y * gridSize.y + camera.y + gridSize.y + 20);

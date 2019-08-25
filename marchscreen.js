@@ -110,11 +110,18 @@ class MarchScreen extends ScreenView {
             if(troopList.length > 0) {
                 this.displayTroops();   
             } else {
-                ctx.fillStyle = '#eeee33';
-                ctx.font = "30px Georgia";
+                ctx.fillStyle = '#ff0000';
+                ctx.font = "40px Georgia";
                 ctx.fillText("train some troops please", 200, 300);
                 setButtonState(this.buttons, "march", false);
             }  
+
+            if(marches.length == marchManager.slots) {
+                ctx.fillText("ALL MARCH SLOTS ARE FULL", 200, 300);
+                setButtonState(this.buttons, "march", false);
+               // return;
+            }
+
             this.drawButtons();
             this.checkButtons();
             // if(this.troopBuilding.training) {   //this.troopBuilding.training

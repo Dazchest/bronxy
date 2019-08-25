@@ -16,8 +16,11 @@ class BuildingHandler {
     }
     drawBuildings() {
         if (buildingList.length > 0) {
-            for (let x = 0; x < buildingList.length; x++) {
-                buildingList[x].draw();
+            for (let j = 0; j < buildingList.length; j++) {
+                buildingList[j].x = buildingList[j].gridPos.x * gridSize.x + camera.x;
+                buildingList[j].y = buildingList[j].gridPos.y * gridSize.y + camera.y;
+
+                buildingList[j].draw(buildingList[j].x, buildingList[j].y);
             }
         }
     }

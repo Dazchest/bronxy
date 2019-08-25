@@ -14,6 +14,11 @@ class Research {
             //console.log(data[name]);
             this[name] = data[name];
         }
+
+        this.x = 0;
+        this.y = 0;
+        this.w = 320;
+        this.h = 50;
         
         this.button = new Button({"active": true, "drawButton": true, "x": 50, "y": 150 + (this.row * 45), "w": 100, "h": 30, "text": this.name, "action":  this.showResearch});
         this.upgradebutton = new Button({"active": false, "drawButton": true, "x": 50, "y": 200, "w": 100, "h": 30, "text": "upgrade",  "action":  this.upgrade});
@@ -34,7 +39,10 @@ class Research {
         this.active = false;
     }
 
-    draw(x = this.button.x, y = this.button.y) {
+    //draw(x = this.button.x, y = this.button.y) {
+    draw(x, y) {
+        this.x = x;
+        this.y = y;
         this.checkClickOutside();
 
         ctx.font = "20px Georgia";
@@ -62,11 +70,17 @@ class Research {
 
     displayResearch() {
         if(this.show) {
+            ctx.fillStyle = '#aaaaaa';
+            ctx.globalAlpha = .5;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.globalAlpha = 1;
+
+
             ctx.fillStyle = '#444444';
             let newX = researchScreen.x;
             ctx.fillRect(50,150,500,300);
             ctx.fillStyle = '#ffffff';
-            ctx.fillText(this.name, 70, 150);
+            ctx.fillText(this.name, 70, 180);
 
             this.upgradebutton.draw();
             this.upgradebutton.check(this);
@@ -99,7 +113,7 @@ class Research {
     
         if(currentLevel == this.levels.length) {
             ctx.fillStyle = '#ff0000';
-            ctx.fillText("level maxed" , 200, 100);  
+            ctx.fillText("level maxed" , 100, 350);  
             levelMaxed = true;
         }
         if(levelMaxed == false) {
@@ -194,7 +208,7 @@ class Research {
             console.log("all research slots are full");
         }
 
-        ctx.fillText("requirements met: " + requirementMet, 375, 100);
+        ctx.fillText("requirements met: " + requirementMet, 100, 425);
 
         if(requirementMet) {
             this.upgradebutton.active = true;

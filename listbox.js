@@ -1,6 +1,6 @@
 class ListBox {
 
-    constructor(x, y, w, h, canvas, ctx, vertical, horizontal) {
+    constructor(x, y, w, h, vertical, horizontal) {
         console.log("Creating the ListBox");
 
         this.x = x;
@@ -9,88 +9,89 @@ class ListBox {
         this.h = h;
         this.horizontal = false;
         this.vertical = true;
-        this.canvas = canvas;
-        this.ctx = ctx;
         this.active = true; 
-        this.bottom = 0;
+        this.bottom = 0;            // where the last list item will be displayed vertical
+        this.right = 0;             // where the last list item will be displayed horizontal
 
-        this.mouseDownFired = false;
-        this.scrolling = false;
+        this.listScroll = false;
 
-        this.listCanvas = document.createElement('canvas');
-        this.listCtx = this.listCanvas.getContext("2d");
-
-        this.listCanvas.style.position = "absolute"; 
-        this.listCanvas.style.left = "700px";
-        this.listCanvas.style.top = "100px";
-        this.listCanvas.width = this.w;
-        this.listCanvas.height = this.h;
-
-        // this.listCtx.fillStyle = "#000000";
-        // this.listCtx.fillRect(0, 0, this.listCanvas.width, this.listCanvas.height);
-    
-        document.body.appendChild(this.listCanvas);
-
-        // this.eventHandler = this.scrollList.bind(this);
-        // this.addEventListeners();
-
-        
+        console.log(researchList);
     }
 
     listen() {
-        // if(listScroll) {
-        //     camera.y += mouse.movement.y;
-        
-        if(mouse.movement.y > 0) { //scrolling down
-            //console.log("scrolling down");
-            if(camera.y >= 0 ) {
-                camera.y = 0;
+        if(listScroll == false && camera.y >= 5) {
+            //console.log("scroll back up");
+            camera.y -= 2;
+        }
+        if(camera.y >= 50) {
+            camera.y = 50;
+        }
+        if(listScroll == false && camera.y < -this.bottom + this.h) {
+            camera.y += 2;
+        }
+        if(camera.y < -this.bottom + this.h - 50) {
+            camera.y = -this.bottom + this.h - 50;
+        }
+    }
+
+    draw(list) {
+        //return;
+        ctx.drawImage(itemListImages[10], this.x-10, this.y-7, this.w+20, this.h+15);
+
+        if(list == false) {
+            return;
+        }
+        this.listen();
+
+        ctx.save();
+
+        // --- DO CLIPPING ---
+        ctx.strokeStyle = '#ff00ff';
+        ctx.rect(this.x, this.y, this.w, this.h);
+        ctx.clip();
+
+        if(researchScreen.active) {
+            for(let x=0; x<list.length; x++) {
+                let itemWidth = list[x].w;
+                let itemHeight = list[x].h;
+                list[x].draw(this.x + 5, this.y + 5 + ((list[x].row-1) * (itemHeight + 25)) + camera.y);
+                this.bottom = 5 + (list.length * (itemHeight + 25));    // - (list[x].h * 2)
+                // go through the buttons, and change x,y to match the item x,y
+                list[x].button.x = list[x].x;
+                list[x].button.y = list[x].y;
+                list[x].button.w = itemWidth;
+                list[x].button.h = itemHeight;
+           }
+        } else {
+            for(let x=0; x<list.length; x++) {
+                let itemWidth = list[x].w;
+                let itemHeight = list[x].h;
+                list[x].draw(this.x + 5, this.y + 5 + (x * (itemHeight + 5)) + camera.y);
+                this.bottom = 5 + (list.length * (itemHeight + 5));    // - (list[x].h * 2)
+                // go through the buttons, and change x,y to match the item x,y
+                if(list[x].button) {    // TODO: need to sort
+                    list[x].button.x = list[x].x;
+                    list[x].button.y = list[x].y;
+                    list[x].button.w = itemWidth;
+                    list[x].button.h = itemHeight;
+                }
             }
         }
 
-        if(mouse.movement.y < 0) { //scrolling up
-            //console.log("scrolling up");
-                if(-camera.y >= this.bottom - this.h) {
-                    camera.y =  -this.bottom + this.h;
-                }
-        }
-    // }
-
+        ctx.restore();
 
     }
 
-
     close() {
-        this.listCanvas.remove();
         this.active = false;
     }
 
-    // doMouseDown(e) {
-    //     this.scrolling = false;
-    //     this.listCanvas.addEventListener('mousemove', this.eventHandler);
-
-    //     this.listCanvas.addEventListener('mouseup', function() {
-    //         this.listCanvas.removeEventListener('mousemove', this.eventHandler);
-    //         this.scrolling = true;
-    //     }.bind(this));
-    //     this.listCanvas.addEventListener('mouseout', function() {
-    //         this.listCanvas.removeEventListener('mousemove', this.eventHandler);
-    //     }.bind(this))
-    // }
-
-
     init() {
-        this.listCtx.save();
-        //this.listCtx.scale(screenZoom.x, screenZoom.y);
     }
-    rest() {
-        this.listCtx.restore();
+    rest() {;
     }
 
     clear() {
-        this.listCtx.clearRect(0, 0, this.listCanvas.width, this.listCanvas.height);
-        //this.listCtx.fillStyle = 'rgb(89,86,82)';
-        //this.listCtx.fillRect(0, 0, this.listCanvas.width, this.listCanvas.height);
     }
 
 }

@@ -43,8 +43,8 @@ function scrollCity(e) {
         // touchStart.x = 99999;
         // });
     }
-
-    if(itemScreen.active) {
+    //TODO: does this need to be here???
+    if(itemScreen.active || researchScreen.active || buildingScreen.active) {
         camera.x += e.movementX;
         camera.y += e.movementY;
     };

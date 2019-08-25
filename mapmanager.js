@@ -49,9 +49,10 @@ class MapManager {
         console.log("tile", tileData);
         for (let x = 0; x < Object.keys(tileData).length; x++) {
             name = Object.keys(tileData)[x]; // (data[x]).value;
-            console.log(tileData[name]);
+            console.log("tileData[name] ", tileData[name]);
             mapScreen.mapTiles[tileData.coords.x][tileData.coords.y][name] = tileData[name];
         }
+        console.log("time = ", Date.now());
     }
     processTile(data) {
         let tileData = JSON.parse(JSON.stringify(data));
@@ -114,8 +115,10 @@ class MapManager {
             var foundEmptyTile = false;
             let x, y;
             while (foundEmptyTile == false) {
-                x = Math.floor(Math.random() * mapScreen.grid.width);
-                y = Math.floor(Math.random() * mapScreen.grid.height);
+                // x = Math.floor(Math.random() * mapScreen.grid.width + 1);
+                // y = Math.floor(Math.random() * mapScreen.grid.height + 1);
+                x = Math.floor(Math.random() * 20 + 1);
+                y = Math.floor(Math.random() * 20 + 1);
                 if (mapScreen.mapTiles[x][y].type == "grass1") { //TODO: need to change how to define tiles better
                     foundEmptyTile = true;
                 }
