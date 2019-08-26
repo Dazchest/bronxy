@@ -493,4 +493,14 @@ function mapRange(value, a, b, c, d) {
 //     console.log(b);
 // }
 
+var bob = {};
+bob.cat = "hello";
+
+let a = {};
+a.fish = "world";
+//a.cat = "goodbye";
+
+bob = Object.assign(bob, a);
+
+console.log(bob);
 

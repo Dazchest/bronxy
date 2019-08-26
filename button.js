@@ -27,8 +27,8 @@ class Button {
             ctx.shadowOffsetX=3; // offset along X axis
             ctx.shadowOffsetY=-3;  // offset along Y axis
 
-            let height = 40;
-            ctx.font = "40px Georgia";
+            let height = 30;
+            ctx.font = "30px Georgia";
             let textWidth = ctx.measureText(this.text).width;
             if(this.style == "rectangle") {
                 ctx.fillRect(this.x, this.y, textWidth + 20, height + 10);

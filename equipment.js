@@ -9,8 +9,16 @@ class ThroneEquipment {
 
         this.quantity = 1;
 
-        this.colors = {"grey": '#aaaaaa', "green": '#22cc22', "blue": '#2222cc', "purple": "#aa22cc", "orange": "#ccaa22", "red": "#cc2222"};
-        this.qualityNames = {"grey": '#aaaaaa', "green": '#22cc22', "blue": '#2222cc', "purple": "#aa22cc", "orange": "#ccaa22", "red": "#cc2222"};
+        this.qualityColors = ['#aaaaaa', '#22cc22', '#2222cc', "#aa22cc", "#ccaa22", "#cc2222"];
+        this.qualityNames = ['Basic', 'Common', 'Uncommon', 'Great', 'Excellent', 'Marvelous'];
+        this.qualityAmount = 6;     // or  = this.qualityName.length
+
+        this.qualities = [];
+        for(let x=0; x<this.qualityAmount; x++) {
+            let q = {color: this.qualityColors[x], name: this.qualityNames[x]};
+            this.qualities.push(q);
+        }
+        
 
         //buffs
         //this.attack = 0;
@@ -33,9 +41,11 @@ class ThroneEquipment {
 
         this.buttons = [];
         this.buttons.push(new Button({"active": true, "drawButton": true, "x": 50, "y": 200, "w": 100, "h": 20, "text": "upgrade",  "action":  this.upgrade.bind(this)}));
-        this.buttons.push(new Button({"active": true, "drawButton": true, "x": 180, "y": 200, "w": 100, "h": 20, "text": "enhance",  "action":  this.enhance}));
-        this.buttons.push(new Button({"active": true, "drawButton": true, "x": 350, "y": 200, "w": 100, "h": 20, "text": "equip",  "action":  this.equip}));
+        this.buttons.push(new Button({"active": true, "drawButton": true, "x": 200, "y": 200, "w": 100, "h": 20, "text": "enhance",  "action":  this.enhance.bind(this)}));
+        this.buttons.push(new Button({"active": true, "drawButton": true, "x": 350, "y": 200, "w": 100, "h": 20, "text": "equip",  "action":  this.equip.bind(this)}));
         this.buttons.push(new Button({"active": true, "style": "circle", "radius": 50, "drawButton": true, "x": 475, "y": 550, "w": 100, "h": 50, "text": "scramble",  "action":  this.scramble.bind(this)}));
+
+        this.buttons.push(new Button({"active": true, "style": "circle", "radius": 25, "drawButton": true, "x": 510, "y": 185, "w": 100, "h": 20, "text": "X",  "action":  this.closeEquipment.bind(this)}));
 
 
     }
@@ -50,7 +60,7 @@ class ThroneEquipment {
         ctx.drawImage(itemHolderImages[1], x + this.w + itemHolderImages[0].width, y, itemHolderImages[1].width, this.h);       //right
 
         ctx.textBaseline = "middle";
-        ctx.fillStyle = Object.keys(this.colors)[this.quality];
+        ctx.fillStyle = this.qualities[this.quality].color;
         ctx.font = this.h/2 + "px Georgia";
         ctx.fillText(this.name, x + 10, y + textOffsetY);
         ctx.fillText("quality: " + this.quality, x + 100, y + textOffsetY);
@@ -67,6 +77,10 @@ class ThroneEquipment {
         self.show = true;
     }
 
+    closeEquipment() {
+        this.show = false;
+    }
+
     displayEquipment() {
         if(this.show) {
             this.checkClickOutside();
@@ -78,17 +92,13 @@ class ThroneEquipment {
 
             ctx.fillStyle = '#111111';
             ctx.fillRect(50, 150, 500, 500);
-            ctx.fillStyle = '#ffffff';
-            ctx.fillText(this.name + " - Level: " + this.level + " - Quality: " + Object.keys(this.colors)[this.quality], 70, 180);
+            ctx.fillStyle = this.qualities[this.quality].color;
+            ctx.fillText(this.name + " - Level: " + this.level + " - Quality: " + this.qualities[this.quality].name, 70, 180);
 
-            this.buttons[0].draw();
-            this.buttons[0].check(this);
-            this.buttons[1].draw();
-            this.buttons[1].check(this);
-            this.buttons[2].draw();
-            this.buttons[2].check(this);
-            this.buttons[3].draw();
-            this.buttons[3].check(this);
+            for(let b=0; b<this.buttons.length; b++) {
+                this.buttons[b].draw();
+                this.buttons[b].check(this);
+            }
             //this.displayUpgradeRequirements();
 
             //display the stats
@@ -117,17 +127,20 @@ class ThroneEquipment {
                 ctx.fillText(level.buff + " %", 350, yOffset);
                 
                 //show the stats for the next enhance
+                if(this.quality < 5) {
                 ctx.fillStyle = '#4400ff';
-                ctx.fillText("+" + level.enhanceGrowth + " %", 400, yOffset);
+                ctx.fillText("+" + this.enhanceGrowth + " %", 400, yOffset);
+                } else {
+                    ctx.fillText(" maxed", 400, yOffset);
+                }
             }
 
-            if(this.level < this.levels.length-1) {    //only display if not max level
+            //display upgrade requirements
+            if(this.level < this.levels.length) {    //only display if not max level
                 ctx.fillStyle = '#ffffff';
                 ctx.fillText("Upgrade Chance is " + this.levels[this.level].upgradeChance + " %", 65, yOffset + 75);
-                ctx.fillText("Enhance Chance is " + this.levels[this.level].enhanceChance + " %", 65, yOffset + 110);
                 
                 if(zennyStones<this.levels[this.level].upgradeStonesRequired) {
-                    //console.log("not enough Zenny Stones");
                     this.buttons[0].active = false;
                     //setButtonState(this.buttons, "upgrade", false);
                     ctx.fillStyle = '#ff0000'
@@ -137,6 +150,28 @@ class ThroneEquipment {
                     ctx.fillStyle = '#ffffff'
                 }
                 ctx.fillText("Zenny Stones Required: " + this.levels[this.level].upgradeStonesRequired + "/" + zennyStones, 65, yOffset + 155);
+            } else {
+                this.buttons[0].active = false;
+            }
+
+            //TODO: maybe have a "qualities" property - at the moment, they are one and the same
+            //display enhance requirements
+            if(this.quality < 5) {    //only display if not max level
+                ctx.fillStyle = '#ffffff';
+                ctx.fillText("Enhance Chance is " + this.levels[this.quality].enhanceChance + " %", 65, yOffset + 110);
+                
+                if(zennyStones<this.levels[this.level].enhanceStonesRequired) {
+                    this.buttons[1].active = false;
+                    //setButtonState(this.buttons, "upgrade", false);
+                    ctx.fillStyle = '#ff0000'
+                } else {
+                    this.buttons[1].active = true;
+                    //setButtonState(this.buttons, "upgrade", true);
+                    ctx.fillStyle = '#ffffff'
+                }
+                ctx.fillText("Zenny Stones Required: " + this.levels[this.level].enhanceStonesRequired + "/" + zennyStones, 65, yOffset + 155);
+            } else {
+                this.buttons[1].active = false;
             }
 
 
@@ -163,17 +198,40 @@ class ThroneEquipment {
                 let r = getRandom(0, 100);
                 console.log("random = ", r, " - chance = ", this.levels[x].upgradeChance)
                 if(r <= this.levels[x].upgradeChance) {
+                    Toast("upgrade succseful")
                     console.log("upgrade succseful");
                     this.levels[x].activated = true;
                     this.level++;
+                    return;
                 }
-                console.log("upgrade not successful");
+                Toast("upgrade failed")
+                console.log("upgrade failed");
                 return;
             }
         }
     }
     enhance() {
         console.log("enhance pressed");
+        zennyStones -= this.levels[this.quality].upgradeStonesRequired;
+        for(let x=0; x<this.levels.length; x++) {
+            if(x >= this.quality) {
+                let r = getRandom(0, 100);
+                console.log("random = ", r, " - enhance chance = ", this.levels[x].enhanceChance)
+                if(r <= this.levels[x].enhanceChance) {
+                    Toast("enhance succseful")
+                    console.log("enhance succseful");
+                    this.quality++;
+                    for(let i=0; i<6; i++) {
+                        this.levels[i].buff += this.enhanceGrowth;
+                    }
+                    this.enhanceGrowth = this.quality + 1
+                                return;
+                }
+                Toast("enhance failed")
+                console.log("enhance failed");
+                return;
+            }
+        }
     }
     equip() {
         console.log("equip pressed");
@@ -181,27 +239,36 @@ class ThroneEquipment {
 
     // get new buffs
     scramble() {
-        for(let x=0; x< 6; x++) {
+        for(let x=0; x<6; x++) {
             let a = getRandom(0, 3);
-            let newAttributes = this.levels[x];
             let attributes = {
-                level: x+1, 
+                //level: this.levels[x].level, 
                 buffType: this.availableBuffs[a].buffType, 
                 text: this.availableBuffs[a].text, 
                 activated: this.levels[x].activated, 
                 buff: getRandom(1, x+2),
-                upgradeChance: 60-((x)*10),       //percentages
-                upgradeStonesRequired: (x+1) * 100, //(x*x*100)
-                enhanceChance: 60-((x)*10),
-                enhanceGrowth: this.level + 1
+                //upgradeChance: this.levels[x].upgradeChance,       //percentages
+                //upgradeStonesRequired: this.levels[x].upgradeStonesRequired, 
+                //enhanceChance: this.levels[x].enhanceChance,
+                //enhanceGrowth: this.levels[x].enhanceGrowth
             }
-            this.levels[x] = attributes;
+            //NOTICE: this will not preserve the object type... in case we change these properties
+            this.levels[x] = Object.assign(this.levels[x], attributes);
         }
+
+        // for(let x=0; x<6; x++) {        // go through each quality
+        //     if(x < this.quality) {
+                for(let i=0; i<6; i++) {
+                    this.levels[i].buff += this.enhanceGrowth;
+                }
+        //     }
+        // }
+
 
     }
 
 }
-var zennyStones = 10000;
+var zennyStones = 100000;
 class ThroneStatue extends ThroneEquipment {
 
     constructor() {
@@ -226,7 +293,7 @@ class ThroneStatue extends ThroneEquipment {
             {text: "Resource Production", buffType: "resourceproduction", buffRange: 1}
         ]
 
-        for(let x=0; x< 6; x++) {
+        for(let x=0; x<6; x++) {        // go through each level
             let a = getRandom(0, 3);
             let attributes = {
                 level: x+1, 
@@ -236,11 +303,20 @@ class ThroneStatue extends ThroneEquipment {
                 buff: getRandom(1, x+2),
                 upgradeChance: 60-((x)*10),       //percentages
                 upgradeStonesRequired: (x+1) * 100, //(x*x*100)
-                enhanceChance: 60-((x)*10),
-                enhanceGrowth: this.level + 1
+                enhanceChance: 50-((x)*10),     // min should be 10%
+                //enhanceGrowth: this.quality + 1,    //this.quality
+                enhanceStonesRequired: (x+1) * 250, //(x*x*150)
             }
             this.levels.push(attributes);
         }
+        this.enhanceGrowth = this.quality + 1
+        //for(let x=0; x<6; x++) {        // go through each quality
+            if(this.quality > 0) {
+                for(let i=0; i<6; i++) {
+                    this.levels[i].buff += this.enhanceGrowth;
+                }
+            }
+        //}
 
     }
 }
