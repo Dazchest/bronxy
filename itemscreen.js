@@ -8,7 +8,7 @@ class ItemScreen extends ScreenView {
         this.buttons = [];
         this.name = "Items";
 
-        this.buttons.push(new Button({"style": "circle", "active": true, "x": 450, "y": 50, "w": 100, "h": 50, "text": "Exit", "screen": this, "action":  this.exitScreen}));
+        this.buttons.push(new Button({"style": "circle", radius: 50, "active": true, "x": 450, "y": 50, "w": 100, "h": 50, "text": "Exit", "screen": this, "action":  this.exitScreen}));
         //this.buttons.push(new Button({"active": true, "x": 400, "y": 350, "w": 100, "h": 30, "text": "Details", "screen": this, "action":  this.detailsScreen}));
 
         for(let x=0; x<itemList.length; x++) {

@@ -78,10 +78,10 @@ class Button {
                 let dx = mouse.x - this.x;
                 let dy = mouse.y - this.y;
                 if(this.text == "break") {
-                    console.log("sdjhgfjdgfjsdgfjhdgf");
+                    //console.log("sdjhgfjdgfjsdgfjhdgf");
                 }
                 let dist = Math.sqrt(dx * dx + dy * dy);
-                console.log("circle dist = ", dist, " and radius is ", this.radius);
+                //console.log("circle dist = ", dist, " and radius is ", this.radius);
                 if(dist < this.radius) {
                     if(this.action && this.active) {
                         clicked = false;

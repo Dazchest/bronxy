@@ -130,6 +130,60 @@ function init() {
     //--------
     console.log("initialising game");
 
+    //--------------------------
+    //--------------------------------------------
+    if ('serviceWorker' in navigator && 'PushManager' in window) {
+        console.log('Service Worker and Push is supported');
+    
+        navigator.serviceWorker.register('sw.js')
+        .then(function(swReg) {
+        console.log('Service Worker is registered', swReg);
+    
+        swRegistration = swReg;
+        })
+        .catch(function(error) {
+        console.error('Service Worker Error', error);
+        });
+    } else {
+        console.warn('Push messaging is not supported');
+        //pushButton.textContent = 'Push Not Supported';
+    }
+    //----------------------------------------------------
+    SETTINGS_ENABLE_APP_INSTALL = true;
+    if(SETTINGS_ENABLE_APP_INSTALL) {
+        console.log("setting up install");
+        inst = document.getElementById('installbutton');
+  
+        window.addEventListener('beforeinstallprompt', function(e) {
+          // Prevent Chrome 67 and earlier from automatically showing the prompt
+          //e.prompt();
+          console.log("Meets criteria to install");
+          inst.value = "would you like to install";
+          e.preventDefault();
+          // Stash the event so it can be triggered later.
+          installPromptEvent = e;
+  
+        });
+  
+        inst.addEventListener('click', function(){
+            console.log("trying to install");
+            inst.disabled = true;
+          installPromptEvent.prompt();
+          installPromptEvent.userChoice.then(function(choice) {
+            if (choice.outcome === 'accepted') {
+              console.log('User accepted the A2HS prompt');
+            } else {
+              console.log('User dismissed the A2HS prompt');
+            }
+            // Clear the saved prompt since it can't be used again
+            installPromptEvent = null;
+          });
+        });
+      }
+      //-----------------------------------------------------------
+  
+
+
     // get operating system - mobile etc
     opsys = getMobileOperatingSystem();
     console.log(opsys);

@@ -101,7 +101,7 @@ class ScreenView {
                     let dist = Math.sqrt(dx * dx + dy * dy);
                     console.log("circle dist = ", dist);
                     if(dist < b.h) {
-                        if(b.action && b.active) {
+                        if(b.action && b.radius) {
                             clicked = false;
                             console.log(b.text + " pressed");
                             let callback = b.action;

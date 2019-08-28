@@ -14,12 +14,12 @@ class CityScreen extends ScreenView {
         //this.inputs.push(new newInput("f"));
 
         console.log("this is CityScreen constructor");
-        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 150, "w": 70, "h": 50, "text": "Map", "screen": this, "action":  this.mapScreen3}));
-        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 260, "w": 80, "h": 50, "text": "Items", "screen": this, "action":  this.itemScreen}));
-        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 370, "w": 80, "h": 50, "text": "Research", "screen": this, "action":  this.researchScreen}));
-        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 500, "w": 80, "h": 50, "text": "Buildings", "screen": this, "action":  this.buildingScreen}));
-        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 610, "w": 80, "h": 50, "text": "Equipment", "screen": this, "action":  this.equipmentScreen}));
-        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 740, "w": 80, "h": 50, "text": "Throne", "screen": this, "action":  this.throneRoomScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 150, "w": 70, "h": 50, "text": "Map", "screen": this, "action":  this.mapScreen3}));
+        this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 260, "w": 80, "h": 50, "text": "Items", "screen": this, "action":  this.itemScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 370, "w": 80, "h": 50, "text": "Research", "screen": this, "action":  this.researchScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 500, "w": 80, "h": 50, "text": "Buildings", "screen": this, "action":  this.buildingScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 610, "w": 80, "h": 50, "text": "Equipment", "screen": this, "action":  this.equipmentScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 740, "w": 80, "h": 50, "text": "Throne", "screen": this, "action":  this.throneRoomScreen}));
 
 
         

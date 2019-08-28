@@ -14,7 +14,7 @@ class BuildingScreen extends ScreenView {
         //this.inputs.push(new newInput("f"));
 
         console.log("this is BuildingScreen constructor");
-        this.buttons.push(new Button({"active": true, "style": "circle", "x": 500, "y": 100, "w": 70, "h": 50, "text": "Exit", "screen": this, "action":  this.exitScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 500, "y": 100, "w": 70, "h": 50, "text": "Exit", "screen": this, "action":  this.exitScreen}));
 
         this.listBox = new ListBox(50, 100, 300, 400);
 

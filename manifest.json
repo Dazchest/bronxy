@@ -1,0 +1,22 @@
+{
+    "short_name": "BronxCraft",
+    "name": "Bronx Craft yeah",
+    "start_url": "https://bronxcraft.glitch.me",
+
+    "background_color": "#3367D6",
+    "display": "standalone",
+    "theme_color": "#3367D6",
+
+    "icons": [
+      {
+        "src": "/images/icons/icon1-144x144.png",
+        "type": "image/png",
+        "sizes": "144x144"
+      },        
+      {
+        "src": "/images/icons/icon1-512x512.png",
+        "type": "image/png",
+        "sizes": "512x512"
+      }
+      ]
+  }
