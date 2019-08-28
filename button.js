@@ -63,14 +63,12 @@ class Button {
     //TODO: maybe have it so accepts a button and this --- so.. (b = this)
     check(researchThis) {
         if(clicked) {   //mouse is clicked, check if it was on a button
-            console.log(this.style);
             if(this.style == "rectangle") {
                 if(mouse.x > this.x*zoom.x && mouse.x < this.x*zoom.x + this.w*zoom.x && mouse.y > this.y*zoom.y && mouse.y < this.y*zoom.y + this.h*zoom.y) {
                     if(this.action && this.active) {
                         clicked = false;
                         console.log(this.text + " pressed");
                         let callback = this.action;
-                        //callback(this.where, this);
                         callback(researchThis, this);
                         return true
                     }
@@ -79,9 +77,12 @@ class Button {
             if(this.style == "circle") {
                 let dx = mouse.x - this.x;
                 let dy = mouse.y - this.y;
+                if(this.text == "break") {
+                    console.log("sdjhgfjdgfjsdgfjhdgf");
+                }
                 let dist = Math.sqrt(dx * dx + dy * dy);
-                console.log("circle dist = ", dist);
-                if(dist < this.h) {
+                console.log("circle dist = ", dist, " and radius is ", this.radius);
+                if(dist < this.radius) {
                     if(this.action && this.active) {
                         clicked = false;
                         console.log(this.text + " pressed");

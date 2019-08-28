@@ -119,6 +119,14 @@ class Assets {
         itemHolderImages[1].src = "images/panels/item_holder_right.png";
         itemHolderImages[2].src = "images/panels/item_holder_middle.png";
 
+        
+        throneImages[0] = new Image();
+        throneImages[0].src = "images/equipment/throne2.png";
+        throneImages[0].onload = convertImage;
+        throneImages[1] = new Image();
+        throneImages[1].src = "images/equipment/statue3.png";
+        throneImages[1].onload = convertImage;
+
         function dop() {
             //this.resolve(true);
             return;

@@ -1,3 +1,5 @@
+
+console.log("ekjhsdfwww");
 window.onload = init;
 
 var game = {};
@@ -14,6 +16,9 @@ var player;
 
 var equipmentScreen = {"active": false};
 var equipmentList = [];
+var throneRoomScreen = {"active": false};
+var throneRoom = new ThroneRoom();
+var throneImages = [];
 
 var resources = {};
 var resourceManager = new ResourceManager();
@@ -339,8 +344,6 @@ function init() {
     })
 
     //initStageTwo();
-    let te = new ThroneStatue();
-    equipmentList.push(te);
 
     //---------------------------
    
@@ -433,6 +436,7 @@ function init() {
         mapScreen = new MapScreen(3);
         let currentUser = database.ref(username);
         
+
        // console.log("userdata", currentUser.val());
         currentUser.once('value', function(data) {
             if (data.hasChild("city")) {
@@ -451,6 +455,13 @@ function init() {
                     //  ctx.clip();
 
                     // expand = setInterval(expandIntro, 100);
+
+                    // add a few throne room equipment to start with
+                    //let te = new ThroneEquipment(0);
+                    equipmentList.push(new ThroneEquipment(getRandom(0,1)));
+                    //equipmentList.push(new ThroneEquipment(1));
+                    //----------------------------------------------
+
                     setTimeout(draw, 100);
                 });
 
@@ -606,8 +617,8 @@ function saveList(listToSave, noStringy) {
     console.log(listName);        //
     console.log(listToSave);       //
 
-    console.log("saving to database???");
-    if(noStringy) {   // some lists, like resources, do not need to be stringifief
+    console.log("saving list to database???");
+    if(noStringy) {   // some lists, like resources, do not need to be stringified
         saveData = JSON.parse(JSON.stringify(listToSave));
     } else {
         saveData = JSON.stringify(listToSave);
@@ -912,6 +923,16 @@ function loadGame() {
         for(let x=0; x<jb.length; x++) {
             itemList[x] = new Item(jb[x]);
         }
+
+        jb = gameData.equipmentList;
+        if(jb) {
+            for(let x=0; x<jb.length; x++) {
+                equipmentList.push(new ThroneEquipment(jb[x]));
+            }
+        }
+        //throneRoom = new ThroneRoom;        // needs to be setup after equipment has been loaded
+        throneRoom.init();
+        saveList("throneRoom", true);
 
         //this doesnt need parsing
         jb = gameData.resources;

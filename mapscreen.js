@@ -201,7 +201,7 @@ class MapScreen extends ScreenView {
             //----------------------------------
 
             this.gridOffset = new Vector3d(this.grid_x, this.grid_y);
-            this.gridDisplay = {"width": 28, "height": 22};
+            this.gridDisplay = {"width": 28, "height": 28};
 
             this.tileCount = 0;
 

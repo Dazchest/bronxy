@@ -44,7 +44,7 @@ function scrollCity(e) {
         // });
     }
     //TODO: does this need to be here???
-    if(itemScreen.active || researchScreen.active || buildingScreen.active) {
+    if(itemScreen.active || researchScreen.active || buildingScreen.active || equipmentScreen.active) {
         camera.x += e.movementX;
         camera.y += e.movementY;
     };

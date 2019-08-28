@@ -19,6 +19,7 @@ class CityScreen extends ScreenView {
         this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 370, "w": 80, "h": 50, "text": "Research", "screen": this, "action":  this.researchScreen}));
         this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 500, "w": 80, "h": 50, "text": "Buildings", "screen": this, "action":  this.buildingScreen}));
         this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 610, "w": 80, "h": 50, "text": "Equipment", "screen": this, "action":  this.equipmentScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", "x": 60, "y": 740, "w": 80, "h": 50, "text": "Throne", "screen": this, "action":  this.throneRoomScreen}));
 
 
         
@@ -90,6 +91,12 @@ class CityScreen extends ScreenView {
         console.log("going to equipment screen");
         equipmentScreen = new EquipmentScreen();
         screenManager.screen = equipmentScreen;
+    }
+
+    throneRoomScreen() {
+        console.log("going to throne room screen");
+        throneRoomScreen = new ThroneRoomScreen();
+        screenManager.screen = throneRoomScreen;
     }
 
     // mapScreen() {

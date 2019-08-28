@@ -6,6 +6,28 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Empire Craft</title>
 
+    <script>
+    function isES6()
+{
+    try
+    {
+        Function("() => {};");
+        //console.log("dfkjhsfkhsdkfhsdkfhjdhfkhsfkhsfj");
+        return true;
+    }
+    catch(exception)
+    {
+        console.log("dfkjhsfkhsdkfhsdkfhjdhfkhsfkhsfj");
+        return false;
+    }
+}
+    if(!isES6()) {
+        //console.log("you are stuck in 1983");
+        ///window.stop();
+        alert("Sorry, your browser is stuck in 1984");
+        throw new Error("Sorry, your browser is stuck in 1984");
+    }
+    </script>
     <!-- <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase-app.js"></script> -->
     <!-- <script src="https://www.gstatic.com/firebasejs/6.2.4/firebase.js"></script> -->
 
@@ -164,7 +186,7 @@
         <button onclick="zoomScreen('out')">zoom out</button>
     </div> -->
 
-    <div id="" style="position:absolute; top:500px; left: 20px; display:flex">
+    <div id="" style="position:absolute; top:500px; left: 140px; display:flex">
         <button onclick="fullScreen()" style="font-size:20px">full screen</button>
         <button onclick="logout()" style="font-size:20px">LogOut</button>
     </div>

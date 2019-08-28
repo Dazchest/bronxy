@@ -8,11 +8,11 @@ function convertMouseXYtoGridXY() {
 
 /**
  * Gets a whole random number, inclusive of start and end
- * @param {int} start 
- * @param {int} end 
+ * @param {int} min 
+ * @param {int} max 
  */
-function getRandom(start, end) {
-    return Math.floor(Math.random() * (end) + start);
+function getRandom(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
 function setButtonActive(buttons, type) {
@@ -304,6 +304,8 @@ function convertImage() {
     img.src = buffer.toDataURL();
 }
 
+
+
 function logout() {
     localStorage.setItem("username", "");
     location.reload();
@@ -493,14 +495,21 @@ function mapRange(value, a, b, c, d) {
 //     console.log(b);
 // }
 
-var bob = {};
-bob.cat = "hello";
+// var bob = {};
+// bob.cat = "hello";
 
-let a = {};
-a.fish = "world";
-//a.cat = "goodbye";
+// let a = {};
+// a.fish = "world";
+// //a.cat = "goodbye";
 
-bob = Object.assign(bob, a);
+// bob = Object.assign(bob, a);
 
-console.log(bob);
+// function bb() {};
+// var g = new bb();
+// console.log(g);
+// console.log(g.constructor.name);
 
+
+// for(let x=0; x<50; x++) {
+//     console.log(getRandom(1,3));
+// }
