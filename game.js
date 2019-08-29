@@ -83,6 +83,9 @@ var listScroll;
 
 var speedScreen = {"active": false};
 
+var optionScreen = {"active": false};
+var optionList = [];
+
 var buttonImages = [];
 var mapImages = [];
 var assets;
@@ -158,26 +161,11 @@ function init() {
           // Prevent Chrome 67 and earlier from automatically showing the prompt
           //e.prompt();
           console.log("Meets criteria to install");
-          inst.value = "would you like to install";
+          //inst.value = "would you like to install";
           e.preventDefault();
           // Stash the event so it can be triggered later.
           installPromptEvent = e;
   
-        });
-  
-        inst.addEventListener('click', function(){
-            console.log("trying to install");
-            inst.disabled = true;
-          installPromptEvent.prompt();
-          installPromptEvent.userChoice.then(function(choice) {
-            if (choice.outcome === 'accepted') {
-              console.log('User accepted the A2HS prompt');
-            } else {
-              console.log('User dismissed the A2HS prompt');
-            }
-            // Clear the saved prompt since it can't be used again
-            installPromptEvent = null;
-          });
         });
       }
       //-----------------------------------------------------------
@@ -186,7 +174,7 @@ function init() {
 
     // get operating system - mobile etc
     opsys = getMobileOperatingSystem();
-    console.log(opsys);
+    console.log(opsys + " operating system");
     let downtype, movetype, uptype;
     if (opsys=="unknown"){downtype = 'mousedown'; movetype = 'mousemove'; uptype = 'mouseup';}
     if (opsys!="unknown"){downtype = 'touchstart'; movetype = 'touchmove'; uptype = 'touchleave';}
@@ -410,6 +398,28 @@ function init() {
     }
     //TODO: put all promises in an array, and then check them all before proceeding
     function initStageTwo(myJson) {
+
+        options = [
+            {   text: "Log Out",
+                button: {"active": true, "drawButton": false, "x": 50, "y": 200, "w": 100, "h": 30, "text": "Logout",  "action":  logout}
+            },
+            {   text: "Full Screen",
+                button: {"active": true, "drawButton": false, "x": 50, "y": 200, "w": 100, "h": 30, "text": "Full Screen",  "action":  fullScreen}
+            },
+            {   text: "Install as App",
+                button: {"active": true, "drawButton": false, "x": 50, "y": 200, "w": 100, "h": 30, "text": "Install as App",  "action":  installApp}
+            },
+            {   text: "Get Push Notifications",
+                button: {"active": false, "drawButton": false, "x": 50, "y": 200, "w": 100, "h": 30, "text": "Get Push Notifications",  "action":  askPermission}
+            }
+        ]
+
+        //blankOption.text = "Log Out"
+        for(let x=0; x<options.length; x++) {
+            let blankOption = new Option(options[x]);
+            blankOption.button =  new Button(options[x].button);
+            optionList.push(blankOption);
+        }
 
         buildingHandler.loadImages();
         assets = new Assets();
@@ -1103,7 +1113,7 @@ function draw() {
 
     ctx.font = "20px Georgia";
     ctx.fillStyle = '#ffffff';
-    ctx.fillText("fps: " + Math.floor(fps), 400, 70);
+    ctx.fillText("fps: " + Math.floor(fps), 320, 25);
 
     ctx.fillStyle = '#ffffff';
     popup(mouse.x + ", " + mouse.y, 10, 50);

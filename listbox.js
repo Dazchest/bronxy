@@ -15,7 +15,7 @@ class ListBox {
 
         this.listScroll = false;
 
-        console.log(researchList);
+        //console.log(researchList);
     }
 
     listen() {

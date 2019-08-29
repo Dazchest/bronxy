@@ -75,6 +75,8 @@
     <script src="buildingdetailsscreen.js"></script>
     <script src="buildingupgradescreen.js"></script>
     <script src="itemscreen.js"></script>
+    <script src="optionscreen.js"></script>
+    <script src="newInput.js    "></script>
     
     <script src="assets.js"></script>
     <script src="troops.js"></script>
@@ -152,7 +154,7 @@
         }
     </style>
 </head>
-<body oncontextmenu="return false;" style="background:#ff00ff">
+<body oncontextmenu="return false;">
 
     <script>
         if(!login) {
@@ -174,7 +176,7 @@
 
     <div id="buildingDiv" style="visibility: hidden; position:absolute; top:50px; left: 50px">
         select building
-        <select style="font-size: 30px" onchange="buildingHandler.selectNewBuilding(this)" name="buildingSelect" id="buildingSelect">
+        <select style="font-size: 25px" onchange="buildingHandler.selectNewBuilding(this)" name="buildingSelect" id="buildingSelect">
             <option value="">Select Building</option>
             <option value="2">Farm</option>
             <option value="3">Sawmill</option>
@@ -188,16 +190,10 @@
         <button onclick="zoomScreen('out')">zoom out</button>
     </div> -->
 
-    <div id="" style="position:absolute; top:600px; left: 140px; display:flex">
-        <button onclick="fullScreen()" style="font-size:20px">full screen</button>
-        <button onclick="logout()" style="font-size:20px">LogOut</button>
-        <button id="installbutton" style="font-size:20px">INSTALL</button>
-        <button onclick="askPermission()" disabled style="font-size:20px">GET MESSAGES</button>
-    </div>
 
 
     <div class="toast" id="toastdiv">
-        <span id="toasttext">vdsvd</span>
+        <span id="toasttext"></span>
     </div>
 
 

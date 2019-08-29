@@ -1,7 +1,7 @@
 {
     "short_name": "BronxCraft",
     "name": "Bronx Craft yeah",
-    "start_url": "localhost",
+    "start_url": "/index.html",
 
     "background_color": "#3367D6",
     "display": "standalone",

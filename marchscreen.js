@@ -37,8 +37,8 @@ class MarchScreen extends ScreenView {
 
         this.buttons = [];
 
-        this.buttons.push(new Button({"active": true, "x": 475, "y": 500, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
-        this.buttons.push(new Button({"active": true, "name": "march", "x": 365, "y": 365, "w": 100, "h": 30, "text": "March", "screen": this, "action":  this.march}));
+        this.buttons.push(new Button({"active": true, style: "circle", radius: 50, "x": 500, "y": 100, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
+        this.buttons.push(new Button({"active": true, "name": "march", "x": 365, "y": 500, "w": 100, "h": 30, "text": "March", "screen": this, "action":  this.march}));
         // this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "left", "name": "troopleft", "x": 75, "y": 200, "w": 128, "h": 128, "text": "Left", "screen": this, "action":  this.viewTiers}));
         // this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "right", "name": "troopright", "x": 420, "y": 200, "w": 128, "h": 128, "text": "Right", "screen": this, "action":  this.viewTiers}));
 
@@ -52,24 +52,19 @@ class MarchScreen extends ScreenView {
                         if(troopList[x].levels[y] != null) {
                             let availableQuantity = troopList[x].levels[y].quantity;
 
-                            let i = document.createElement('input');
+                            let i = {};
                             i.id = 'quantityInput';
                             i.name = 'quantityInput[]';
-                            i.style.position = 'absolute';
-                            i.style.left = ((268 + this.x) * zoom.x) + 'px';
-                            i.style.top =  (265 + (counter * 25) * zoom.y) + 'px';
-                            i.style.width = '48px';
                             i.type = 'number';  
                             i.min = 0;
                             i.max = availableQuantity;
                             i.value = 0;
-                            //i.addEventListener('keydown', getInput);
-                            //i.addEventListener('change', checkInput); 
 
+                            let iData = {x: 268 + this.x, y: (160 + (counter * 35))};
+                            let newI = new NewInput(i, iData);
+
+                            this.inputs.push(newI);
                             counter ++;
-                            console.log(i);
-                            this.inputs.push(i);
-                            document.getElementById('maindiv').appendChild(i);
                         }
 
                     }
@@ -104,6 +99,7 @@ class MarchScreen extends ScreenView {
             ctx.fillStyle = '#eeeeee';
             ctx.font = "20px Georgia";
             ctx.fillText(this.name, this.x, this.y + 20);
+
 
             this.displayTileInfo();
 
@@ -165,16 +161,22 @@ class MarchScreen extends ScreenView {
                         let troopType = troopList[x].type;
                         let tier = troopList[x]
                         ctx.font = "16px Georgia";
-                        ctx.fillText(troopList[x].levels[y].quantity + " - " + troops[x].levels[y].name, this.x + 100, this.y + 180 + (counter * 25));
+                        ctx.fillStyle = '#ffff22';
+                        ctx.fillText(troopList[x].levels[y].quantity + " - " + troops[x].levels[y].name, this.x + 100, this.y + 180 + (counter * 35));
+                        // draw the inputs
+                        this.inputs[counter].draw();
+                        this.inputs[counter].button.check();
+                        //------------
                         counter++;
                     }
                 }
             }
         }
+        ctx.fillStyle = '#ffff22';
         ctx.font = "18px Georgia";
-        ctx.fillText("Select March Size = " + this.selectedMarchSize, this.x + 100, this.y + 180 + (counter * 25));
+        ctx.fillText("Select March Size = " + this.selectedMarchSize, this.x + 100, this.y + 220 + (counter * 35));
         counter++;
-        ctx.fillText("Max March Size = " + marchManager.marchSize, this.x + 100, this.y + 180 + (counter * 25));
+        ctx.fillText("Max March Size = " + marchManager.marchSize, this.x + 100, this.y + 220 + (counter * 35));
 
     }
     //---------------------------------------
@@ -201,7 +203,7 @@ class MarchScreen extends ScreenView {
                 if(troopsNeeded > this.troopsAvailable[x].quantity) {
                     troopsNeeded = this.troopsAvailable[x].quantity;
                 }
-                this.inputs[x].value = troopsNeeded;
+                this.inputs[x].i.value = troopsNeeded;
 
                 this.selectedMarchSize += troopsNeeded;
                 this.load += troopsNeeded * troopLoad;
@@ -235,11 +237,11 @@ class MarchScreen extends ScreenView {
             troopLoad = troops[troopType].levels[troopLevel].load;
             
             if(this.tile.resources) {
-                this.load += this.inputs[x].value * troopLoad;
-                this.selectedMarchSize += Number(this.inputs[x].value);
+                this.load += this.inputs[x].i.value * troopLoad;
+                this.selectedMarchSize += Number(this.inputs[x].i.value);
             } else 
             if(this.tile.monster) {
-                this.selectedMarchSize += Number(this.inputs[x].value);
+                this.selectedMarchSize += Number(this.inputs[x].i.value);
             }
         }
     }
@@ -248,13 +250,13 @@ class MarchScreen extends ScreenView {
         let inputQuantity, marchAvailable;
 
         for(let x=0; x<this.inputs.length; x++) {
-            inputQuantity = Number(this.inputs[x].value);
+            inputQuantity = Number(this.inputs[x].i.value);
 
             marchAvailable = marchManager.marchSize - this.selectedMarchSize;
             if(this.troopsAvailable[x].quantity > (inputQuantity + marchAvailable) ) {
-                this.inputs[x].max = inputQuantity + marchAvailable;
+                this.inputs[x].i.max = inputQuantity + marchAvailable;
             } else {
-                this.inputs[x].max = this.troopsAvailable[x].quantity;
+                this.inputs[x].i.max = this.troopsAvailable[x].quantity;
             }
             
             

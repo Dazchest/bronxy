@@ -32,7 +32,7 @@ class TroopTrainingScreen extends ScreenView {
 
         this.buttons = [];
 
-        this.buttons.push(new Button({"active": true, "x": 475, "y": 500, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
+        this.buttons.push(new Button({"active": true, style: "circle", radius: 50, "x": 500, "y": 100, "w": 100, "h": 30, "text": "Exit", "screen": this, "action":  this.exitScreen}));
         this.buttons.push(new Button({"active": true, "name": "train", "x": 365, "y": 365, "w": 100, "h": 30, "text": "Train", "screen": this, "action":  this.train}));
         //this.buttons.push(new Button({"active": true, "x": 400, "y": 350, "w": 100, "h": 30, "text": "Details", "screen": this, "action":  this.detailsScreen}));
         this.buttons.push(new Button({"active": true, "drawButton": false, "direction": "left", "name": "troopleft", "x": 75, "y": 200, "w": 128, "h": 128, "text": "Left", "screen": this, "action":  this.viewTiers}));
@@ -40,27 +40,26 @@ class TroopTrainingScreen extends ScreenView {
 
         this.buttons.push(new Button({"active": true, "name": "speed", "x": 365, "y": 565, "w": 100, "h": 30, "text": "Speed", "screen": this, "action":  this.speed}));
 
-        let i = document.createElement('input');
+        let i = {};
         i.id = 'quantityInput';
-        i.style.position = 'absolute';
-        i.style.left = ((268 + this.x) * zoom.x) + 'px';
-        i.style.top =  (365 * zoom.y) + 'px';
-        i.style.width = '48px';
+        i.name = 'quantityInput[]';
         i.type = 'number';  
-        i.min = 1;
-        i.value = 1;
-        //i.addEventListener('keydown', getInput);
-        //i.addEventListener('change', checkInput); 
+        i.min = 0;
+        //i.max = 50;      
+        i.value = 0;
 
-        //console.log(i);
-        this.inputs.push(i);
-        document.getElementById('maindiv').appendChild(i);
+        let iData = {x: 200, y: 375};
+        let newI = new NewInput(i, iData);
+
+        this.inputs.push(newI);
 
         if(this.troopBuilding.training) {   //this.troopBuilding.training
             setButtonState(this.buttons, "train", false);
             console.log("we are already training hyou know...");
         }
 
+        this.x = 0;
+        this.y = 0;
         
         cities[currentCity].active = false;
         buildingHandler.highlightGrid = false;
@@ -92,6 +91,9 @@ class TroopTrainingScreen extends ScreenView {
             if(this.troopBuilding.training) {   //this.troopBuilding.training
                 this.displayTrainingTimer();
             }
+
+            this.inputs[0].draw();
+            this.inputs[0].button.check();
 
             Resource.drawAll(); // draw resources at the top of the screen
             //this.checkDisplayResearch();
@@ -146,11 +148,11 @@ class TroopTrainingScreen extends ScreenView {
                 ctx.fillStyle = '#ff0000';
                 this.requirementsMet = false;
             }
-            ctx.fillText(resources[resCheck[x]].text + ": " + quantityInput * r.resources[resCheck[x]], this.x + 25 + (x * 95), this.y + 420)    
+            ctx.fillText(resources[resCheck[x]].text + ": " + quantityInput * r.resources[resCheck[x]], 50 + (x * 95), 650)    
         }
 
         ctx.fillStyle = '#ffffff';
-        ctx.fillText("Total Time: " + quantityInput * this.troops.levels[tier].baseTrainTime, this.x + 375, this.y + 380)
+        ctx.fillText("Total Time: " + quantityInput * this.troops.levels[tier].baseTrainTime, 50, 700)
 
         if(this.troopBuilding.training) { //this.troopBuilding.training
             this.requirementsMet = false;
@@ -253,7 +255,7 @@ class TroopTrainingScreen extends ScreenView {
         //self.closeScreen();
         if(self.inputs) {
             for(let x=0; x<self.inputs.length; x++) {
-                document.getElementById('maindiv').removeChild(self.inputs[x]);
+                document.getElementById('maindiv').removeChild(self.inputs[x].i);
             }
         }
 

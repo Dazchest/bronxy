@@ -40,15 +40,7 @@ function setButtonState(buttons, name, state) {
     }
 }
 
-function getInput(e) {
-    console.log(e.keyCode);
-}
-function checkInput() {
-    //console.log("key = " + e.keyCode);
-    if(document.getElementById('quantityInput').value < 0) {
-        document.getElementById('quantityInput').value = 1;
-    }
-}
+
 
 
 function zoomScreen(inout) {
@@ -164,52 +156,7 @@ function expandIntro() {
 }
 
 
-  class newInput {
 
-    // inputs = [];
-
-    constructor(id) {
-        return;
-        this.i = document.createElement('input');
-        this.i.id = 'input';
-        this.i.style.position = 'absolute';
-        this.i.style.left = ((268) * zoom.x) + 'px';
-        this.i.style.top =  (365 * zoom.y) + 'px';
-        this.i.style.width = '48px';
-        //this.i.type = 'hidden';
-        this.i.style.opacity = .5;
-       
-        //i.type = 'number';  
-        // i.min = 1;
-        // i.value = 1;
-        //this.i.addEventListener('keydown', getInput);
-        //this.i.addEventListener('change', this.updateInput); 
-
-        // console.log(i);
-        // this.inputs.push(i);
-        document.getElementById('maindiv').appendChild(this.i);
-        //document.getElementById('input').focus();
-        this.i.focus();
-    }
-
-        draw() {
-            return;
-            let text = this.i.value;
-            ctx.fillStyle = '#000000';
-            ctx.fillText(text, 400, 200);
-        }
-
-  }
-
-  function getInput() {
-      //alert("f");
-      ctx.fillStyle = '#000000';
-      ctx.fillText("wahsfsefwefwefweefooo", 400, 200);
-      ctx.font = "20px Georgia";
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText("fps: " + fps, 400, 300);
-  
-}
 
 function addFoodtoBronxy() {
     var adaNameRef = firebase.database().ref('Bronxy/resources/food');
@@ -399,8 +346,23 @@ function askPermission() {
         throw new Error('We weren\'t granted permission.');
       }
     });
-  }
+}
 
+function installApp(b) {
+    console.log("trying to install");
+    console.log(b)
+    //inst.disabled = true;
+    installPromptEvent.prompt();
+    installPromptEvent.userChoice.then(function(choice) {
+    if (choice.outcome === 'accepted') {
+        console.log('User accepted the A2HS prompt');
+    } else {
+        console.log('User dismissed the A2HS prompt');
+    }
+    // Clear the saved prompt since it can't be used again
+    installPromptEvent = null;
+    });
+}
 
 
 //---------------------------------------------------

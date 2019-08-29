@@ -64,7 +64,7 @@ class ScreenView {
         }
         if(self.inputs) {
             for(let x=0; x<self.inputs.length; x++) {
-                document.getElementById('maindiv').removeChild(self.inputs[x]);
+                document.getElementById('maindiv').removeChild(self.inputs[x].i);
             }
         }
         if(self.listBox) {
@@ -100,8 +100,8 @@ class ScreenView {
                     let dy = mouse.y - b.y;
                     let dist = Math.sqrt(dx * dx + dy * dy);
                     console.log("circle dist = ", dist);
-                    if(dist < b.h) {
-                        if(b.action && b.radius) {
+                    if(dist < b.radius) {
+                        if(b.action && b.active) {
                             clicked = false;
                             console.log(b.text + " pressed");
                             let callback = b.action;
