@@ -1,9 +1,8 @@
-class Player {
+class User {
 
 
     constructor() {
-        this.gold = 213154;
-        this.gems = 324;
-        this.playerName = "Bronxy";
+        this.id;
+        this.name;
     }
 }

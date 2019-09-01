@@ -79,7 +79,7 @@ class TroopTrainingScreen extends ScreenView {
 
             ctx.strokeStyle = "#000000";
             ctx.fillStyle = "#333333";
-            ctx.fillRect(this.x, this.y, this.w, this.h);
+            ctx.fillRect(0, 0, canvas.w, canvas.h);
 
             ctx.fillStyle = '#eeeeee';
             ctx.font = "20px Georgia";

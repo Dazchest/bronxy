@@ -12,7 +12,7 @@ var camera = {"x": 0, "y": 0};
 var cityCameraStart = {"x": 200, "y": 30};
 var gridSize = {"x":100, "y": 100};
 
-var player;
+var user;
 
 var equipmentScreen = {"active": false};
 var equipmentList = [];
@@ -66,6 +66,9 @@ var marches = [];
 var marchScreen = {"active": false};
 var marchManager = new MarchManager();
 
+var allianceList = [];
+var alliance;
+var allianceScreen = {"active": false};
 
 var generals = [];
 var generalImages = [];
@@ -118,6 +121,18 @@ var screenZoom = new Vector3d(.5, .5);
 var ratioW = 1;
 var ratioH = 1;
 
+function SaveDatFileBro(localstorage) {
+    localstorage.root.getDirectory("demo", {create: true}, function() {});
+
+    localstorage.root.getFile("info.txt", {create: true}, function(DatFile) {
+        DatFile.createWriter(function(DatContent) {
+          var blob = new Blob(["Lorem Ipsum"], {type: "text/plain"});
+          DatContent.write(blob);
+        });
+      });    
+      
+    return;
+}
 
 function init() {
     username = localStorage.getItem("username");
@@ -133,6 +148,9 @@ function init() {
     //--------
     console.log("initialising game");
 
+    navigator.webkitPersistentStorage.requestQuota(1024*1024, function() {
+        window.webkitRequestFileSystem(window.PERSISTENT , 1024*1024, SaveDatFileBro);
+      })
     //--------------------------
     //--------------------------------------------
     if ('serviceWorker' in navigator && 'PushManager' in window) {
@@ -330,7 +348,7 @@ function init() {
     //window.addEventListener('keydown', getInput);
 
     //initilaiase the player
-    player = new Player;
+    user = new User();
 
 
 
@@ -508,8 +526,8 @@ function init() {
 
                 console.log("Waiting for map");
                 let p = [];
-                let p1 = loadMap2();
-                p.push(p1);
+                // let p1 = loadMap2();
+                // p.push(p1);
                 let p2 = loadGame();
                 p.push(p2);
 
@@ -915,135 +933,143 @@ function loadGame() {
     //userName = document.getElementById('savename').value;
     //if(!userName) { userName = "Bronxy";}
     return new Promise(resolve => {
-
-    var ref = firebase.database().ref(username);
-
-    ref.once('value', function(data) {
-        gameData = data.val();
-        let jb;
-
-        //jb = JSON.parse(gameData.city);
-        jb = gameData.city;
-        city = jb;    
-        //cities.push(city);
-        cities[0] = city;
-        cities[0].active = true;
-
-
-        //jb = JSON.parse(gameData.buildingList);
-        jb = gameData.buildingList;
-        for(let x=0; x<jb.length; x++) {
-            if(jb[x].troopProduction) {
-                buildingList[x] = new troopTrainingBuilding(jb[x]);
-            } else if(jb[x].type == 14) {
-                buildingList[x] = new TavernBuilding(jb[x]);
-            } else if(jb[x].type == 15) {
-                buildingList[x] = new AcademyBuilding(jb[x]);
-            } else {
-                buildingList[x] = new Building(jb[x]);
+        
+        
+    var id;
+    firebase.database().ref("users").once('value', function(data) {
+        data.forEach(function(childSnapshot) {
+            console.log(childSnapshot.val().username);
+            if(childSnapshot.val().username == username) { 
+                id = childSnapshot.val().id;
+                console.log("found user ", id);
+                parseGameData(id);
             }
-        }
+        });
+     })
 
-        //jb = JSON.parse(gameData.researchList);
-        jb = gameData.researchList;
-        //researchList = [];
-        for(let x=0; x<jb.length; x++) {
-             researchList[x] = new Research(jb[x]);
-        }
+    function parseGameData(id) {
+        var ref = firebase.database().ref("users" + "/" + id.toString());
+        console.log(id);
+        ref.once('value', function(data) {
+            gameData = data.val();
+            console.log(gameData);
+            //return;
+            let jb;
 
-        if(gameData.troopList) {
-            jb = JSON.parse(gameData.troopList);
+            jb = gameData.city;
+            city = jb;    
+            cities[0] = city;
+            cities[0].active = true;
+
+            user.id = gameData.id;
+            user.name = gameData.name
+            if(gameData.alliance) {
+                user.allianceID = gameData.alliance.id;
+
+                var ally = database.ref("allianceList" + "/" + user.allianceID.toString());
+                ally.once('value', function(allyData) {
+                    if(allyData.val()) {
+                        alliance = new Alliance(allyData.val());
+                    }
+                });
+            }
+            
+            jb = gameData.researchList;
             for(let x=0; x<jb.length; x++) {
-                if(jb[x]) {
-                    troopList[x] = new Troop(jb[x]);
+                researchList[x] = new Research(jb[x]);
+            }
+
+            jb = gameData.buildingList;
+            for(let x=0; x<jb.length; x++) {
+                if(jb[x].troopProduction) {
+                    buildingList[x] = new troopTrainingBuilding(jb[x]);
+                } else if(jb[x].type == 14) {
+                    buildingList[x] = new TavernBuilding(jb[x]);
+                } else if(jb[x].type == 15) {
+                    buildingList[x] = new AcademyBuilding(jb[x]);
+                } else {
+                    buildingList[x] = new Building(jb[x]);
                 }
             }
-        }
 
-        //console.log(gameData.generals);
-        //jb = JSON.parse(gameData.generals);
-        if(gameData.generals) {
-            jb = gameData.generals;
-            generals = [];  // clear it ready for any full new list
+            jb = gameData.researchList;
             for(let x=0; x<jb.length; x++) {
-                //console.log(jb[x]);
-                if(jb[x]) {
-                    generals.push(new General(jb[x]));
+                researchList[x] = new Research(jb[x]);
+            }
+
+            if(gameData.troopList) {
+                jb = JSON.parse(gameData.troopList);
+                for(let x=0; x<jb.length; x++) {
+                    if(jb[x]) {
+                        troopList[x] = new Troop(jb[x]);
+                    }
                 }
             }
-        }
 
-        //return;
-
-        jb = gameData.marches;
-        if(jb) {
-            marches = [];
-            for(let x=0; x<jb.length; x++) {
-                marches.push(new March(jb[x]));
+            if(gameData.generals) {
+                jb = gameData.generals;
+                generals = [];  // clear it ready for any full new list
+                for(let x=0; x<jb.length; x++) {
+                    //console.log(jb[x]);
+                    if(jb[x]) {
+                        generals.push(new General(jb[x]));
+                    }
+                }
             }
-        }
 
-        jb = JSON.parse(gameData.itemList);
-        for(let x=0; x<jb.length; x++) {
-            itemList[x] = new Item(jb[x]);
-        }
-
-        jb = gameData.equipmentList;
-        if(jb) {
-            for(let x=0; x<jb.length; x++) {
-                equipmentList.push(new ThroneEquipment(jb[x]));
+            jb = gameData.marches;
+            if(jb) {
+                marches = [];
+                for(let x=0; x<jb.length; x++) {
+                    marches.push(new March(jb[x]));
+                }
             }
-        }
-        //throneRoom = new ThroneRoom;        // needs to be setup after equipment has been loaded
-        throneRoom.init();
-        saveList("throneRoom", true);
 
-        //this doesnt need parsing
-        jb = gameData.resources;
-        resources.food = new Resource(jb.food);
-        resources.wood = new Resource(jb.wood);
-        resources.stone = new Resource(jb.stone);
-        resources.iron = new Resource(jb.iron);
-        resources.gold = new Resource(jb.gold);
-        resources.gems = new Resource(jb.gems);
-        assets.loadIcons();
-        //todo:: this needs to be optimised
-        //resources = jb;
+            jb = JSON.parse(gameData.itemList);
+            for(let x=0; x<jb.length; x++) {
+                itemList[x] = new Item(jb[x]);
+            }
 
-    //---------------------------
-    // this works great - checking if resources have changed, and load new amounts
-    var resourceRef = firebase.database().ref(username + '/' + 'resources');
-    resourceRef.on('child_changed', function(data) {
-        console.log(data.key);
-        console.log(data.val().amount);
-        let rss = data.key;
-        resources[rss].amount = data.val().amount;
-        // let c = data.val().coords;
-        // if(data.val().type == "food") {
-        //     //mapScreen.mapTiles[c.x][c.y] = new FoodTile(1, c.x, c.y);
-        // } else {
-        //     //mapScreen.mapTiles[c.x][c.y] = new Tile(c.x, c.y);
+            jb = gameData.equipmentList;
+            if(jb) {
+                for(let x=0; x<jb.length; x++) {
+                    equipmentList.push(new ThroneEquipment(jb[x]));
+                }
+            }
+            //throneRoom = new ThroneRoom;        // needs to be setup after equipment has been loaded
+            throneRoom.init();
+            saveList("throneRoom", true);
 
-        // }
-        console.log(data.val());
+            //this doesnt need parsing
+            jb = gameData.resources;
+            resources.food = new Resource(jb.food);
+            resources.wood = new Resource(jb.wood);
+            resources.stone = new Resource(jb.stone);
+            resources.iron = new Resource(jb.iron);
+            resources.gold = new Resource(jb.gold);
+            resources.gems = new Resource(jb.gems);
+            assets.loadIcons();
+            //todo:: this needs to be optimised
+            //resources = jb;
+
+        //---------------------------
+        // this works great - checking if resources have changed, and load new amounts
+        var resourceRef = firebase.database().ref(username + '/' + 'resources');
+        resourceRef.on('child_changed', function(data) {
+            console.log(data.key);
+            console.log(data.val().amount);
+            let rss = data.key;
+            resources[rss].amount = data.val().amount;
+            console.log(data.val());
+        });
+        //------------------------
+
+        resolve(true);
+
+        });
+    }
+
     });
-    //------------------------
-
-    // clearInterval(prog);
-    // setTimeout(draw, 100);
-
-    resolve(true);
-
-    });
-
-    });
-    //let keys = Object.keys(ref);
-    //console.log(keys);
-    // let saveData = {};
-    // saveData.id = "Lilly";
-    // let buildingData = JSON.stringify(buildingList);
-    // saveData.buildingList = buildingData;
-    // ref.push(saveData); 
 
 
   

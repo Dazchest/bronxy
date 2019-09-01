@@ -195,7 +195,7 @@ class ThroneEquipment {
 
             //TODO: maybe have a "qualities" property - at the moment, they are one and the same
             //display enhance requirements
-            if(this.quality < 5) {    //only display if not max level
+            if(this.quality < 5 && this.level<6) {    //only display if not max level
                 ctx.fillStyle = '#ffffff';
                 ctx.fillText("Enhance Chance is " + this.levels[this.quality].enhanceChance + " %", 65, yOffset + 110);
                 

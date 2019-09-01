@@ -60,7 +60,7 @@ class NewInput {
 
         ctx.restore();
 
-        this.checkHover();
+        //sthis.checkHover();
         this.drawCursor();
     }
 
@@ -69,17 +69,18 @@ class NewInput {
         console.log("setting focus");
     }
 
-    checkHover() {
-        if(mouse.x >= this.x && mouse.x <= this.x+this.w && mouse.y >= this.y && mouse.y <= this.y+this.h) {
-            //canvas.style.cursor = 'text';
-        }// else  //TODO: needs fixing - put into an inputManager maybe...
-        // if(canvas.style.cursor != 'text') { //check it isnt over a different input and is set to 'text'
-        //     canvas.style.cursor = 'default';
-        // }
+    static checkHover(inputs) {
+        canvas.style.cursor = 'default';
+        for(let x=0; x<inputs.length; x++) {
+            if(mouse.x >= inputs[x].x && mouse.x <= inputs[x].x+inputs[x].w && mouse.y >= inputs[x].y && mouse.y <= inputs[x].y+inputs[x].h) {
+                canvas.style.cursor = 'text';
+            }
+        }
     }
 
     drawCursor() {
         if(this.i === document.activeElement) { // only draw when focused
+            //console.log(this.i.selectionStart);
             if(Date.now() > this.cursor.lastFlash + this.cursor.speed) {
                 if(this.cursor.state) {
                     this.cursor.state = false;

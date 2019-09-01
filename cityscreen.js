@@ -20,6 +20,7 @@ class CityScreen extends ScreenView {
         this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 500, "w": 80, "h": 50, "text": "Buildings", "screen": this, "action":  this.buildingScreen}));
         this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 610, "w": 80, "h": 50, "text": "Equipment", "screen": this, "action":  this.equipmentScreen}));
         this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 740, "w": 80, "h": 50, "text": "Throne", "screen": this, "action":  this.throneRoomScreen}));
+        this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 520, "y": 500, "w": 80, "h": 50, "text": "Alliance", "screen": this, "action":  this.allianceScreen}));
 
 
         
@@ -103,6 +104,12 @@ class CityScreen extends ScreenView {
         console.log("going to option screen");
         optionScreen = new OptionScreen();
         screenManager.screen = optionScreen;
+    }
+
+    allianceScreen() {
+        console.log("going to alliance screen");
+        allianceScreen = new AllianceScreen();
+        screenManager.screen = allianceScreen;
     }
 
     // mapScreen() {

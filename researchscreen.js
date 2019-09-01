@@ -30,7 +30,7 @@ class ResearchScreen extends ScreenView {
         if(this.active) {
             ctx.strokeStyle = "#000000";
             ctx.fillStyle = "#ffbbdd";
-            ctx.fillRect(this.x, this.y, this.w, this.h);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             ctx.fillStyle = '#000000';
             ctx.font = "20px Georgia";

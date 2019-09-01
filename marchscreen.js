@@ -94,7 +94,7 @@ class MarchScreen extends ScreenView {
 
             ctx.strokeStyle = "#000000";
             ctx.fillStyle = "#333333";
-            ctx.fillRect(this.x, this.y, this.w, this.h);
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
             ctx.fillStyle = '#eeeeee';
             ctx.font = "20px Georgia";
@@ -151,6 +151,7 @@ class MarchScreen extends ScreenView {
     }
 
     displayTroops() {
+        NewInput.checkHover(this.inputs);
 
         let counter = 0;
         for(let x=0; x<troopList.length; x++) {
