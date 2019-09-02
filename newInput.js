@@ -21,16 +21,15 @@ class NewInput {
         // this.i.type = 'hidden';
         document.getElementById('maindiv').appendChild(this.i);
 
+        this.w = 100;   // default w and h, can be overidden with data, below...
+        this.h = 30;
+
         for(let x=0; x<Object.keys(data).length; x++) {
             name = Object.keys(data)[x];
             this[name] = data[name];
         }
 
 
-        //this.x = 300;
-        //this.y = 170;
-        this.w = 100;
-        this.h = 30;
 
         this.cursor = {flash: false, state: false, start: Date.now(), x: 0, y: 0, lastFlash: Date.now(), speed: 1000};
         this.button = new Button({"active": true, drawButton: false, "x": this.x, "y": this.y, "w": this.w, "h": this.h, "text": "", "screen": this, "action":  this.setFocus.bind(this)});

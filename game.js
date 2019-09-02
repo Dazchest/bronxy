@@ -95,6 +95,11 @@ var assets;
 
 var promises = [];
 
+var chat;
+var chatScreen = {"active": false};
+
+var socket;
+
 var rp;
 var clicked = false;
 var scrolling = false;
@@ -526,10 +531,11 @@ function init() {
 
                 console.log("Waiting for map");
                 let p = [];
-                // let p1 = loadMap2();
-                // p.push(p1);
+                let p1 = loadMap2();
+                p.push(p1);
                 let p2 = loadGame();
                 p.push(p2);
+                chat = new Chat();
 
                 Promise.all(p).then( result => {
                     clearInterval(prog);

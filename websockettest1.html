@@ -7,26 +7,48 @@
     <title>Document</title>
 
     <script>
+    var tempuserid;
     // Create WebSocket connection.
-    const socket = new WebSocket('wss://bronxcraft.glitch.me/');
+    const socket = new WebSocket('ws://localhost:3000');
     socket.onopen = function (event) {
+        tempuserid = Math.floor(Math.random() * 5000) + 2
         console.log("we are now conected to the websocket");
         // div.innerHTML += "<br>opened " + new Date().toLocaleString();
         // socket.send("Hey socket! " + new Date().toLocaleString());
     };
     // Connection opened
     socket.addEventListener('open', function (event) {
-        socket.send('Hello Server!');
+        //socket.send('Hello Server!');
     });
 
     // // Listen for messages
     socket.addEventListener('message', function (event) {
         console.log('Message from server ', event.data);
+        try {
+            let parsedmsg = JSON.parse(event.data);
+            document.getElementById('allchat').innerHTML += "<br>" + parsedmsg.userid + ": " + parsedmsg.message;
+        } catch {
+            parsedmsg = event.data;
+            document.getElementById('allchat').innerHTML += "<br>" + parsedmsg;
+        }
     });
+
+    function sendMessage() {
+        let message = {};
+        message.message = document.getElementById('message').value;
+        document.getElementById('message').value = "";
+        message.userid = tempuserid;
+        let msg = JSON.stringify(message);
+        socket.send(msg);
+    }
 
     </script>
 </head>
 <body>
-    
+    <div style="width: 400px; height:500px; background: #cccccc" id="allchat"><p>&#x1F354</p>😝Chat: 🐼 👙</div><br>
+    <form onsubmit="return false">
+    <input type="text" id="message">
+    <button type="submit" onclick="sendMessage()">send</button>
+    </form>
 </body>
 </html>

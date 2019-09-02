@@ -14,9 +14,11 @@ class AllianceScreen extends ScreenView {
         
         this.buttons.push(new Button({"active": true, drawButton: false, "x": 100, "y": 200, "w": 100, "h": 30, "text": "Create New Alliance", "screen": this, "action":  this.showCreateAlliance.bind(this)}));
         this.buttons.push(new Button({"active": true, drawButton: false, "x": 100, "y": 250, "w": 100, "h": 30, "text": "Join an Alliance", "screen": this, "action":  this.showJoinAlliance.bind(this)}));
+        this.buttons.push(new Button({"active": true, drawButton: true, "x": 100, "y": 600, "w": 100, "h": 30, "text": "Leave Alliance", "screen": this, "action":  this.leaveAlliance.bind(this)}));
 
         this.createButton = new Button({"active": false, drawButton: true, "x": 260, "y": 400, "w": 100, "h": 30, "text": "Create Alliance", "screen": this, "action":  this.createAlliance.bind(this)});
 
+        this.joinButtons = [];
         //this.listBox = new ListBox(100, 150, 400, 400, true, false);
 
         let i = {};
@@ -45,7 +47,7 @@ class AllianceScreen extends ScreenView {
             //     allianceList.push(al[x]);
             // }
             for(let x=0; x<Object.keys(al).length; x++) {
-                name = Object.keys(al)[x];// (data[x]).value;
+                name = Object.keys(al)[x];
                 console.log(al[name]);
                 let name2 = {};
                 name2[name] = al[name];    
@@ -55,7 +57,28 @@ class AllianceScreen extends ScreenView {
             console.log(allianceList);
             });
         //----------------
-        
+
+        if(alliance) {  // are we in an alliance
+            alliance.members = [];
+            firebase.database().ref("users/" + user.id.toString() + "/alliance" ).once('value', function(allydata) {
+                if(allydata.val()) {        // check we have an alliance to look through
+                    let allianceID = allydata.val().id
+                    //firebase.database().ref("allianceList/" + allianceID.toString() + "/members").once('value', function(data) {
+                    firebase.database().ref("allianceList/" + allianceID.toString()).once('value', function(data) {
+                        //alliance.name = data.val().name;
+                        let al = data.val().members;
+                        for(let x=0; x<Object.keys(al).length; x++) {
+                            name = Object.keys(al)[x];
+                            //let m = al[x];
+                            console.log("getting memebers ");
+                            console.log(al[name]);
+                            console.log(name);
+                            alliance.members.push(al[name]);
+                        }
+                    });
+                }
+            })
+        }
         
         cities[currentCity].active = false;
         cityScreen.active = false;
@@ -71,7 +94,11 @@ class AllianceScreen extends ScreenView {
 
             ctx.fillStyle = '#000000';
             ctx.font = "20px Georgia";
-            ctx.fillText(this.name, 20, 130);
+            if(alliance) {
+            ctx.fillText(this.name + " - " + alliance.name, 20, 130);
+            } else {
+                ctx.fillText(this.name, 20, 130);
+            }
     
             this.drawButtons();
             this.checkButtons();
@@ -91,8 +118,9 @@ class AllianceScreen extends ScreenView {
     }
 
     showAllianceMembers() {
+        ctx.fillText("MEMBERS", 100, 200);
         for(let x=0; x<alliance.members.length; x++) {
-            ctx.fillText(alliance.members[x], 100, 150 + (x*35));
+            ctx.fillText(alliance.members[x].name, 100, 250 + (x*35));
         }   
     }
 
@@ -124,10 +152,32 @@ class AllianceScreen extends ScreenView {
 
     showJoinAlliance() {
         this.join = true;
+        this.joinButtons = [];
         for(let x=0; x<allianceList.length; x++) {
-            ctx.fillText("A" + allianceList[x].name, 100, 400 + (x * 35));
+            ctx.fillText(allianceList[x].name, 100, 400 + (x * 35));
+            this.joinButtons.push(new Button({"active": true, allianceID: allianceList[x].id, drawButton: true, "x": 250, "y": 400 + (x * 35), "w": 100, "h": 30, "text": "Join", "screen": this, "action":  this.joinAlliance.bind(this)}));
+
+
+            this.joinButtons[x].draw();
+            this.joinButtons[x].check();
         }
 
+
+    }
+    joinAlliance(self, b) {
+        console.log(self);
+        console.log(b);
+        console.log("trying to join " + b.allianceID);
+
+        console.log("updating user with alliance data", b.allianceID);
+        firebase.database().ref("allianceList/" + b.allianceID.toString()).once('value', function(data) {
+            alliance = new Alliance(data.val());
+            alliance.members = null;
+            firebase.database().ref("users" + "/" + user.id.toString() + "/alliance").set(alliance);
+            firebase.database().ref("allianceList/" + b.allianceID.toString() + "/members/" + user.id.toString()).update(user);
+        });
+
+        this.exitScreen(this);
     }
 
     createAlliance() {
@@ -135,16 +185,28 @@ class AllianceScreen extends ScreenView {
             let newAlliance = {};
             newAlliance.id = Date.now();
             newAlliance.name = this.allianceName;
-            newAlliance.members = [{id: user.id, name: user.name}]; 
+            
+            //newAlliance.members = [{id: user.id, name: user.name}]; 
+            alliance = new Alliance(newAlliance);
+
             console.log("adding alliance with id ", alliance.id);
-            firebase.database().ref("allianceList" + "/" + alliance.id.toString()).update(alliance);
+            firebase.database().ref("allianceList" + "/" + alliance.id.toString()).set(alliance);
+            firebase.database().ref("allianceList" + "/" + alliance.id.toString() + "/members/" + user.id.toString()).set(user);
 
             console.log("updating user with alliance id ", alliance.id);
-            firebase.database().ref("users" + "/" + user.id.toString() + "/alliance").update(alliance);
+            firebase.database().ref("users" + "/" + user.id.toString() + "/alliance").set(alliance);
+            //firebase.database().ref("users" + "/" + user.id.toString() + "/alliance/members/" + user.id.toString()).set(alliance.members);
 
-            alliance = new Alliance(newAlliance);
             this.exitScreen(this);
         }
+    }
+
+    leaveAlliance() {
+        console.log("leaving alliance");
+        firebase.database().ref("users" + "/" + user.id.toString() + "/alliance").remove();
+        firebase.database().ref("allianceList" + "/" + alliance.id.toString() + "/members/" + user.id.toString()).remove();
+        alliance = null;
+        this.exitScreen(this);
     }
 
 
