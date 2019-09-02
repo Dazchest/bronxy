@@ -61,6 +61,7 @@ class ChatScreen extends ScreenView {
         camera.x = 0;
         camera.y = 0;
         this.lines = 22;
+        this.inputOffset = 0;
 
         this.buttons = [];
         this.buttons.push(new Button({"style": "circle", radius: 50, "active": true, "x": 450, "y": 50, "w": 100, "h": 50, "text": "Exit", "screen": this, "action":  this.exitScreen}));
@@ -75,8 +76,9 @@ class ChatScreen extends ScreenView {
         this.chatInput.i.addEventListener('keypress', (function(e) {
             if(e.keyCode == 13) {
                 this.send();
-            }
-;        }).bind(this));
+            }       
+        }).bind(this));
+        this.originalY = iData.y;
 
         this.buttons.push(new Button({"active": true, "x": 450, "y": 720, "w": 100, "h": 50, "text": "Send", "screen": this, "action":  this.send.bind(this)}));
 
@@ -98,6 +100,17 @@ class ChatScreen extends ScreenView {
             this.drawButtons();
             this.checkButtons();
 
+            if(this.chatInput.i === document.activeElement) {
+                this.inputOffset = -400;
+                this.lines = 12;
+                camera.y = 250;
+            } else {
+                this.inputOffset = 0;
+                //camera.y = 0;
+                this.lines = 22;
+            }
+            this.chatInput.y = this.originalY + this.inputOffset;
+            this.chatInput.button.y = this.originalY + this.inputOffset;
             this.chatInput.draw();
             this.chatInput.button.check();
 
@@ -107,10 +120,11 @@ class ChatScreen extends ScreenView {
     }
 
     displayChat() {
+        ctx.fillText("wahoooooo", 50,50);
         ctx.save();
         ctx.rect(0, 125, 500, 560);
         ctx.clip();
-        let offset;
+        let offset = 0;
         if(chat.messageList.length > this.lines) {
             offset = chat.messageList.length - this.lines;
         }
@@ -118,10 +132,10 @@ class ChatScreen extends ScreenView {
             let msg;
             try {
                 msg = JSON.parse(chat.messageList[x]);
-                ctx.fillText(msg.userid + ": " + msg.message, 100, 150 + ((x-offset)*25) + camera.y);
+                ctx.fillText(msg.userid + ": " + msg.message, 100, 150 + ((x-offset)*25) + this.inputOffset + camera.y);
             } catch (err) {
                 msg = chat.messageList[x];
-                ctx.fillText(msg, 100, 150 + ((x-offset)*25) + camera.y);
+                ctx.fillText(msg, 100, 150 + ((x-offset)*25) + this.inputOffset + camera.y);
             }
         }
         ctx.restore();
