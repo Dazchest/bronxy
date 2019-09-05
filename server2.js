@@ -69,6 +69,7 @@ app.ws('/', function(ws, req) {
 
     ws.on('chat', function(msg, parsedmsg) {
         //console.log(msg, parsedmsg);
+        console.log("incoming chat message");
         sendAll(msg);
         messageList.push(msg);
     });
@@ -76,7 +77,7 @@ app.ws('/', function(ws, req) {
         //console.log(msg);
         // sendAll(msg);
         // messageList.push(msg);
-        console.log("incoming image");
+        console.log("incoming chat image");
         sendAll(msg);
         //ws.send(msg);
     });

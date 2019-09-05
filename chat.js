@@ -4,8 +4,12 @@ class Chat {
     constructor() {
         var tempuserid;
         // Create WebSocket connection.
+        console.log(location.hostname);
         if(location.hostname === "localhost") {
             socket = new WebSocket('ws://localhost:3005');
+        } else
+        if(location.hostname === '192.168.1.148') {
+            socket = new WebSocket('ws://192.168.1.148:3005');
         } else {
             socket = new WebSocket('wss://bronxcraft.glitch.me');
         }
@@ -140,6 +144,9 @@ class ChatScreen extends ScreenView {
     }
 
     displayChat() {
+        ctx.fillStyle = '#000000';  
+        ctx.fillText("chatpen:", 175, 250);
+
         ctx.fillText("start height = " + this.startWindowHeight, 350,150);
         ctx.fillText("height now = " + window.innerHeight, 350,200);
 
@@ -207,13 +214,26 @@ class ChatScreen extends ScreenView {
         ctx.stroke();
         if(chatPen.active) {
             //console.log("drawing");
-            this.ctx.fillStyle = this.drawing.color;
-            this.ctx.fillRect(mouse.x-400, mouse.y-400, 5, 5);
-            //this.drawing = this.ctx.getImageData(0,0,150,150);
+            // this.ctx.fillStyle = this.drawing.color;
+            // this.ctx.fillRect(chatPen.x-400, chatPen.y-400, 5, 5);
+            // connect the points with a line
+            if(chatPen.lastX) {
+                this.ctx.strokeStyle = this.drawing.color;
+                this.ctx.lineWidth = 5;
+                this.ctx.beginPath();
+                this.ctx.moveTo(chatPen.x-400, chatPen.y-400),
+                this.ctx.lineTo(chatPen.lastX-400, chatPen.lastY-400),
+                this.ctx.closePath();
+                this.ctx.stroke();
+            }
+            chatPen.lastX = chatPen.x;
+            chatPen.lastY = chatPen.y;
         }
         if(clicked && mouse.x > 400 && mouse.x < 550 && mouse.y > 400 && mouse.y < 550) {
             this.ctx.fillStyle = this.drawing.color;
-            this.ctx.fillRect(mouse.x-400, mouse.y-400, 5, 5);
+            this.ctx.fillRect(chatPen.x-400, chatPen.y-400, 5, 5);
+            chatPen.lastX = null;
+            chatPen.lastY = null;
         }
 
         //if(this.drawing) {
@@ -223,6 +243,12 @@ class ChatScreen extends ScreenView {
     }
     changeDrawingColor(s,b) {
         this.drawing.color = b.lineColor;
+        b.active = false;
+        for(let x=0; x<this.buttons.length; x++) {
+            if(this.buttons[x].lineColor && this.buttons[x] !== b) {
+                this.buttons[x].active = true;
+            }
+        }
     }
 
     clearDrawing() {

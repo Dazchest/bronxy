@@ -17,8 +17,11 @@ function scrollCity(e) {
     //mouseDownFired = true;    //TODO: this works, but makes clicks a bit harder
     listScroll = true;
     scrolling = false;
+    chatPen.touch = false;
     //console.log("mouse moving");
     if(e.touches) {
+        //ctx.fillText("chatpen:" + chatPen.x + ", " + chatPen.y, 150, 100);
+        console.log("touch");
         var touch = e.touches[0];
         //console.log(touch);
         if(touchStart.x == 99999) {
@@ -38,8 +41,15 @@ function scrollCity(e) {
         touchStart.x = touch.clientX;   // reset current touch position
         touchStart.y = touch.clientY;
         e.preventDefault()
+        
+        chatPen.touch = true;
+        chatPen.x = touch.clientX;
+        chatPen.y = touch.clientY;
+        chatPen.distX = distX;
+        chatPen.distY = distY;
 
-        chatPen.active = true;
+        chatPen.x = Math.floor(touch.clientX / screenZoom.x);
+        chatPen.y = Math.floor(touch.clientY / screenZoom.y);
 
         // canvas.addEventListener("touchend", function(e) {
         // touchStart.x = 99999;
@@ -52,11 +62,33 @@ function scrollCity(e) {
         camera.y += e.movementY;
     };
 
+
     if(chatScreen.active) {
+        if(chatPen.touch) {
+            // console.log("chatpen: xy" + chatPen.x + ", " + chatPen.y);
+            // console.log("chatpen: dist" + chatPen.distX + ", " + chatPen.distY);
+            chatPen.active = false;
+            if(chatPen.x > 400 && chatPen.x < 550 && chatPen.y > 400 && chatPen.y < 550) {
+                chatPen.x += chatPen.distX;
+                chatPen.y += chatPen.distY;
+                // chatPen.x = touch.clientX;
+                // chatPen.y = touch.clientY;
+                chatPen.active = true;
+            } else {
+                camera.x += e.movementX;
+                camera.y += e.movementY;
+            }
+            return;
+        }
+    
+
+        chatPen.x = mouse.x;
+        chatPen.y = mouse.y;
+    
         chatPen.active = false;
         if(mouse.x > 400 && mouse.x < 550 && mouse.y > 400 && mouse.y < 550) {
-            chatPen.x += e.movementX;
-            chatPen.y += e.movementY;
+            chatPen.x = mouse.x;
+            chatPen.y = mouse.y;
             chatPen.active = true;
         } else {
             //camera.x += e.movementX;

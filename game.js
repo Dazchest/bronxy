@@ -1111,6 +1111,9 @@ function doClick() {
     console.log("doclick clicked");
     mouseDownFired = false;
     clicked = true;
+    chatPen.x = mouse.x;
+    chatPen.y = mouse.y;
+
     //console.log("clicked = " + clicked);
     //console.log("clicked at " + mouse.x + " , " + mouse.y);
 }
@@ -1160,7 +1163,6 @@ function draw() {
 
     clicked = false;
 
-    ctx.restore();
 
     ctx.font = "20px Georgia";
     ctx.fillStyle = '#ffffff';
@@ -1168,8 +1170,11 @@ function draw() {
 
     ctx.fillStyle = '#ffffff';
     popup(mouse.x + ", " + mouse.y, 10, 50);
-    popup(camera.x + ", " + camera.y, 100, 20);
+    popup(Math.floor(camera.x) + ", " + camera.y, 100, 20);
     //popup(distX + ", " + distY, 10, 200)
+
+
+    ctx.restore();
 
     requestAnimationFrame(draw);    
 }
