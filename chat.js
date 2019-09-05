@@ -103,6 +103,7 @@ class ChatScreen extends ScreenView {
 
         this.buttons.push(new Button({"active": true, "x": 450, "y": 720, "w": 100, "h": 50, "text": "Send", "screen": this, "action":  this.send.bind(this)}));
 
+        this.buttons.push(new Button({"active": true, "x": 450, "y": 300, "w": 100, "h": 50, "text": "Clear Chat", "screen": this, "action":  this.clearChat.bind(this)}));
         this.buttons.push(new Button({"active": true, "lineColor": '#ff0000', "x": 555, "y": 410, "w": 100, "h": 50, "text": "R", "screen": this, "action":  this.changeDrawingColor.bind(this)}));
         this.buttons.push(new Button({"active": true, "lineColor": '#00ff00', "x": 555, "y": 450, "w": 100, "h": 50, "text": "G", "screen": this, "action":  this.changeDrawingColor.bind(this)}));
         this.buttons.push(new Button({"active": true, "lineColor": '#0000ff', "x": 555, "y": 500, "w": 100, "h": 50, "text": "B", "screen": this, "action":  this.changeDrawingColor.bind(this)}));
@@ -159,6 +160,10 @@ class ChatScreen extends ScreenView {
             // this.checkItemButtons();
             // Resource.drawAll();
         }
+    }
+
+    clearChat() {
+        chat.messageList = [];
     }
 
     displayChat() {
