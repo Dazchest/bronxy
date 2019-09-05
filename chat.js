@@ -26,7 +26,16 @@ class Chat {
             //console.log(newMessageData);
             let newMessageData = JSON.stringify(message);
             //console.log(newMessageData);
-            socket.send(newMessageData);
+
+            // new - - - display a please wait or something
+            return new Promise(function (res, rej) { 
+                socket.send(newMessageData);
+                console.log(socket.bufferedAmount);
+            });
+
+
+
+            //socket.send(newMessageData);
         }
     
         // Connection opened
@@ -118,6 +127,15 @@ class ChatScreen extends ScreenView {
             ctx.font = "20px Georgia";
             ctx.fillText(this.name, this.x, this.y + 20);
 
+            // check if the socket buffer is empty
+            if(socket.bufferedAmount > 0) {
+                ctx.save();
+                ctx.textBaseline = "middle";
+                ctx.textAlign = "center";
+                ctx.font = '50px arial';
+                ctx.fillText("PLEASE WAIT!!!", 200, 400);
+                ctx.restore();
+            }
             // DRAW TH PANEL
 
             this.displayChat();
@@ -144,9 +162,7 @@ class ChatScreen extends ScreenView {
     }
 
     displayChat() {
-        ctx.fillStyle = '#000000';  
-        ctx.fillText("chatpen:", 175, 250);
-
+    
         ctx.fillText("start height = " + this.startWindowHeight, 350,150);
         ctx.fillText("height now = " + window.innerHeight, 350,200);
 
@@ -174,16 +190,20 @@ class ChatScreen extends ScreenView {
             camera.y = 0;
         }
         var counter = 0;
+        var imageCounter = 0;
         for(let x=chat.messageList.length-1; x>=0; x--) {
             let msg;
             try {
+                //TODO: need to parse the message when it arraive ..  so only once
                 msg = JSON.parse(chat.messageList[x]);
                 if(msg.emitName == 'chat') {
                     ctx.fillText(msg.userid + ": " + msg.message, 100, this.chatInput.y - (20) - counter*25 + camera.y);
                 }
                 if(msg.emitName == 'chatimage') {
+                    //TODO: need to speed this up???
                     // only draw the actual image if its in the chat area
                     if(this.chatInput.y - (200) - counter*25 + camera.y > 0) {
+                        imageCounter ++;
                         let tempCanvas = document.createElement('canvas');
                         let tempCtx = tempCanvas.getContext('2d');
                         tempCanvas.width = msg.imageWidth;
@@ -197,7 +217,6 @@ class ChatScreen extends ScreenView {
                         ctx.drawImage(tempCanvas, 100, this.chatInput.y - (200) - counter*25 + camera.y);
                     }
                     counter += 8;       // still increase even if not drawing
-
                 }
             } catch (err) {
                 //console.log(err);
@@ -207,6 +226,7 @@ class ChatScreen extends ScreenView {
             }
             counter++;
         }
+        console.log(imageCounter);
         ctx.restore();
 
         ctx.strokeStyle = '#000000';
