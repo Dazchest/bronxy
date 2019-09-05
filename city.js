@@ -38,7 +38,9 @@ function scrollCity(e) {
         touchStart.x = touch.clientX;   // reset current touch position
         touchStart.y = touch.clientY;
         e.preventDefault()
-        
+
+        chatPen.active = true;
+
         // canvas.addEventListener("touchend", function(e) {
         // touchStart.x = 99999;
         // });
@@ -53,8 +55,8 @@ function scrollCity(e) {
     if(chatScreen.active) {
         chatPen.active = false;
         if(mouse.x > 400 && mouse.x < 550 && mouse.y > 400 && mouse.y < 550) {
-            chatPen.x = mouse.x;
-            chatPen.y = mouse.y;
+            chatPen.x += e.movementX;
+            chatPen.y += e.movementY;
             chatPen.active = true;
         } else {
             //camera.x += e.movementX;
