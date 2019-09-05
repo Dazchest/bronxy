@@ -110,6 +110,7 @@ class Assets {
         itemListImages[10] = new Image();
         itemListImages[10].src = "images/panels/panel_full_1.png";
 
+
         //setup ## blank images
         for(let x=0; x<3; x++) {
             itemHolderImages[x] = new Image();

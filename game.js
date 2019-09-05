@@ -1,5 +1,6 @@
 
 console.log("ekjhsdfwww");
+
 window.onload = init;
 
 var game = {};
@@ -97,6 +98,7 @@ var promises = [];
 
 var chat;
 var chatScreen = {"active": false};
+var chatPen = {};
 
 var socket;
 
@@ -152,6 +154,56 @@ function init() {
     }
     //--------
     console.log("initialising game");
+    //init cavnas
+    canvas = document.getElementById('canvas');
+    ctx = canvas.getContext('2d');
+    var loaderImage = [];
+    loaderImage[0] = new Image();
+    loaderImage[0].onload = function() {
+        ctx.save();
+        ctx.arc(300, 300, 300, 0, 2 * Math.PI);
+        ctx.stroke();
+        //ctx.arc(this.x, this.y, height, 0, 2 * Math.PI);
+        ctx.clip();
+        ctx.drawImage(loaderImage[0], 0, 0, canvas.width, canvas.height);
+        ctx.closePath();
+        ctx.restore();
+    };
+    loaderImage[0].src = "images/med.jpg";
+    console.log("canvas width at the start = ", canvas.width);
+    console.log("window outer width at the start = ", window.outerWidth);
+    console.log("window inner width at the start = ", window.innerWidth);
+    originalCanvas.width = 600;
+    originalCanvas.height = 900;
+
+    //resixe the canva
+    if(window.innerWidth<600) {
+        //set screenZoom
+        ratioW = window.innerWidth / originalCanvas.width;
+        ratioW = ratioW.toFixed(2);
+        console.log("ratio = ", ratioW , " by ", ratioH);
+        //-------------
+        canvas.width = window.innerWidth;
+    }  else {
+        canvas.width = originalCanvas.width;
+    }
+    if(window.innerHeight<900) {
+        //set screenZoom
+        ratioH = window.innerHeight / originalCanvas.height;
+        ratioH = ratioH.toFixed(2);
+        console.log("ratio = ", ratioW , " by ", ratioH);
+        //-------------
+        canvas.height = window.innerHeight;
+    }  else {
+        canvas.height = originalCanvas.height;
+    }
+    console.log("ratio = ", ratioW , " by ", ratioH);
+
+    //screenZoom.x = .67;
+    screenZoom.x = ratioW;
+    screenZoom.y = ratioH;
+    //------------------------------------------------
+    //-----------------------------------------
 
     navigator.webkitPersistentStorage.requestQuota(1024*1024, function() {
         window.webkitRequestFileSystem(window.PERSISTENT , 1024*1024, SaveDatFileBro);
@@ -202,47 +254,12 @@ function init() {
     if (opsys=="unknown"){downtype = 'mousedown'; movetype = 'mousemove'; uptype = 'mouseup';}
     if (opsys!="unknown"){downtype = 'touchstart'; movetype = 'touchmove'; uptype = 'touchleave';}
 
-    //init cavnas
-    canvas = document.getElementById('canvas');
-    ctx = canvas.getContext('2d');
-    console.log("canvas width at the start = ", canvas.width);
-    console.log("window outer width at the start = ", window.outerWidth);
-    console.log("window inner width at the start = ", window.innerWidth);
-    originalCanvas.width = 600;
-    originalCanvas.height = 900;
-
-    //resixe the canva
-    if(window.innerWidth<600) {
-        //set screenZoom
-        ratioW = window.innerWidth / originalCanvas.width;
-        ratioW = ratioW.toFixed(2);
-        console.log("ratio = ", ratioW , " by ", ratioH);
-        //-------------
-        canvas.width = window.innerWidth;
-    }  else {
-        canvas.width = originalCanvas.width;
-    }
-    if(window.innerHeight<900) {
-        //set screenZoom
-        ratioH = window.innerHeight / originalCanvas.height;
-        ratioH = ratioH.toFixed(2);
-        console.log("ratio = ", ratioW , " by ", ratioH);
-        //-------------
-        canvas.height = window.innerHeight;
-    }  else {
-        canvas.height = originalCanvas.height;
-    }
-    console.log("ratio = ", ratioW , " by ", ratioH);
-
-    //screenZoom.x = .67;
-    screenZoom.x = ratioW;
-    screenZoom.y = ratioH;
-    //------------------------------------------------
-    //-----------------------------------------
 
 
-    ctx.fillStyle = "#ff0000";
-    ctx.fillRect(0,0,canvas.width,canvas.height);
+    //ctx.fillStyle = "#ff0000";
+    //ctx.fillRect(0,0,canvas.width,canvas.height);
+
+
 
     //--- show progress bar
     progressBar();
@@ -264,7 +281,8 @@ function init() {
 
     mouseDownFired = false;
     var pressTimer;
-    
+    chatPen.active = false;
+
     canvas.addEventListener('mousedown', function(e) {
         scrolling = false;
         //      pressTimer = window.setTimeout(function() {
@@ -277,6 +295,7 @@ function init() {
 
         canvas.addEventListener('mouseup', function() {
             canvas.removeEventListener('mousemove', scrollCity);
+            chatPen.active = false;
             listScroll = false;
             scrolling = true;
             scrollMovement.startTime = Date.now();
@@ -531,8 +550,8 @@ function init() {
 
                 console.log("Waiting for map");
                 let p = [];
-                let p1 = loadMap2();
-                p.push(p1);
+                // let p1 = loadMap2();
+                // p.push(p1);
                 let p2 = loadGame();
                 p.push(p2);
                 chat = new Chat();

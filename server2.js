@@ -16,43 +16,48 @@ var expressWs = require('express-ws')(app);
 
 // http://expressjs.com/en/starter/static-files.html
 app.use(express.static('./'));
+//------------------
+app.use(function (req, res, next) {
+    console.log('middleware');
+    req.testing = 'testing';
+    return next();
+  });
+
+// app.get('/', function(req, res, next){
+// console.log('get route', req.testing);
+// res.end();
+// });
 
 // http://expressjs.com/en/starter/basic-routing.html
 app.get('/', function(request, response) {
+    console.log('get route', req.testing);
   response.sendFile(__dirname + '/index.html');
 });
 
-//------------------
-app.use(function (req, res, next) {
-  console.log('middleware');
-  req.testing = 'testing';
-  return next();
-});
+
 //---------------------
 var clients = [];
 var messageList = [];
 //---------------------
 app.ws('/', function(ws, req) {
     clients.push(ws);
-    console.log('socket', req.testing);
-    console.log("connected??? " + clients.length);
-    sendMessageHistory(ws);
-    //sendAll("new user has joined the chat");
-    ws.send("Welcome to the chat.");
-    ws.on('message', function(msg) {
+    //sendMessageHistory(ws); // send the message history when first connected to chat
+    //ws.send("Welcome to the chat.");
+    //console.log("hello");
+    ws.on('message', function(msg) {        // check for a data message
+      //console.log(msg);
+      // console.log(msg.length);
+      // ws.send(msg);
+      //return;
+      console.log("receiving message");
       try {
-        let parsedmsg = JSON.parse(msg);
-        clients[clients.length-1].userid = parsedmsg.userid;
-        sendAll(msg);
-        messageList.push(msg);
-        //msg = JSON.parse(msg);
-        // console.log(msg.length);
-        // console.log(msg[0].action);
-        // ws.emit(msg.action, 'listId')
+        let parsedmsg = JSON.parse(msg);    // get the whole message (emitname, id, message etc)
+        if(parsedmsg.emitName) {
+            ws.emit(parsedmsg.emitName, msg, parsedmsg);
+        }
       } catch (err) {
-        //msg = "not valid JSON";
-        //console.log(msg);
         sendAll(msg);
+
       }
     });
 
@@ -61,24 +66,22 @@ app.ws('/', function(ws, req) {
         ws.close()
     };
 
-    ws.on('get-list', function(msg) {
-        console.log(msg);
-        ws.send("hello fromdddddddddddd the server");
+    ws.on('chat', function(msg, parsedmsg) {
+        //console.log(msg, parsedmsg);
+        sendAll(msg);
+        messageList.push(msg);
+    });
+    ws.on('chatimage', function(msg, parsedmsg) {
+        //console.log(msg);
+        // sendAll(msg);
+        // messageList.push(msg);
+        sendAll(msg);
+        //ws.send(msg);
     });
 
-    console.log('socket', req.testing);
-    //ws.send("hello from the server again");
-    //ws.emit('get-list', 'listId')
 });
 
-app.ws('/echo', function(ws, req) {
-  ws.on('message', function(msg) {
-    console.log(msg);
-    ws.send("hello from the echo server");
-  });
-  // console.log('socket', req.testing);
-  // ws.send("hello from the server again");
-});
+
 
 function sendMessageHistory(ws) {
     for(let x=0; x<messageList.length; x++) {
@@ -88,7 +91,7 @@ function sendMessageHistory(ws) {
 function sendAll(message) {
   for (var i=0; i<clients.length; i++) {
       if(clients[i].readyState != 3) {
-        clients[i].send(message); //clients[i].userid + ": " + 
+        clients[i].send(message);
       }
   }
 }
@@ -114,7 +117,7 @@ function sendAll(message) {
 // });
 //--------------------------------------------------------------------------
 // listen for requests :)
-const listener = app.listen(3000, function() {
+const listener = app.listen(3005, function() {
   console.log('Your app is listening on port ' + listener.address().port);
 });
 

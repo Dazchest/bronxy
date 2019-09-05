@@ -63,7 +63,8 @@ app.ws('/', function(ws, req) {
 
     ws.on('get-list', function(msg) {
         //console.log(msg);
-        ws.send("hello fromdddddddddddd the server");
+        let m = {"userid":"getlist", "message": "hello fromdddddddddddd the server"};
+        ws.send(m);
     });
 
     //console.log('socket', req.testing);

@@ -85,11 +85,11 @@ class ScreenView {
             let b = this.buttons[x];
             if(clicked) {   //mouse is clicked, check if it was on a button
                 if(b.style != "circle") {
-                    console.log("cliecked in checkbuttons");
+                    //console.log("cliecked in checkbuttons");
                     if(mouse.x > b.x*zoom.x && mouse.x < b.x*zoom.x + b.w*zoom.x && mouse.y > b.y*zoom.y && mouse.y < b.y*zoom.y + b.h*zoom.y) {
                         if(b.action && b.active) {
                             clicked = false;
-                            console.log(b.text + " pressed");
+                            //console.log(b.text + " pressed");
                             let callback = b.action;
                             callback(this, b);
                         }
@@ -99,11 +99,11 @@ class ScreenView {
                     let dx = mouse.x - b.x;
                     let dy = mouse.y - b.y;
                     let dist = Math.sqrt(dx * dx + dy * dy);
-                    console.log("circle dist = ", dist);
+                    //console.log("circle dist = ", dist);
                     if(dist < b.radius) {
                         if(b.action && b.active) {
                             clicked = false;
-                            console.log(b.text + " pressed");
+                            //console.log(b.text + " pressed");
                             let callback = b.action;
                             callback(this, b);
                         }

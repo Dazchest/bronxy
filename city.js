@@ -44,10 +44,25 @@ function scrollCity(e) {
         // });
     }
     //TODO: does this need to be here???
+    chatPen.active = false;
     if(itemScreen.active || researchScreen.active || buildingScreen.active || equipmentScreen.active) {
         camera.x += e.movementX;
         camera.y += e.movementY;
     };
+
+    if(chatScreen.active) {
+        chatPen.active = false;
+        if(mouse.x > 400 && mouse.x < 550 && mouse.y > 400 && mouse.y < 550) {
+            chatPen.x = mouse.x;
+            chatPen.y = mouse.y;
+            chatPen.active = true;
+        } else {
+            //camera.x += e.movementX;
+            chatPen.active = false;
+            camera.y += e.movementY;
+        }
+        return;
+    }
 
     //mouseDownFired = true;
     if(cities[currentCity].active) {

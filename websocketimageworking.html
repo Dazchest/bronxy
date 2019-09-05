@@ -48,7 +48,7 @@
         //socket.send('Hello Server!');
     });
 
-    // Listen for messages
+    // // Listen for messages
     socket.addEventListener('message', function (event) {
 
         try {
@@ -60,6 +60,8 @@
             if(parsedmsg.emitName == 'chatimage') {
                 console.log("receiving an image");
                 console.log("e", parsedmsg.message);
+                //return;
+                //let imageData = parsedmsg.message;
 
                 let imageData = parsedmsg.message;
                 console.log("imdat", imageData);
@@ -68,15 +70,14 @@
                 let ii = ctx.createImageData(parsedmsg.imageWidth, parsedmsg.imageHeight);
                 ii.data.set(binary);
                 ctx.putImageData(ii, 180, 10);
-
-                let r = Math.floor(Math.random() * 100000 + 1);
-                document.getElementById('allchat').innerHTML += "<br><img id='" + r + "' src=''><br>";
-                img = document.getElementById(r);
+                document.getElementById('allchat').innerHTML += "<img id='d' src=''><br>";
+                img = document.getElementById('d');
                 img.src = canvas.toDataURL("image/png");
             }
+            //ctx.putImageData(parsedmsg.message, 15, 15);
         } catch {
             parsedmsg = event.data;
-            document.getElementById('allchat').innerHTML += "<br>" + parsedmsg;
+            //document.getElementById('allchat').innerHTML += "<br>" + parsedmsg;
         }
     });
 
@@ -93,20 +94,39 @@
         //socket.send(msg);
         socket.emit('chat', msg);
     }
-
     function sendImage() {
         let message = {};
-        message.userid = tempuserid;
 
         console.log("attempting to send an image")
-        var img = ctx.getImageData(0, 0, 100, 100);   // get from canvas
+        var img = ctx.getImageData(0, 0, 100, 100);
         message.imageWidth = img.width;
         message.imageHeight = img.height;
         console.log("w: ", img.width, "  - h: ", img.height);
-        message.message = [...img.data];  // create a copy of the array
+        var binary = new Uint8Array(img.data.length);
+            for (var i = 0; i < img.data.length; i++) {
+                binary[i] = img.data[i];
+            }
 
+        message.userid = tempuserid;
+        //console.log(binary.buffer);
+        //message.message = new Uint8Array(binary.buffer);
+        message.message = [];
+        for (var i = 0; i < img.data.length; i++) {
+            message.message[i] = binary[i];
+            }
+            
+       // message.message = new Uint8Array(img.data);
+        //console.log("mm", message.message);
         let msg = JSON.stringify(message);
+        //console.log(msg);
         socket.emit('chatimage', msg);
+        //console.log(msg);
+        // msg = JSON.parse(msg);
+        // console.log(msg);
+        //socket.send(msg);
+        //socket.send(message.message);
+        //socket.send(binary.buffer);
+        //socket.send(new Uint8Array(img.data));
     }
 
     </script>
