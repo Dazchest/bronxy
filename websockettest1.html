@@ -68,6 +68,26 @@
                 let ii = ctx.createImageData(parsedmsg.imageWidth, parsedmsg.imageHeight);
                 ii.data.set(binary);
                 ctx.putImageData(ii, 180, 10);
+                let im = new Image();
+                //im.data[100] = 127;
+                //ctx.drawImage(im, 100, 10);
+
+
+                    let tempCanvas = document.createElement('canvas');
+                    let tempCtx = tempCanvas.getContext('2d');
+                    tempCanvas.width = parsedmsg.imageWidth;
+                    tempCanvas.height = parsedmsg.imageHeight;
+                    imageData = parsedmsg.message;
+                    binary = new Uint8Array(imageData);
+                    ii = tempCtx.createImageData(parsedmsg.imageWidth, parsedmsg.imageHeight);
+                    ii.data.set(binary);
+                    tempCtx.putImageData(ii, 0, 0);
+
+                    ctx.drawImage(tempCanvas, 120, 20);
+
+
+
+
 
                 let r = Math.floor(Math.random() * 100000 + 1);
                 document.getElementById('allchat').innerHTML += "<br><img id='" + r + "' src=''><br>";
@@ -99,7 +119,7 @@
         message.userid = tempuserid;
 
         console.log("attempting to send an image")
-        var img = ctx.getImageData(0, 0, 100, 100);   // get from canvas
+        var img = ctx.getImageData(0, 0, 50, 50);   // get from canvas
         message.imageWidth = img.width;
         message.imageHeight = img.height;
         console.log("w: ", img.width, "  - h: ", img.height);

@@ -5,7 +5,7 @@ class Chat {
         var tempuserid;
         // Create WebSocket connection.
         if(location.hostname === "localhost") {
-            socket = new WebSocket('ws://localhost:3000');
+            socket = new WebSocket('ws://localhost:3005');
         } else {
             socket = new WebSocket('wss://bronxcraft.glitch.me');
         }
@@ -16,7 +16,15 @@ class Chat {
             // div.innerHTML += "<br>opened " + new Date().toLocaleString();
             // socket.send("Hey socket! " + new Date().toLocaleString());
         };
-
+        socket.emit = function(name, message) {
+            //let newMessageData = JSON.parse(message);
+            message.emitName = name;
+            //console.log(newMessageData);
+            let newMessageData = JSON.stringify(message);
+            //console.log(newMessageData);
+            socket.send(newMessageData);
+        }
+    
         // Connection opened
         socket.addEventListener('open', function (event) {
             //socket.send('Hello Server!');
@@ -24,7 +32,7 @@ class Chat {
         
         // // Listen for messages
         socket.addEventListener('message', function (event) {
-            console.log('Message from server ', event.data);
+            //console.log('Message from server ', event.data);
             try {
                 //let parsedmsg = JSON.parse(event.data);
                 chat.messageList.push(event.data);
@@ -38,14 +46,14 @@ class Chat {
         this.messageList = [];
     }
 
-    sendMessage(msg) {
-        // let message = {};
-        // message.message = "hello"    //document.getElementById('message').value;
-        // //document.getElementById('message').value = "";
-        // message.userid = user.id;
-        msg = JSON.stringify(msg);
-        socket.send(msg);
-    }
+    // sendMessage(msg) {
+    //     // let message = {};
+    //     // message.message = "hello"    //document.getElementById('message').value;
+    //     // //document.getElementById('message').value = "";
+    //     // message.userid = user.id;
+    //     msg = JSON.stringify(msg);
+    //     socket.send(msg);
+    // }
 }
 
 
@@ -80,12 +88,13 @@ class ChatScreen extends ScreenView {
         }).bind(this));
         this.originalY = iData.y;
 
-        this.buttons.push(new Button({"active": true, "x": 450, "y": 575, "w": 100, "h": 50, "text": "Clear", "screen": this, "action":  this.clearDrawing.bind(this)}));
         this.buttons.push(new Button({"active": true, "x": 450, "y": 720, "w": 100, "h": 50, "text": "Send", "screen": this, "action":  this.send.bind(this)}));
 
         this.buttons.push(new Button({"active": true, "lineColor": '#ff0000', "x": 555, "y": 410, "w": 100, "h": 50, "text": "R", "screen": this, "action":  this.changeDrawingColor.bind(this)}));
         this.buttons.push(new Button({"active": true, "lineColor": '#00ff00', "x": 555, "y": 450, "w": 100, "h": 50, "text": "G", "screen": this, "action":  this.changeDrawingColor.bind(this)}));
         this.buttons.push(new Button({"active": true, "lineColor": '#0000ff', "x": 555, "y": 500, "w": 100, "h": 50, "text": "B", "screen": this, "action":  this.changeDrawingColor.bind(this)}));
+        this.buttons.push(new Button({"active": true, "x": 450, "y": 575, "w": 100, "h": 50, "text": "Clear", "screen": this, "action":  this.clearDrawing.bind(this)}));
+        this.buttons.push(new Button({"active": true, "x": 450, "y": 650, "w": 100, "h": 50, "text": "Send Image", "screen": this, "action":  this.sendImage.bind(this)}));
 
         this.drawing = {};
         this.drawing.color = '#0000ff';
@@ -162,8 +171,30 @@ class ChatScreen extends ScreenView {
             let msg;
             try {
                 msg = JSON.parse(chat.messageList[x]);
-                ctx.fillText(msg.userid + ": " + msg.message, 100, this.chatInput.y - (20) - counter*25 + camera.y);
+                if(msg.emitName == 'chat') {
+                    ctx.fillText(msg.userid + ": " + msg.message, 100, this.chatInput.y - (20) - counter*25 + camera.y);
+                }
+                if(msg.emitName == 'chatimage') {
+                    // only draw the actual image if its in the chat area
+                    if(this.chatInput.y - (200) - counter*25 + camera.y > 0) {
+                        let tempCanvas = document.createElement('canvas');
+                        let tempCtx = tempCanvas.getContext('2d');
+                        tempCanvas.width = msg.imageWidth;
+                        tempCanvas.height = msg.imageHeight;
+                        let imageData = msg.message;
+                        let binary = new Uint8Array(imageData);
+                        let ii = tempCtx.createImageData(msg.imageWidth, msg.imageHeight);
+                        ii.data.set(binary);
+                        tempCtx.putImageData(ii, 0, 0);
+
+                        ctx.drawImage(tempCanvas, 100, this.chatInput.y - (200) - counter*25 + camera.y);
+                    }
+                    counter += 8;       // still increase even if not drawing
+
+                }
             } catch (err) {
+                //console.log(err);
+
                 msg = chat.messageList[x];
                 ctx.fillText(msg, 100, this.chatInput.y - (20) - counter*25 + camera.y);
             }
@@ -180,6 +211,11 @@ class ChatScreen extends ScreenView {
             this.ctx.fillRect(mouse.x-400, mouse.y-400, 5, 5);
             //this.drawing = this.ctx.getImageData(0,0,150,150);
         }
+        if(clicked && mouse.x > 400 && mouse.x < 550 && mouse.y > 400 && mouse.y < 550) {
+            this.ctx.fillStyle = this.drawing.color;
+            this.ctx.fillRect(mouse.x-400, mouse.y-400, 5, 5);
+        }
+
         //if(this.drawing) {
             //ctx.putImageData(this.drawing, 400, 400);
             ctx.drawImage(this.canvas, 400, 400);
@@ -197,10 +233,28 @@ class ChatScreen extends ScreenView {
         console.log("preparing to send message");
         let msg = {};
         msg.userid = user.name;
+        msg.emitName = 'chat';
         msg.message = this.chatInput.i.value;
         this.chatInput.i.value = "";
         camera.y = 0;
-        chat.sendMessage(msg);
+        //chat.sendMessage(msg);
+        socket.emit('chat', msg)
     }
+
+    sendImage() {
+        let message = {};
+        message.userid = user.name;
+
+        console.log("attempting to send an image")
+        var img = this.ctx.getImageData(0, 0, 150, 150);   // get from canvas
+        message.imageWidth = img.width;
+        message.imageHeight = img.height;
+        console.log("w: ", img.width, "  - h: ", img.height);
+        message.message = [...img.data];  // create a copy of the array
+
+        //let msg = JSON.stringify(message);
+        socket.emit('chatimage', message);
+    }
+
 
 }

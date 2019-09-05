@@ -50,6 +50,7 @@ app.ws('/', function(ws, req) {
       // ws.send(msg);
       //return;
       console.log("receiving message");
+      //console.log(msg);
       try {
         let parsedmsg = JSON.parse(msg);    // get the whole message (emitname, id, message etc)
         if(parsedmsg.emitName) {
@@ -75,6 +76,7 @@ app.ws('/', function(ws, req) {
         //console.log(msg);
         // sendAll(msg);
         // messageList.push(msg);
+        console.log("incoming image");
         sendAll(msg);
         //ws.send(msg);
     });
