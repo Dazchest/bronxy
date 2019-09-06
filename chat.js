@@ -3,6 +3,7 @@ class Chat {
 
     constructor() {
         var tempuserid;
+
         // Create WebSocket connection.
         console.log(location.hostname);
         if(location.hostname === "localhost") {
@@ -44,15 +45,13 @@ class Chat {
         });
         
         // // Listen for messages
-        socket.addEventListener('message', function (event) {
+        socket.addEventListener('message', (event) => {
             //console.log('Message from server ', event.data);
             try {
-                //let parsedmsg = JSON.parse(event.data);
-                chat.messageList.push(event.data);
-                //document.getElementById('allchat').innerHTML += "<br>" + parsedmsg.userid + ": " + parsedmsg.message;
+                let msg = JSON.parse(event.data);
+                this.messageList.push(msg);
             } catch (err) {
-                //let parsedmsg = event.data;
-                //document.getElementById('allchat').innerHTML += "<br>" + parsedmsg;
+                console.log("there was an error above, so got here - ", err);
             }
         });
 
@@ -106,7 +105,7 @@ class ChatScreen extends ScreenView {
         this.buttons.push(new Button({"active": true, "x": 450, "y": 300, "w": 100, "h": 50, "text": "Clear Chat", "screen": this, "action":  this.clearChat.bind(this)}));
         this.buttons.push(new Button({"active": true, "lineColor": '#ff0000', "x": 555, "y": 410, "w": 100, "h": 50, "text": "R", "screen": this, "action":  this.changeDrawingColor.bind(this)}));
         this.buttons.push(new Button({"active": true, "lineColor": '#00ff00', "x": 555, "y": 450, "w": 100, "h": 50, "text": "G", "screen": this, "action":  this.changeDrawingColor.bind(this)}));
-        this.buttons.push(new Button({"active": true, "lineColor": '#0000ff', "x": 555, "y": 500, "w": 100, "h": 50, "text": "B", "screen": this, "action":  this.changeDrawingColor.bind(this)}));
+        this.buttons.push(new Button({"active": false, "lineColor": '#0000ff', "x": 555, "y": 500, "w": 100, "h": 50, "text": "B", "screen": this, "action":  this.changeDrawingColor.bind(this)}));
         this.buttons.push(new Button({"active": true, "x": 450, "y": 575, "w": 100, "h": 50, "text": "Clear", "screen": this, "action":  this.clearDrawing.bind(this)}));
         this.buttons.push(new Button({"active": true, "x": 450, "y": 650, "w": 100, "h": 50, "text": "Send Image", "screen": this, "action":  this.sendImage.bind(this)}));
 
@@ -175,22 +174,7 @@ class ChatScreen extends ScreenView {
         ctx.rect(0, 125, 500, 580);
         ctx.clip();
         let offset = 0;
-        // if(chat.messageList.length > this.lines) {
-        //     offset = chat.messageList.length - this.lines;
-        // }
-        // for(let x=0; x<chat.messageList.length; x++) {
-        //     let msg;
-        //     try {
-        //         msg = JSON.parse(chat.messageList[x]);
-        //         ctx.fillText(msg.userid + ": " + msg.message, 100, 150 + ((x-offset)*25) + this.inputOffset + camera.y);
-        //     } catch (err) {
-        //         msg = chat.messageList[x];
-        //         ctx.fillText(msg, 100, 150 + ((x-offset)*25) + this.inputOffset + camera.y);
-        //     }
-        // }
-        if(chat.messageList.length > this.lines) {
-            //offset = chat.messageList.length - this.lines;
-        }
+
         if(camera.y <= 0) {
             camera.y = 0;
         }
@@ -199,8 +183,7 @@ class ChatScreen extends ScreenView {
         for(let x=chat.messageList.length-1; x>=0; x--) {
             let msg;
             try {
-                //TODO: need to parse the message when it arraive ..  so only once
-                msg = JSON.parse(chat.messageList[x]);
+                msg = chat.messageList[x];
                 if(msg.emitName == 'chat') {
                     ctx.fillText(msg.userid + ": " + msg.message, 100, this.chatInput.y - (20) - counter*25 + camera.y);
                 }
@@ -231,11 +214,13 @@ class ChatScreen extends ScreenView {
             }
             counter++;
         }
-        console.log(imageCounter);
+        //console.log(imageCounter);
         ctx.restore();
 
         ctx.strokeStyle = '#000000';
+        ctx.beginPath();
         ctx.rect(400, 400, 150, 150);
+        ctx.closePath();
         ctx.stroke();
         if(chatPen.active) {
             //console.log("drawing");
@@ -260,12 +245,9 @@ class ChatScreen extends ScreenView {
             chatPen.lastX = null;
             chatPen.lastY = null;
         }
-
-        //if(this.drawing) {
-            //ctx.putImageData(this.drawing, 400, 400);
             ctx.drawImage(this.canvas, 400, 400);
-        //}
     }
+
     changeDrawingColor(s,b) {
         this.drawing.color = b.lineColor;
         b.active = false;

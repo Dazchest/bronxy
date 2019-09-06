@@ -399,6 +399,25 @@
             "baseBuildTime": 100
         }
         ]
+    },
+
+    {   "type": 16,
+        "name": "Hospital",
+        "quantityAllowed" : 1,
+        "levels" : [
+        {   "level": 1,
+            "requirements":    {   "resources" : {"food": 40000, "wood": 40000, "stone": 40000, "iron": 20000},
+                                    "buildings" : [{"type": 0, "level": 1}]
+                                },
+            "baseBuildTime": 10
+        },
+        {   "level": 2,
+            "requirements":    {   "resources" : {"food": 100000, "wood": 100000, "stone": 150000, "iron": 35000},
+                                    "buildings" : [{"type": 0, "level": 3}]
+                                },
+            "baseBuildTime": 100
+        }
+        ]
     }
 
 ]
