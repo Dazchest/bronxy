@@ -13,7 +13,7 @@ class CityScreen extends ScreenView {
         this.inputs = [];
         //this.inputs.push(new newInput("f"));
 
-        console.log("this is CityScreen constructor");
+        console.log("this is CityShhjcreen constructojjkjr");
         this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 150, "w": 70, "h": 50, "text": "Map", "screen": this, "action":  this.mapScreen3}));
         this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 260, "w": 80, "h": 50, "text": "Items", "screen": this, "action":  this.itemScreen}));
         this.buttons.push(new Button({"active": true, "style": "circle", radius: 50, "x": 60, "y": 370, "w": 80, "h": 50, "text": "Options", "screen": this, "action":  this.optionScreen}));
